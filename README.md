@@ -48,7 +48,7 @@
    Stay Up-to-Date
 </h2>
 
-<p align="center"><img src="https://github.com/MdNoor786/ShasaVcPlayer/blob/main/Utils/star.gif" alt="MdNoor786 Github" width="1000px" /></p>
+
 
 
 <h2 align="center">
