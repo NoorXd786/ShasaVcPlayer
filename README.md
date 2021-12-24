@@ -75,7 +75,7 @@
 </h2>
 
 <p align="center">
-<a href="https://t.me/LionXsupport"><img src="https://img.shields.io/badge/Shasa%20Channel-blueviolet?style=for-the-badge&logo=telegram" width="200""/</a>
+<a href="https://t.me/LionXupdates"><img src="https://img.shields.io/badge/Shasa%20Channel-blueviolet?style=for-the-badge&logo=telegram" width="200""/</a>
 <a href="https://t.me/Md_Noor786"><img src="https://img.shields.io/badge/Contact%20Owner-blueviolet?style=for-the-badge&logo=telegram" width="202""/</a>  
 <a href="https://t.me/LionXSupport"><img src="https://img.shields.io/badge/Shasa%20Support-blueviolet?style=for-the-badge&logo=telegram" width="195""/></a>
 </p>
