@@ -12,7 +12,7 @@ ytdl = YoutubeDL(
         "nocheckcertificate": True,
         "quiet": True,
         "no_warnings": True,
-    } 
+    }
 )
 
 
