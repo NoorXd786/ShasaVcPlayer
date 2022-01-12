@@ -8,7 +8,7 @@ from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
                             Message)
 
 from Shasa import (ASS_CLI_1, ASS_CLI_2, ASS_CLI_3, ASS_CLI_4, ASS_CLI_5,
-                   ASSISTANT_PREFIX, BOT_ID, BOT_USERNAME, LOG_GROUP_ID,
+                   ASSISTANT_HANDLER, BOT_ID, BOT_USERNAME, LOG_GROUP_ID,
                    MUSIC_BOT_NAME, SUDOERS, app)
 from Shasa.Database import (approve_pmpermit, disapprove_pmpermit, is_on_off,
                             is_pmpermit_approved)
@@ -59,12 +59,12 @@ async def awaiting_message(client, message):
 
 
 @Client.on_message(
-    filters.command("approve", prefixes=ASSISTANT_PREFIX)
+    filters.command("approve", prefixes=ASSISTANT_HANDLER)
     & filters.user(SUDOERS)
     & ~filters.via_bot
 )
 @Client.on_message(
-    filters.command("approve", prefixes=ASSISTANT_PREFIX)
+    filters.command("approve", prefixes=ASSISTANT_HANDLER)
     & filters.user("me")
     & ~filters.via_bot
 )
@@ -81,12 +81,12 @@ async def pm_approve(client, message):
 
 
 @Client.on_message(
-    filters.command("disapprove", prefixes=ASSISTANT_PREFIX)
+    filters.command("disapprove", prefixes=ASSISTANT_HANDLER)
     & filters.user(SUDOERS)
     & ~filters.via_bot
 )
 @Client.on_message(
-    filters.command("disapprove", prefixes=ASSISTANT_PREFIX)
+    filters.command("disapprove", prefixes=ASSISTANT_HANDLER)
     & filters.user("me")
     & ~filters.via_bot
 )
@@ -110,12 +110,12 @@ async def pm_disapprove(client, message):
 
 
 @Client.on_message(
-    filters.command("block", prefixes=ASSISTANT_PREFIX)
+    filters.command("block", prefixes=ASSISTANT_HANDLER)
     & filters.user(SUDOERS)
     & ~filters.via_bot
 )
 @Client.on_message(
-    filters.command("block", prefixes=ASSISTANT_PREFIX)
+    filters.command("block", prefixes=ASSISTANT_HANDLER)
     & filters.user("me")
     & ~filters.via_bot
 )
@@ -128,12 +128,12 @@ async def block_user_func(client, message):
 
 
 @Client.on_message(
-    filters.command("unblock", prefixes=ASSISTANT_PREFIX)
+    filters.command("unblock", prefixes=ASSISTANT_HANDLER)
     & filters.user(SUDOERS)
     & ~filters.via_bot
 )
 @Client.on_message(
-    filters.command("unblock", prefixes=ASSISTANT_PREFIX)
+    filters.command("unblock", prefixes=ASSISTANT_HANDLER)
     & filters.user("me")
     & ~filters.via_bot
 )
@@ -148,12 +148,12 @@ async def unblock_user_func(client, message):
 
 
 @Client.on_message(
-    filters.command("pfp", prefixes=ASSISTANT_PREFIX)
+    filters.command("pfp", prefixes=ASSISTANT_HANDLER)
     & filters.user(SUDOERS)
     & ~filters.via_bot
 )
 @Client.on_message(
-    filters.command("pfp", prefixes=ASSISTANT_PREFIX)
+    filters.command("pfp", prefixes=ASSISTANT_HANDLER)
     & filters.user("me")
     & ~filters.via_bot
 )
@@ -169,12 +169,12 @@ async def set_pfp(client, message):
 
 
 @Client.on_message(
-    filters.command("bio", prefixes=ASSISTANT_PREFIX)
+    filters.command("bio", prefixes=ASSISTANT_HANDLER)
     & filters.user(SUDOERS)
     & ~filters.via_bot
 )
 @Client.on_message(
-    filters.command("bio", prefixes=ASSISTANT_PREFIX)
+    filters.command("bio", prefixes=ASSISTANT_HANDLER)
     & filters.user("me")
     & ~filters.via_bot
 )
