@@ -1,8 +1,9 @@
-from config import MUSIC_BOT_NAME, SUPPORT_CHANNEL, SUPPORT_GROUP
 from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
                             InlineKeyboardMarkup, InputMediaPhoto, Message)
 
+from config import MUSIC_BOT_NAME, SUPPORT_CHANNEL, SUPPORT_GROUP
 from Shasa import BOT_USERNAME
+
 
 def setting_markup2():
     buttons = [
@@ -25,13 +26,12 @@ def setting_markup2():
     return f"🔧  **{MUSIC_BOT_NAME} Settings**", buttons
 
 
-
 def start_pannel():
     if not SUPPORT_CHANNEL and not SUPPORT_GROUP:
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -45,7 +45,7 @@ def start_pannel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -64,7 +64,7 @@ def start_pannel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -83,7 +83,7 @@ def start_pannel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -108,7 +108,7 @@ def private_panel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -123,7 +123,7 @@ def private_panel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -143,7 +143,7 @@ def private_panel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
@@ -163,7 +163,7 @@ def private_panel():
         buttons = [
             [
                 InlineKeyboardButton(
-                    text="🗂 Helper Commands Menu", callback_data="mdnoor"
+                    text="🗂 Helper Commands Menu", callback_data="md"
                 ),
             ],
             [
