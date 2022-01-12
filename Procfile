@@ -1,1 +1,1 @@
-worker: bash ShasaX
+worker: bash start

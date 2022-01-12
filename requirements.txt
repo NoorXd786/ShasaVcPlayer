@@ -6,7 +6,7 @@ pillow
 pyrogram
 hachoir
 lyricsgenius
-py-tgcalls==0.8.1
+py-tgcalls
 wget
 python-dotenv
 youtube-search-python
@@ -19,3 +19,5 @@ rich
 dnspython
 yt-dlp==2021.11.10.1
 tgcrypto
+gitpython
+heroku3
