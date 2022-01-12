@@ -3,19 +3,25 @@ import importlib
 import os
 import re
 
-from config import LOG_GROUP_ID
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pytgcalls import idle
 from rich.console import Console
 from rich.table import Table
 from youtubesearchpython import VideosSearch
 
-from Shasa import (ASSID, ASSMENTION, ASSNAME, ASSUSERNAME, BOT_ID, BOT_NAME,
-                   BOT_USERNAME, SUDOERS, app, db, userbot)
-from Shasa.Core.Logger.Log import (startup_delete_last, startup_edit_last,
-                                   startup_send_new)
-from Shasa.Core.PyTgCalls.Shasa import run
-from Shasa.Database import get_active_chats, get_sudoers, remove_active_chat
+from config import (LOG_GROUP_ID, LOG_SESSION, STRING1, STRING2, STRING3,
+                    STRING4, STRING5)
+from Shasa import (ASS_CLI_1, ASS_CLI_2, ASS_CLI_3, ASS_CLI_4, ASS_CLI_5,
+                   ASSID1, ASSID2, ASSID3, ASSID4, ASSID5, ASSNAME1, ASSNAME2,
+                   ASSNAME3, ASSNAME4, ASSNAME5, BOT_ID, BOT_NAME, LOG_CLIENT,
+                   OWNER_ID, app)
+from Shasa.Core.Clients.cli import LOG_CLIENT
+from Shasa.Core.PyTgCalls.Shasa import (pytgcalls1, pytgcalls2, pytgcalls3,
+                                        pytgcalls4, pytgcalls5)
+from Shasa.Database import (get_active_chats, get_active_video_chats,
+                            get_sudoers, is_on_off, remove_active_chat,
+                            remove_active_video_chat)
 from Shasa.Inline import private_panel
 from Shasa.Plugins import ALL_MODULES
 from Shasa.Utilities.inline import paginate_modules
@@ -27,29 +33,31 @@ HELPABLE = {}
 
 async def initiate_bot():
     with console.status(
-        "[magenta] Booting up The Shasa Music Bot...",
+        "[magenta] Finalizing Booting...",
     ) as status:
-        console.print("┌ [red]Clearing MongoDB cache...")
+        try:
+            chats = await get_active_video_chats()
+            for chat in chats:
+                chat_id = int(chat["chat_id"])
+                await remove_active_video_chat(chat_id)
+        except Exception as e:
+            pass
         try:
             chats = await get_active_chats()
             for chat in chats:
                 chat_id = int(chat["chat_id"])
                 await remove_active_chat(chat_id)
         except Exception as e:
-            console.print("[red] Error while clearing Mongo DB.")
-        console.print("└ [green]MongoDB Cleared Successfully!\n\n")
-        ____ = await startup_send_new("Importing All Plugins...")
+            pass
         status.update(
             status="[bold blue]Scanning for Plugins", spinner="earth"
         )
-        await asyncio.sleep(1.7)
         console.print("Found {} Plugins".format(len(ALL_MODULES)) + "\n")
         status.update(
             status="[bold red]Importing Plugins...",
             spinner="bouncingBall",
             spinner_style="yellow",
         )
-        await asyncio.sleep(1.2)
         for all_module in ALL_MODULES:
             imported_module = importlib.import_module(
                 "Shasa.Plugins." + all_module
@@ -69,14 +77,10 @@ async def initiate_bot():
             console.print(
                 f">> [bold cyan]Successfully imported: [green]{all_module}.py"
             )
-            await asyncio.sleep(0.2)
         console.print("")
-        _____ = await startup_edit_last(____, "Finalizing...")
         status.update(
             status="[bold blue]Importation Completed!",
         )
-        await asyncio.sleep(2.4)
-        await startup_delete_last(_____)
     console.print(
         "[bold green]Congrats!! Shasa Music Bot has started successfully!\n"
     )
@@ -87,7 +91,7 @@ async def initiate_bot():
         )
     except Exception as e:
         print(
-            "Bot has failed to access the log Channel. Make sure that you have added your bot to your log channel and promoted as admin!"
+            "\nBot has failed to access the log Channel. Make sure that you have added your bot to your log channel and promoted as admin!"
         )
         console.print(f"\n[red]Stopping Bot")
         return
@@ -96,66 +100,197 @@ async def initiate_bot():
         print("Promote Bot as Admin in Logger Channel")
         console.print(f"\n[red]Stopping Bot")
         return
-    try:
-        await userbot.send_message(
-            LOG_GROUP_ID,
-            "<b>Congrats!! Assistant has started successfully!</b>",
-        )
-    except Exception as e:
-        print(
-            "Assistant Account has failed to access the log Channel. Make sure that you have added your bot to your log channel and promoted as admin!"
-        )
-        console.print(f"\n[red]Stopping Bot")
-        return
-    try:
-        await userbot.join_chat("OfficialShasa")
-    except:
-        pass
     console.print(f"\n┌[red] Bot Started as {BOT_NAME}!")
     console.print(f"├[green] ID :- {BOT_ID}!")
-    console.print(f"├[red] Assistant Started as {ASSNAME}!")
-    console.print(f"└[green] ID :- {ASSID}!")
-    await run()
+    if STRING1 != "None":
+        try:
+            await ASS_CLI_1.send_message(
+                LOG_GROUP_ID,
+                "<b>Congrats!! Assistant Client 1  has started successfully!</b>",
+            )
+        except Exception as e:
+            print(
+                "\nAssistant Account 1 has failed to access the log Channel. Make sure that you have added your Assistant to your log channel and promoted as admin!"
+            )
+            console.print(f"\n[red]Stopping Bot")
+            return
+        try:
+            await ASS_CLI_1.join_chat("LionXupdates")
+            await ASS_CLI_1.join_chat("LionXsupport")
+        except:
+            pass
+        console.print(f"├[red] Assistant 1 Started as {ASSNAME1}!")
+        console.print(f"├[green] ID :- {ASSID1}!")
+    if STRING2 != "None":
+        try:
+            await ASS_CLI_2.send_message(
+                LOG_GROUP_ID,
+                "<b>Congrats!! Assistant Client 2 has started successfully!</b>",
+            )
+        except Exception as e:
+            print(
+                "\nAssistant Account 2 has failed to access the log Channel. Make sure that you have added your Assistant to your log channel and promoted as admin!"
+            )
+            console.print(f"\n[red]Stopping Bot")
+            return
+        try:
+            await ASS_CLI_2.join_chat("LionXupdates")
+            await ASS_CLI_2.join_chat("LionXsupport")
+        except:
+            pass
+        console.print(f"├[red] Assistant 2 Started as {ASSNAME2}!")
+        console.print(f"├[green] ID :- {ASSID2}!")
+    if STRING3 != "None":
+        try:
+            await ASS_CLI_3.send_message(
+                LOG_GROUP_ID,
+                "<b>Congrats!! Assistant Client 3 has started successfully!</b>",
+            )
+        except Exception as e:
+            print(
+                "\nAssistant Account 3 has failed to access the log Channel. Make sure that you have added your Assistant to your log channel and promoted as admin!"
+            )
+            console.print(f"\n[red]Stopping Bot")
+            return
+        try:
+            await ASS_CLI_3.join_chat("LionXupdates")
+            await ASS_CLI_3.join_chat("LionXsupport")
+        except:
+            pass
+        console.print(f"├[red] Assistant 3 Started as {ASSNAME3}!")
+        console.print(f"├[green] ID :- {ASSID3}!")
+    if STRING4 != "None":
+        try:
+            await ASS_CLI_4.send_message(
+                LOG_GROUP_ID,
+                "<b>Congrats!! Assistant Client 4 has started successfully!</b>",
+            )
+        except Exception as e:
+            print(
+                "\nAssistant Account 4 has failed to access the log Channel. Make sure that you have added your Assistant to your log channel and promoted as admin!"
+            )
+            console.print(f"\n[red]Stopping Bot")
+            return
+        try:
+            await ASS_CLI_4.join_chat("LionXupdates")
+            await ASS_CLI_4.join_chat("LionXsupport")
+        except:
+            pass
+        console.print(f"├[red] Assistant 4 Started as {ASSNAME4}!")
+        console.print(f"├[green] ID :- {ASSID4}!")
+    if STRING5 != "None":
+        try:
+            await ASS_CLI_5.send_message(
+                LOG_GROUP_ID,
+                "<b>Congrats!! Assistant Client 5 has started successfully!</b>",
+            )
+        except Exception as e:
+            print(
+                "\nAssistant Account 5 has failed to access the log Channel. Make sure that you have added your Assistant to your log channel and promoted as admin!"
+            )
+            console.print(f"\n[red]Stopping Bot")
+            return
+        try:
+            await ASS_CLI_5.join_chat("LionXupdates")
+            await ASS_CLI_5.join_chat("LionXsupport")
+        except:
+            pass
+        console.print(f"├[red] Assistant 5 Started as {ASSNAME5}!")
+        console.print(f"├[green] ID :- {ASSID5}!")
+    if LOG_SESSION != "None":
+        try:
+            await LOG_CLIENT.send_message(
+                LOG_GROUP_ID,
+                "<b>Congrats!! Logger Client has started successfully!</b>",
+            )
+        except Exception as e:
+            print(
+                "\nLogger Client has failed to access the log Channel. Make sure that you have added your Logger Account to your log channel and promoted as admin!"
+            )
+            console.print(f"\n[red]Stopping Bot")
+            return
+        try:
+            await LOG_CLIENT.join_chat("LionXupdates")
+            await LOG_CLIENT.join_chat("LionXsupport")
+        except:
+            pass
+    console.print(f"└[red] Shasa Music Bot Boot Completed.")
+    if STRING1 != "None":
+        await pytgcalls1.start()
+    if STRING2 != "None":
+        await pytgcalls2.start()
+    if STRING3 != "None":
+        await pytgcalls3.start()
+    if STRING4 != "None":
+        await pytgcalls4.start()
+    if STRING5 != "None":
+        await pytgcalls5.start()
+    await idle()
     console.print(f"\n[red]Stopping Bot")
 
 
-home_text_pm = f"""Hey ,
-My name is [{BOT_NAME}](https://telegra.ph/file/4fba99c3eeb0a40881055.jpg).
-I'm Telegram Voice Chat Audio with some useful features.
+home_text_pm = f"""Hello ,
+My name is {BOT_NAME}.
+A Telegram Music+Video Streaming bot with some useful features.
 
 All commands can be used with: / """
 
 
 @app.on_message(filters.command("vchelp") & filters.private)
-async def help_command(_, message):
-    text, keyboard = await help_parser(message.from_user.mention)
+async def vchelp_command(_, message):
+    text, keyboard = await vchelp_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
 
 
-@app.on_message(filters.command("vcstart") & filters.private)
+@app.on_message(filters.command("start") & filters.private)
 async def start_command(_, message):
     if len(message.text.split()) > 1:
         name = (message.text.split(None, 1)[1]).lower()
         if name[0] == "s":
             sudoers = await get_sudoers()
-            text = "**__Sudo Users List of Bot:-__**\n\n"
-            j = 0
-            for count, user_id in enumerate(sudoers, 1):
+            text = "⭐️<u> **Owners:**</u>\n"
+            sex = 0
+            for x in OWNER_ID:
                 try:
-                    user = await app.get_users(user_id)
+                    user = await app.get_users(x)
                     user = (
                         user.first_name if not user.mention else user.mention
                     )
+                    sex += 1
                 except Exception:
                     continue
-                text += f"➤ {user}\n"
-                j += 1
-            if j == 0:
+                text += f"{sex}➤ {user}\n"
+            smex = 0
+            for count, user_id in enumerate(sudoers, 1):
+                if user_id not in OWNER_ID:
+                    try:
+                        user = await app.get_users(user_id)
+                        user = (
+                            user.first_name
+                            if not user.mention
+                            else user.mention
+                        )
+                        if smex == 0:
+                            smex += 1
+                            text += "\n⭐️<u> **Sudo Users:**</u>\n"
+                        sex += 1
+                        text += f"{sex}➤ {user}\n"
+                    except Exception:
+                        continue
+            if not text:
                 await message.reply_text("No Sudo Users")
             else:
                 await message.reply_text(text)
+            if await is_on_off(5):
+                sender_id = message.from_user.id
+                sender_name = message.from_user.first_name
+                umention = f"[{sender_name}](tg://user?id={int(sender_id)})"
+                return await LOG_CLIENT.send_message(
+                    LOG_GROUP_ID,
+                    f"{message.from_user.mention} has just started bot to check <code>SUDOLIST</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
+                )
         if name == "vchelp":
-            text, keyboard = await help_parser(message.from_user.mention)
+            text, keyboard = await vchelp_parser(message.from_user.mention)
             await message.delete()
             return await app.send_text(
                 message.chat.id,
@@ -188,7 +323,7 @@ async def start_command(_, message):
 📎**Channel Link:** [Visit From Here]({channellink})
 🔗**Video Link:** [Link]({link})
 
-⚡️ __Searched Powered By {BOT_NAME}t__"""
+⚡️ __Searched Powered By {BOT_NAME}__"""
             key = InlineKeyboardMarkup(
                 [
                     [
@@ -202,21 +337,39 @@ async def start_command(_, message):
                 ]
             )
             await m.delete()
-            return await app.send_photo(
+            await app.send_photo(
                 message.chat.id,
                 photo=thumbnail,
                 caption=searched_text,
                 parse_mode="markdown",
                 reply_markup=key,
             )
+            if await is_on_off(5):
+                sender_id = message.from_user.id
+                sender_name = message.from_user.first_name
+                umention = f"[{sender_name}](tg://user?id={int(sender_id)})"
+                return await LOG_CLIENT.send_message(
+                    LOG_GROUP_ID,
+                    f"{message.from_user.mention} has just started bot to check <code>VIDEO INFORMATION</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
+                )
+            return
     out = private_panel()
-    return await message.reply_text(
+    await message.reply_text(
         home_text_pm,
         reply_markup=InlineKeyboardMarkup(out[1]),
     )
+    if await is_on_off(5):
+        sender_id = message.from_user.id
+        sender_name = message.from_user.first_name
+        umention = f"[{sender_name}](tg://user?id={int(sender_id)})"
+        return await LOG_CLIENT.send_message(
+            LOG_GROUP_ID,
+            f"{message.from_user.mention} has just started Bot.\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
+        )
+    return
 
 
-async def help_parser(name, keyboard=None):
+async def vchelp_parser(name, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "vchelp"))
     return (
@@ -232,14 +385,14 @@ All commands can be used with: /
     )
 
 
-@app.on_callback_query(filters.regex("mdnoor"))
-async def mdnoor(_, CallbackQuery):
-    text, keyboard = await help_parser(CallbackQuery.from_user.mention)
+@app.on_callback_query(filters.regex("md"))
+async def md(_, CallbackQuery):
+    text, keyboard = await vchelp_parser(CallbackQuery.from_user.mention)
     await CallbackQuery.message.edit(text, reply_markup=keyboard)
 
 
 @app.on_callback_query(filters.regex(r"vchelp_(.*?)"))
-async def help_button(client, query):
+async def vchelp_button(client, query):
     home_match = re.match(r"vchelp_home\((.+?)\)", query.data)
     mod_match = re.match(r"vchelp_module\((.+?)\)", query.data)
     prev_match = re.match(r"vchelp_prev\((.+?)\)", query.data)
@@ -256,7 +409,7 @@ All commands can be used with: /
         module = mod_match.group(1)
         text = (
             "{} **{}**:\n".format(
-                "Here is the help for", HELPABLE[module].__MODULE__
+                "Here is the vchelp for", HELPABLE[module].__MODULE__
             )
             + HELPABLE[module].__HELP__
         )
@@ -316,7 +469,7 @@ All commands can be used with: /
         )
 
     elif create_match:
-        text, keyboard = await help_parser(query)
+        text, keyboard = await vchelp_parser(query)
         await query.message.edit(
             text=text,
             reply_markup=keyboard,
