@@ -1,8 +1,8 @@
 from typing import Dict, List, Union
 
 from Shasa import SUDOERS, app
-from Shasa.Database import (_get_authusers, add_nonadmin_chat,
-                            delete_authuser, get_authuser, get_authuser_count,
+from Shasa.Database import (_get_authusers, add_nonadmin_chat, delete_authuser,
+                            get_authuser, get_authuser_count,
                             get_authuser_names, is_nonadmin_chat,
                             remove_nonadmin_chat, save_authuser)
 from Shasa.Utilities.changers import int_to_alpha
