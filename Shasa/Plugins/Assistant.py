@@ -7,7 +7,7 @@ from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
                             InlineQueryResultPhoto, InputTextMessageContent,
                             Message)
 
-from Shasa import ASSISTANT_PREFIX, SUDOERS, app, random_assistant
+from Shasa import ASSISTANT_HANDLER, SUDOERS, app, random_assistant
 from Shasa.Database import get_assistant, save_assistant
 from Shasa.Utilities.assistant import get_assistant_details
 
@@ -22,22 +22,22 @@ __HELP__ = f"""
 **Note:**
 - Only for Sudo Users
 
-{ASSISTANT_PREFIX[0]}block [ Reply to a User Message] 
+{ASSISTANT_HANDLER[0]}block [ Reply to a User Message] 
 - Blocks the User from Assistant Account.
 
-{ASSISTANT_PREFIX[0]}unblock [ Reply to a User Message] 
+{ASSISTANT_HANDLER[0]}unblock [ Reply to a User Message] 
 - Unblocks the User from Assistant Account.
 
-{ASSISTANT_PREFIX[0]}approve [ Reply to a User Message] 
+{ASSISTANT_HANDLER[0]}approve [ Reply to a User Message] 
 - Approves the User for DM.
 
-{ASSISTANT_PREFIX[0]}disapprove [ Reply to a User Message] 
+{ASSISTANT_HANDLER[0]}disapprove [ Reply to a User Message] 
 - Disapproves the User for DM.
 
-{ASSISTANT_PREFIX[0]}pfp [ Reply to a Photo] 
+{ASSISTANT_HANDLER[0]}pfp [ Reply to a Photo] 
 - Changes Assistant account PFP.
 
-{ASSISTANT_PREFIX[0]}bio [Bio text] 
+{ASSISTANT_HANDLER[0]}bio [Bio text] 
 - Changes Bio of Assistant Account.
 
 /changeassistant [ASS NUMBER]
