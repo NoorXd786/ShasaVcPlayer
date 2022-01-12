@@ -17,7 +17,7 @@ from pyrogram import __version__ as pyrover
 from pyrogram import filters
 from pyrogram.types import Message
 
-from config import (MONGO_DB_URI, MUSIC_BOT_NAME, STRING1, STRING2, STRING3,
+from config import (MONGO_DB_URL, MUSIC_BOT_NAME, STRING1, STRING2, STRING3,
                     STRING4, STRING5)
 from Shasa import (ASS_CLI_1, ASS_CLI_2, ASS_CLI_3, ASS_CLI_4, ASS_CLI_5,
                    BOT_ID, MUSIC_BOT_NAME, SUDOERS, app, boottime)
@@ -170,7 +170,7 @@ async def stats_markup(_, CallbackQuery):
             "Getting MongoDB Stats...", show_alert=True
         )
         try:
-            pymongo = MongoClient(MONGO_DB_URI)
+            pymongo = MongoClient(MONGO_DB_URL)
         except Exception as e:
             print(e)
             return await CallbackQuery.edit_message_text(
