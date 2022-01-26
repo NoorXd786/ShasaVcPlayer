@@ -115,7 +115,7 @@
     },
     "UPSTREAM_BRANCH": {
       "description": "Repo's Branch Name",
-      "value": "master",
+      "value": "main",
       "required": true
     }
   },
