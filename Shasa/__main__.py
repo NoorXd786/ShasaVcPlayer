@@ -249,8 +249,8 @@ All commands can be used with: / """
 
 
 @app.on_message(filters.command("vchelp") & filters.private)
-async def help_command(_, message):
-    text, keyboard = await help_parser(message.from_user.mention)
+async def vchelp_command(_, message):
+    text, keyboard = await vchelp_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
 
 
@@ -302,7 +302,7 @@ async def start_command(_, message):
                     f"{message.from_user.mention} has just started bot to check <code>SUDOLIST</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
                 )
         if name == "vchelp":
-            text, keyboard = await help_parser(message.from_user.mention)
+            text, keyboard = await vchelp_parser(message.from_user.mention)
             await message.delete()
             return await app.send_text(
                 message.chat.id,
@@ -388,7 +388,7 @@ async def start_command(_, message):
     return
 
 
-async def help_parser(name, keyboard=None):
+async def vchelp_parser(name, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "vchelp"))
     return (
@@ -406,27 +406,27 @@ All commands can be used with: /
 
 @app.on_callback_query(filters.regex("lionx"))
 async def lionx(_, CallbackQuery):
-    text, keyboard = await help_parser(CallbackQuery.from_user.mention)
+    text, keyboard = await vchelp_parser(CallbackQuery.from_user.mention)
     await CallbackQuery.message.edit(text, reply_markup=keyboard)
 
 
 @app.on_callback_query(filters.regex("search_helper_mess"))
 async def search_helper_mess(_, CallbackQuery):
     await CallbackQuery.message.delete()
-    text, keyboard = await help_parser(CallbackQuery.from_user.mention)
+    text, keyboard = await vchelp_parser(CallbackQuery.from_user.mention)
     await app.send_message(
         CallbackQuery.message.chat.id, text, reply_markup=keyboard
     )
 
 
-@app.on_callback_query(filters.regex(r"help_(.*?)"))
-async def help_button(client, query):
-    home_match = re.match(r"help_home\((.+?)\)", query.data)
-    mod_match = re.match(r"help_module\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
-    back_match = re.match(r"help_back", query.data)
-    create_match = re.match(r"help_create", query.data)
+@app.on_callback_query(filters.regex(r"vchelp_(.*?)"))
+async def vchelp_button(client, query):
+    home_match = re.match(r"vchelp_home\((.+?)\)", query.data)
+    mod_match = re.match(r"vchelp_module\((.+?)\)", query.data)
+    prev_match = re.match(r"vchelp_prev\((.+?)\)", query.data)
+    next_match = re.match(r"vchelp_next\((.+?)\)", query.data)
+    back_match = re.match(r"vchelp_back", query.data)
+    create_match = re.match(r"vchelp_create", query.data)
     top_text = f"""Hello {query.from_user.first_name},
 
 Click on the buttons for more information.
@@ -454,7 +454,7 @@ All commands can be used with: /
             [
                 [
                     InlineKeyboardButton(
-                        text="↪️ Back", callback_data="help_back"
+                        text="↪️ Back", callback_data="vchelp_back"
                     ),
                     InlineKeyboardButton(
                         text="🔄 Close", callback_data="close"
@@ -506,7 +506,7 @@ All commands can be used with: /
         )
 
     elif create_match:
-        text, keyboard = await help_parser(query)
+        text, keyboard = await vchelp_parser(query)
         await query.message.edit(
             text=text,
             reply_markup=keyboard,
