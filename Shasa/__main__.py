@@ -15,7 +15,7 @@ from config import (LOG_GROUP_ID, LOG_SESSION, STRING1, STRING2, STRING3,
 from Shasa import (ASS_CLI_1, ASS_CLI_2, ASS_CLI_3, ASS_CLI_4, ASS_CLI_5,
                    ASSID1, ASSID2, ASSID3, ASSID4, ASSID5, ASSNAME1, ASSNAME2,
                    ASSNAME3, ASSNAME4, ASSNAME5, BOT_ID, BOT_NAME, LOG_CLIENT,
-                   OWNER_ID, app)
+                   OWNER_ID, SUDOERS, app, random_assistant)
 from Shasa.Core.Clients.cli import LOG_CLIENT
 from Shasa.Core.PyTgCalls.Shasa import (pytgcalls1, pytgcalls2, pytgcalls3,
                                         pytgcalls4, pytgcalls5)
@@ -26,6 +26,12 @@ from Shasa.Inline import private_panel
 from Shasa.Plugins import ALL_MODULES
 from Shasa.Utilities.inline import paginate_modules
 
+try:
+    from config import START_IMG_URL
+except:
+    START_IMG_URL = None
+
+
 loop = asyncio.get_event_loop()
 console = Console()
 HELPABLE = {}
@@ -35,6 +41,12 @@ async def initiate_bot():
     with console.status(
         "[magenta] Finalizing Booting...",
     ) as status:
+        ass_count = len(random_assistant)
+        if ass_count == 0:
+            console.print(
+                f"\n[red] No Assistant Clients Vars Defined!.. Exiting Process"
+            )
+            return
         try:
             chats = await get_active_video_chats()
             for chat in chats:
@@ -115,8 +127,8 @@ async def initiate_bot():
             console.print(f"\n[red]Stopping Bot")
             return
         try:
-            await ASS_CLI_1.join_chat("LionXupdates")
             await ASS_CLI_1.join_chat("LionXsupport")
+            await ASS_CLI_1.join_chat("LionXupdates")
         except:
             pass
         console.print(f"├[red] Assistant 1 Started as {ASSNAME1}!")
@@ -134,8 +146,8 @@ async def initiate_bot():
             console.print(f"\n[red]Stopping Bot")
             return
         try:
-            await ASS_CLI_2.join_chat("LionXupdates")
             await ASS_CLI_2.join_chat("LionXsupport")
+            await ASS_CLI_2.join_chat("LionXupdates")
         except:
             pass
         console.print(f"├[red] Assistant 2 Started as {ASSNAME2}!")
@@ -153,8 +165,8 @@ async def initiate_bot():
             console.print(f"\n[red]Stopping Bot")
             return
         try:
-            await ASS_CLI_3.join_chat("LionXupdates")
             await ASS_CLI_3.join_chat("LionXsupport")
+            await ASS_CLI_3.join_chat("LionXupdates")
         except:
             pass
         console.print(f"├[red] Assistant 3 Started as {ASSNAME3}!")
@@ -172,8 +184,8 @@ async def initiate_bot():
             console.print(f"\n[red]Stopping Bot")
             return
         try:
-            await ASS_CLI_4.join_chat("LionXupdates")
             await ASS_CLI_4.join_chat("LionXsupport")
+            await ASS_CLI_4.join_chat("LionXupdates")
         except:
             pass
         console.print(f"├[red] Assistant 4 Started as {ASSNAME4}!")
@@ -191,8 +203,8 @@ async def initiate_bot():
             console.print(f"\n[red]Stopping Bot")
             return
         try:
-            await ASS_CLI_5.join_chat("LionXupdates")
             await ASS_CLI_5.join_chat("LionXsupport")
+            await ASS_CLI_5.join_chat("LionXupdates")
         except:
             pass
         console.print(f"├[red] Assistant 5 Started as {ASSNAME5}!")
@@ -210,8 +222,8 @@ async def initiate_bot():
             console.print(f"\n[red]Stopping Bot")
             return
         try:
-            await LOG_CLIENT.join_chat("LionXupdates")
             await LOG_CLIENT.join_chat("LionXsupport")
+            await LOG_CLIENT.join_chat("LionXupdates")
         except:
             pass
     console.print(f"└[red] Shasa Music Bot Boot Completed.")
@@ -236,9 +248,9 @@ A Telegram Music+Video Streaming bot with some useful features.
 All commands can be used with: / """
 
 
-@app.on_message(filters.command("vchelp") & filters.private)
-async def vchelp_command(_, message):
-    text, keyboard = await vchelp_parser(message.from_user.mention)
+@app.on_message(filters.command("help") & filters.private)
+async def help_command(_, message):
+    text, keyboard = await help_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
 
 
@@ -289,8 +301,8 @@ async def start_command(_, message):
                     LOG_GROUP_ID,
                     f"{message.from_user.mention} has just started bot to check <code>SUDOLIST</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
                 )
-        if name == "vchelp":
-            text, keyboard = await vchelp_parser(message.from_user.mention)
+        if name == "help":
+            text, keyboard = await help_parser(message.from_user.mention)
             await message.delete()
             return await app.send_text(
                 message.chat.id,
@@ -354,10 +366,17 @@ async def start_command(_, message):
                 )
             return
     out = private_panel()
-    await message.reply_text(
-        home_text_pm,
-        reply_markup=InlineKeyboardMarkup(out[1]),
-    )
+    if START_IMG_URL is None:
+        await message.reply_text(
+            home_text_pm,
+            reply_markup=InlineKeyboardMarkup(out[1]),
+        )
+    else:
+        await message.reply_photo(
+            photo=START_IMG_URL,
+            caption=home_text_pm,
+            reply_markup=InlineKeyboardMarkup(out[1]),
+        )
     if await is_on_off(5):
         sender_id = message.from_user.id
         sender_name = message.from_user.first_name
@@ -369,9 +388,9 @@ async def start_command(_, message):
     return
 
 
-async def vchelp_parser(name, keyboard=None):
+async def help_parser(name, keyboard=None):
     if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "vchelp"))
+        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
     return (
         """Hello {first_name},
 
@@ -385,20 +404,29 @@ All commands can be used with: /
     )
 
 
-@app.on_callback_query(filters.regex("md"))
-async def md(_, CallbackQuery):
-    text, keyboard = await vchelp_parser(CallbackQuery.from_user.mention)
+@app.on_callback_query(filters.regex("lionx"))
+async def lionx(_, CallbackQuery):
+    text, keyboard = await help_parser(CallbackQuery.from_user.mention)
     await CallbackQuery.message.edit(text, reply_markup=keyboard)
 
 
-@app.on_callback_query(filters.regex(r"vchelp_(.*?)"))
-async def vchelp_button(client, query):
-    home_match = re.match(r"vchelp_home\((.+?)\)", query.data)
-    mod_match = re.match(r"vchelp_module\((.+?)\)", query.data)
-    prev_match = re.match(r"vchelp_prev\((.+?)\)", query.data)
-    next_match = re.match(r"vchelp_next\((.+?)\)", query.data)
-    back_match = re.match(r"vchelp_back", query.data)
-    create_match = re.match(r"vchelp_create", query.data)
+@app.on_callback_query(filters.regex("search_helper_mess"))
+async def search_helper_mess(_, CallbackQuery):
+    await CallbackQuery.message.delete()
+    text, keyboard = await help_parser(CallbackQuery.from_user.mention)
+    await app.send_message(
+        CallbackQuery.message.chat.id, text, reply_markup=keyboard
+    )
+
+
+@app.on_callback_query(filters.regex(r"help_(.*?)"))
+async def help_button(client, query):
+    home_match = re.match(r"help_home\((.+?)\)", query.data)
+    mod_match = re.match(r"help_module\((.+?)\)", query.data)
+    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
+    next_match = re.match(r"help_next\((.+?)\)", query.data)
+    back_match = re.match(r"help_back", query.data)
+    create_match = re.match(r"help_create", query.data)
     top_text = f"""Hello {query.from_user.first_name},
 
 Click on the buttons for more information.
@@ -407,9 +435,18 @@ All commands can be used with: /
  """
     if mod_match:
         module = mod_match.group(1)
+        if str(module) == "sudousers":
+            userid = query.from_user.id
+            if userid in SUDOERS:
+                pass
+            else:
+                return await query.answer(
+                    "This Button can only be accessed by SUDO USERS",
+                    show_alert=True,
+                )
         text = (
             "{} **{}**:\n".format(
-                "Here is the vchelp for", HELPABLE[module].__MODULE__
+                "Here is the help for", HELPABLE[module].__MODULE__
             )
             + HELPABLE[module].__HELP__
         )
@@ -417,7 +454,7 @@ All commands can be used with: /
             [
                 [
                     InlineKeyboardButton(
-                        text="↪️ Back", callback_data="vchelp_back"
+                        text="↪️ Back", callback_data="help_back"
                     ),
                     InlineKeyboardButton(
                         text="🔄 Close", callback_data="close"
@@ -444,7 +481,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(curr_page - 1, HELPABLE, "vchelp")
+                paginate_modules(curr_page - 1, HELPABLE, "help")
             ),
             disable_web_page_preview=True,
         )
@@ -454,7 +491,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(next_page + 1, HELPABLE, "vchelp")
+                paginate_modules(next_page + 1, HELPABLE, "help")
             ),
             disable_web_page_preview=True,
         )
@@ -463,13 +500,13 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(0, HELPABLE, "vchelp")
+                paginate_modules(0, HELPABLE, "help")
             ),
             disable_web_page_preview=True,
         )
 
     elif create_match:
-        text, keyboard = await vchelp_parser(query)
+        text, keyboard = await help_parser(query)
         await query.message.edit(
             text=text,
             reply_markup=keyboard,
