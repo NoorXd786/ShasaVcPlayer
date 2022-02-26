@@ -255,7 +255,7 @@ async def vchelp_command(_, message):
 
 
 @app.on_message(filters.command("vcstart") & filters.private)
-async def start_command(_, message):
+async def vcstart_command(_, message):
     if len(message.text.split()) > 1:
         name = (message.text.split(None, 1)[1]).lower()
         if name[0] == "s":
