@@ -9,10 +9,16 @@ from pyrogram.types import Message
 from Shasa import BOT_USERNAME, MUSIC_BOT_NAME, app, boottime
 from Shasa.Utilities.ping import get_readable_time
 
-__MODULE__ = "Ping"
+__MODULE__ = "Essentials"
 __HELP__ = """
 
 /ping - Check if Bot is alive or not.
+
+/start - Start the Bot.
+
+/vchelp - Get Commands Helper Menu.
+
+/settings - Get Settings button.
 """
 
 

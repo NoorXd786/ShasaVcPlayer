@@ -27,22 +27,6 @@ from Shasa.Utilities.ping import get_readable_time
 
 welcome_group = 2
 
-__MODULE__ = "Essentials"
-__HELP__ = """
-
-
-/start 
-- Start the Bot.
-
-
-/vchelp 
-- Get Commands Helper Menu.
-
-
-/settings 
-- Get Settings button.
-"""
-
 
 @app.on_message(filters.new_chat_members, group=welcome_group)
 async def welcome(_, message: Message):
@@ -107,7 +91,7 @@ async def useradd(_, message: Message):
     )
 
 
-@app.on_message(filters.command("settings") & filters.group)
+@app.on_message(filters.command("vcsettings") & filters.group)
 @PermissionCheck
 async def settings(_, message: Message):
     c_id = message.chat.id
