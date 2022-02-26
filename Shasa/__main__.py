@@ -248,13 +248,13 @@ A Telegram Music+Video Streaming bot with some useful features.
 All commands can be used with: / """
 
 
-@app.on_message(filters.command("help") & filters.private)
+@app.on_message(filters.command("vchelp") & filters.private)
 async def help_command(_, message):
     text, keyboard = await help_parser(message.from_user.mention)
     await app.send_message(message.chat.id, text, reply_markup=keyboard)
 
 
-@app.on_message(filters.command("start") & filters.private)
+@app.on_message(filters.command("vcstart") & filters.private)
 async def start_command(_, message):
     if len(message.text.split()) > 1:
         name = (message.text.split(None, 1)[1]).lower()
@@ -301,7 +301,7 @@ async def start_command(_, message):
                     LOG_GROUP_ID,
                     f"{message.from_user.mention} has just started bot to check <code>SUDOLIST</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
                 )
-        if name == "help":
+        if name == "vchelp":
             text, keyboard = await help_parser(message.from_user.mention)
             await message.delete()
             return await app.send_text(
@@ -390,7 +390,7 @@ async def start_command(_, message):
 
 async def help_parser(name, keyboard=None):
     if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
+        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "vchelp"))
     return (
         """Hello {first_name},
 
@@ -446,7 +446,7 @@ All commands can be used with: /
                 )
         text = (
             "{} **{}**:\n".format(
-                "Here is the help for", HELPABLE[module].__MODULE__
+                "Here is the vchelp for", HELPABLE[module].__MODULE__
             )
             + HELPABLE[module].__HELP__
         )
@@ -481,7 +481,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(curr_page - 1, HELPABLE, "help")
+                paginate_modules(curr_page - 1, HELPABLE, "vchelp")
             ),
             disable_web_page_preview=True,
         )
@@ -491,7 +491,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(next_page + 1, HELPABLE, "help")
+                paginate_modules(next_page + 1, HELPABLE, "vchelp")
             ),
             disable_web_page_preview=True,
         )
@@ -500,7 +500,7 @@ All commands can be used with: /
         await query.message.edit(
             text=top_text,
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(0, HELPABLE, "help")
+                paginate_modules(0, HELPABLE, "vchelp")
             ),
             disable_web_page_preview=True,
         )
