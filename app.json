@@ -33,7 +33,7 @@
       "value": "60",
       "required": true
     },
-    "ASSISTANT_PREFIX": {
+    "ASSISTANT_HANDLER": {
       "description": "Prefix for Assistant Commands.",
       "value": ".",
       "required": true

@@ -16,7 +16,7 @@ API_HASH = getenv("API_HASH")
 
 # Assistant Prefix needed to trigger your assistant accounts in User mode to execute your command. This can be only set as one Symbol (Special Character)
 # Example:- . or , or ! or * etc etc
-ASSISTANT_PREFIX = list(getenv("ASSISTANT_PREFIX", ".").split())
+ASSISTANT_HANDLER = list(getenv("ASSISTANT_HANDLER", ".").split())
 
 # Custom max audio(music) duration for voice chat. set DURATION_LIMIT in variables with your own time(mins), Default to 10 mins.
 # Remember to give value in Minutes
