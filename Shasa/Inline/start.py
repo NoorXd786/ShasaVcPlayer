@@ -1,5 +1,4 @@
-from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
-                            InlineKeyboardMarkup, InputMediaPhoto, Message)
+from pyrogram.types import InlineKeyboardButton
 
 from config import MUSIC_BOT_NAME, SUPPORT_CHANNEL, SUPPORT_GROUP
 from Shasa import BOT_USERNAME
@@ -12,12 +11,8 @@ def setting_markup2():
             InlineKeyboardButton(text="🎚 Audio Volume", callback_data="AV"),
         ],
         [
-            InlineKeyboardButton(
-                text="👥 Authorized Users", callback_data="AU"
-            ),
-            InlineKeyboardButton(
-                text="💻 Dashboard", callback_data="Dashboard"
-            ),
+            InlineKeyboardButton(text="👥 Authorized Users", callback_data="AU"),
+            InlineKeyboardButton(text="💻 Dashboard", callback_data="Dashboard"),
         ],
         [
             InlineKeyboardButton(text="✖️ Close", callback_data="close"),
@@ -34,11 +29,7 @@ def start_pannel():
                     text="Helper Commands Menu", callback_data="lionx"
                 ),
             ],
-            [
-                InlineKeyboardButton(
-                    text="Settings", callback_data="settingm"
-                )
-            ],
+            [InlineKeyboardButton(text="Settings", callback_data="settingm")],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}**", buttons
     if not SUPPORT_CHANNEL and SUPPORT_GROUP:
@@ -48,15 +39,9 @@ def start_pannel():
                     text="Helper Commands Menu", callback_data="lionx"
                 ),
             ],
+            [InlineKeyboardButton(text="Settings", callback_data="settingm")],
             [
-                InlineKeyboardButton(
-                    text="Settings", callback_data="settingm"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="Support Group", url=f"{SUPPORT_GROUP}"
-                ),
+                InlineKeyboardButton(text="Support Group", url=f"{SUPPORT_GROUP}"),
             ],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}*", buttons
@@ -67,15 +52,9 @@ def start_pannel():
                     text="Helper Commands Menu", callback_data="lionx"
                 ),
             ],
+            [InlineKeyboardButton(text="Settings", callback_data="settingm")],
             [
-                InlineKeyboardButton(
-                    text="Settings", callback_data="settingm"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="Official Channel", url=f"{SUPPORT_CHANNEL}"
-                ),
+                InlineKeyboardButton(text="Official Channel", url=f"{SUPPORT_CHANNEL}"),
             ],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}**", buttons
@@ -86,18 +65,10 @@ def start_pannel():
                     text="Helper Commands Menu", callback_data="lionx"
                 ),
             ],
+            [InlineKeyboardButton(text="Settings", callback_data="settingm")],
             [
-                InlineKeyboardButton(
-                    text="Settings", callback_data="settingm"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="Official Channel", url=f"{SUPPORT_CHANNEL}"
-                ),
-                InlineKeyboardButton(
-                    text="Support Group", url=f"{SUPPORT_GROUP}"
-                ),
+                InlineKeyboardButton(text="Official Channel", url=f"{SUPPORT_CHANNEL}"),
+                InlineKeyboardButton(text="Support Group", url=f"{SUPPORT_GROUP}"),
             ],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}**", buttons
@@ -135,9 +106,7 @@ def private_panel():
                 )
             ],
             [
-                InlineKeyboardButton(
-                    text="Support Group", url=f"{SUPPORT_GROUP}"
-                ),
+                InlineKeyboardButton(text="Support Group", url=f"{SUPPORT_GROUP}"),
             ],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}*", buttons
@@ -156,9 +125,7 @@ def private_panel():
                 )
             ],
             [
-                InlineKeyboardButton(
-                    text="Official Channel", url=f"{SUPPORT_CHANNEL}"
-                ),
+                InlineKeyboardButton(text="Official Channel", url=f"{SUPPORT_CHANNEL}"),
             ],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}**", buttons
@@ -177,12 +144,8 @@ def private_panel():
                 )
             ],
             [
-                InlineKeyboardButton(
-                    text="Official Channel", url=f"{SUPPORT_CHANNEL}"
-                ),
-                InlineKeyboardButton(
-                    text="Support Group", url=f"{SUPPORT_GROUP}"
-                ),
+                InlineKeyboardButton(text="Official Channel", url=f"{SUPPORT_CHANNEL}"),
+                InlineKeyboardButton(text="Support Group", url=f"{SUPPORT_GROUP}"),
             ],
         ]
         return f"🎛  **This is {MUSIC_BOT_NAME}**", buttons
@@ -195,12 +158,8 @@ def setting_markup():
             InlineKeyboardButton(text="🎚 Audio Volume", callback_data="AV"),
         ],
         [
-            InlineKeyboardButton(
-                text="👥 Authorized Users", callback_data="AU"
-            ),
-            InlineKeyboardButton(
-                text="💻 Dashboard", callback_data="Dashboard"
-            ),
+            InlineKeyboardButton(text="👥 Authorized Users", callback_data="AU"),
+            InlineKeyboardButton(text="💻 Dashboard", callback_data="Dashboard"),
         ],
         [
             InlineKeyboardButton(text="✖️ Close", callback_data="close"),
@@ -212,11 +171,7 @@ def setting_markup():
 
 def volmarkup():
     buttons = [
-        [
-            InlineKeyboardButton(
-                text="🔄 Reset Audio Volume 🔄", callback_data="HV"
-            )
-        ],
+        [InlineKeyboardButton(text="🔄 Reset Audio Volume 🔄", callback_data="HV")],
         [
             InlineKeyboardButton(text="🔈 Low Vol", callback_data="LV"),
             InlineKeyboardButton(text="🔉 Medium Vol", callback_data="MV"),
@@ -225,11 +180,7 @@ def volmarkup():
             InlineKeyboardButton(text="🔊 High Vol", callback_data="HV"),
             InlineKeyboardButton(text="🔈 Amplified Vol", callback_data="VAM"),
         ],
-        [
-            InlineKeyboardButton(
-                text="🔽 Custom Volume 🔽", callback_data="Custommarkup"
-            )
-        ],
+        [InlineKeyboardButton(text="🔽 Custom Volume 🔽", callback_data="Custommarkup")],
         [InlineKeyboardButton(text="🔙 Go back", callback_data="settingm")],
     ]
     return f"🔧  **{MUSIC_BOT_NAME} Settings**", buttons

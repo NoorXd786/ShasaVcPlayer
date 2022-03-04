@@ -1,5 +1,3 @@
-from typing import Dict, List, Union
-
 from Shasa import BOT_ID, app
 
 

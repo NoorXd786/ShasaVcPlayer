@@ -1,6 +1,6 @@
 from pyrogram import filters
 
-from Shasa import LOG_GROUP_ID, OWNER_ID, SUDOERS, app
+from Shasa import LOG_GROUP_ID, SUDOERS, app
 from Shasa.Database import is_gbanned_user, is_on_off
 
 

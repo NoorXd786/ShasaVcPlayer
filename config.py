@@ -43,9 +43,7 @@ HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 # To use your Shasa as default with all regular Updates and Patches.
 # Also without customizing or modifying as your own choice, this must be
 # filled with Shasa Music Bot Main Repository URL in value.
-UPSTREAM_REPO = getenv(
-    "UPSTREAM_REPO", "https://github.com/MdNoor786/ShasaVcPlayer"
-)
+UPSTREAM_REPO = getenv("UPSTREAM_REPO", "https://github.com/MdNoor786/ShasaVcPlayer")
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "master")
 
 # If you have a Support for your Music Bot, You can set this var

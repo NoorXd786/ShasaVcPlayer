@@ -11,14 +11,30 @@ from motor.motor_asyncio import AsyncIOMotorClient as Bot
 from rich.console import Console
 from rich.table import Table
 
-from config import (ASSISTANT_HANDLER, DURATION_LIMIT_MIN, LOG_GROUP_ID,
-                    LOG_SESSION)
+from config import ASSISTANT_HANDLER, DURATION_LIMIT_MIN, LOG_GROUP_ID, LOG_SESSION
 from config import MONGO_DB_URL as mango
-from config import (MUSIC_BOT_NAME, OWNER_ID, STRING1, STRING2, STRING3,
-                    STRING4, STRING5, SUDO_USERS, UPSTREAM_BRANCH,
-                    UPSTREAM_REPO, get_queue)
-from Shasa.Core.Clients.cli import (ASS_CLI_1, ASS_CLI_2, ASS_CLI_3, ASS_CLI_4,
-                                    ASS_CLI_5, LOG_CLIENT, app)
+from config import (
+    MUSIC_BOT_NAME,
+    OWNER_ID,
+    STRING1,
+    STRING2,
+    STRING3,
+    STRING4,
+    STRING5,
+    SUDO_USERS,
+    UPSTREAM_BRANCH,
+    UPSTREAM_REPO,
+    get_queue,
+)
+from Shasa.Core.Clients.cli import (
+    ASS_CLI_1,
+    ASS_CLI_2,
+    ASS_CLI_3,
+    ASS_CLI_4,
+    ASS_CLI_5,
+    LOG_CLIENT,
+    app,
+)
 from Shasa.Utilities.changers import time_to_seconds
 from Shasa.Utilities.tasks import install_requirements
 

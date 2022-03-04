@@ -1,9 +1,7 @@
-from typing import Dict, List, Union
+from pyrogram import filters
 
-from pyrogram import Client, filters
-
-from Shasa import BOT_USERNAME, MUSIC_BOT_NAME, app, db
-from Shasa.Database import _get_theme, get_theme, save_theme
+from Shasa import BOT_USERNAME, MUSIC_BOT_NAME, app
+from Shasa.Database import get_theme, save_theme
 from Shasa.Decorators.permission import PermissionCheck
 
 themes = [

@@ -1,5 +1,3 @@
-from typing import Dict, List, Union
-
 from Shasa import db
 
 chatsdb = db.chats

@@ -1,15 +1,10 @@
 import random
 
 from pyrogram import filters
-from pyrogram.raw.functions.messages import DeleteHistory
-from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
-                            InlineKeyboardMarkup, InlineQueryResultArticle,
-                            InlineQueryResultPhoto, InputTextMessageContent,
-                            Message)
+from pyrogram.types import Message
 
-from Shasa import ASSISTANT_HANDLER, SUDOERS, app, random_assistant
+from Shasa import SUDOERS, app, random_assistant
 from Shasa.Database import get_assistant, save_assistant
-from Shasa.Utilities.assistant import get_assistant_details
 
 ass_num_list = ["1", "2", "3", "4", "5"]
 
