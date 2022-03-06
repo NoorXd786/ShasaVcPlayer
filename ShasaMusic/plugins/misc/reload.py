@@ -11,26 +11,22 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS, adminlist
-from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.utils.database import get_authuser_names
 from ShasaMusic.utils.decorators import language
 from ShasaMusic.utils.formatters import alpha_to_int
+from strings import get_command
 
 ### Multi-Lang Commands
 RELOAD_COMMAND = get_command("RELOAD_COMMAND")
 
 
-@app.on_message(
-    filters.command(RELOAD_COMMAND) & filters.group & ~BANNED_USERS
-)
+@app.on_message(filters.command(RELOAD_COMMAND) & filters.group & ~BANNED_USERS)
 @language
 async def reload_admin_cache(client, message: Message, _):
     try:
         chat_id = message.chat.id
-        admins = await app.get_chat_members(
-            chat_id, filter="administrators"
-        )
+        admins = await app.get_chat_members(chat_id, filter="administrators")
         authusers = await get_authuser_names(chat_id)
         adminlist[chat_id] = []
         for user in admins:

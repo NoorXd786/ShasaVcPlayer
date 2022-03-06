@@ -16,19 +16,24 @@ from pyrogram.raw import types
 
 import config
 from config import adminlist, chatstats, clean, userstats
-from strings import get_command
 from ShasaMusic import app, userbot
 from ShasaMusic.misc import SUDOERS
-from ShasaMusic.utils.database import (get_active_chats,
-                                       get_authuser_names,
-                                       get_particular_top,
-                                       get_queries, get_served_chats,
-                                       get_served_users, get_user_top,
-                                       is_cleanmode_on, set_queries,
-                                       update_particular_top,
-                                       update_user_top)
+from ShasaMusic.utils.database import (
+    get_active_chats,
+    get_authuser_names,
+    get_particular_top,
+    get_queries,
+    get_served_chats,
+    get_served_users,
+    get_user_top,
+    is_cleanmode_on,
+    set_queries,
+    update_particular_top,
+    update_user_top,
+)
 from ShasaMusic.utils.decorators.language import language
 from ShasaMusic.utils.formatters import alpha_to_int
+from strings import get_command
 
 BROADCAST_COMMAND = get_command("BROADCAST_COMMAND")
 AUTO_DELETE = config.CLEANMODE_DELETE_MINS
@@ -99,9 +104,7 @@ async def braodcast_message(client, message, _):
                 except Exception:
                     pass
             try:
-                await message.reply_text(
-                    _["broad_1"].format(sent, pin)
-                )
+                await message.reply_text(_["broad_1"].format(sent, pin))
             except:
                 pass
         if "-user" in message.text:
@@ -133,9 +136,7 @@ async def braodcast_message(client, message, _):
             if config.STRING1:
                 async for dialog in userbot.one.iter_dialogs():
                     try:
-                        m = await userbot.one.forward_messages(
-                            dialog.chat.id, y, x
-                        )
+                        m = await userbot.one.forward_messages(dialog.chat.id, y, x)
                         s1 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -145,9 +146,7 @@ async def braodcast_message(client, message, _):
             if config.STRING2:
                 async for dialog in userbot.two.iter_dialogs():
                     try:
-                        m = await userbot.two.forward_messages(
-                            dialog.chat.id, y, x
-                        )
+                        m = await userbot.two.forward_messages(dialog.chat.id, y, x)
                         s2 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -157,9 +156,7 @@ async def braodcast_message(client, message, _):
             if config.STRING3:
                 async for dialog in userbot.three.iter_dialogs():
                     try:
-                        m = await userbot.three.forward_messages(
-                            dialog.chat.id, y, x
-                        )
+                        m = await userbot.three.forward_messages(dialog.chat.id, y, x)
                         s3 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -169,9 +166,7 @@ async def braodcast_message(client, message, _):
             if config.STRING4:
                 async for dialog in userbot.four.iter_dialogs():
                     try:
-                        m = await userbot.four.forward_messages(
-                            dialog.chat.id, y, x
-                        )
+                        m = await userbot.four.forward_messages(dialog.chat.id, y, x)
                         s4 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -181,9 +176,7 @@ async def braodcast_message(client, message, _):
             if config.STRING5:
                 async for dialog in userbot.five.iter_dialogs():
                     try:
-                        m = await userbot.five.forward_messages(
-                            dialog.chat.id, y, x
-                        )
+                        m = await userbot.five.forward_messages(dialog.chat.id, y, x)
                         s5 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -240,9 +233,7 @@ async def braodcast_message(client, message, _):
                 except Exception:
                     pass
             try:
-                await message.reply_text(
-                    _["broad_1"].format(sent, pin)
-                )
+                await message.reply_text(_["broad_1"].format(sent, pin))
             except:
                 pass
         if "-user" in message.text:
@@ -274,9 +265,7 @@ async def braodcast_message(client, message, _):
             if config.STRING1:
                 async for dialog in userbot.one.iter_dialogs():
                     try:
-                        m = await userbot.one.send_message(
-                            dialog.chat.id, text=query
-                        )
+                        m = await userbot.one.send_message(dialog.chat.id, text=query)
                         s1 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -286,9 +275,7 @@ async def braodcast_message(client, message, _):
             if config.STRING2:
                 async for dialog in userbot.two.iter_dialogs():
                     try:
-                        m = await userbot.two.send_message(
-                            dialog.chat.id, text=query
-                        )
+                        m = await userbot.two.send_message(dialog.chat.id, text=query)
                         s2 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -298,9 +285,7 @@ async def braodcast_message(client, message, _):
             if config.STRING3:
                 async for dialog in userbot.three.iter_dialogs():
                     try:
-                        m = await userbot.three.send_message(
-                            dialog.chat.id, text=query
-                        )
+                        m = await userbot.three.send_message(dialog.chat.id, text=query)
                         s3 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -310,9 +295,7 @@ async def braodcast_message(client, message, _):
             if config.STRING4:
                 async for dialog in userbot.four.iter_dialogs():
                     try:
-                        m = await userbot.four.send_message(
-                            dialog.chat.id, text=query
-                        )
+                        m = await userbot.four.send_message(dialog.chat.id, text=query)
                         s4 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -322,9 +305,7 @@ async def braodcast_message(client, message, _):
             if config.STRING5:
                 async for dialog in userbot.five.iter_dialogs():
                     try:
-                        m = await userbot.five.send_message(
-                            dialog.chat.id, text=query
-                        )
+                        m = await userbot.five.send_message(dialog.chat.id, text=query)
                         s5 += 1
                     except FloodWait as e:
                         await asyncio.sleep(e.x)
@@ -351,15 +332,11 @@ async def auto_clean():
                         spot = spot["spot"]
                         next_spot = spot + 1
                         new_spot = {"spot": next_spot, "title": title}
-                        await update_particular_top(
-                            chat_id, vidid, new_spot
-                        )
+                        await update_particular_top(chat_id, vidid, new_spot)
                     else:
                         next_spot = 1
                         new_spot = {"spot": next_spot, "title": title}
-                        await update_particular_top(
-                            chat_id, vidid, new_spot
-                        )
+                        await update_particular_top(chat_id, vidid, new_spot)
             for user_id in userstats:
                 for dic in userstats[user_id]:
                     vidid = dic["vidid"]
@@ -370,15 +347,11 @@ async def auto_clean():
                         spot = spot["spot"]
                         next_spot = spot + 1
                         new_spot = {"spot": next_spot, "title": title}
-                        await update_user_top(
-                            user_id, vidid, new_spot
-                        )
+                        await update_user_top(user_id, vidid, new_spot)
                     else:
                         next_spot = 1
                         new_spot = {"spot": next_spot, "title": title}
-                        await update_user_top(
-                            user_id, vidid, new_spot
-                        )
+                        await update_user_top(user_id, vidid, new_spot)
         except:
             pass
         try:
@@ -388,9 +361,7 @@ async def auto_clean():
                 for x in clean[chat_id]:
                     if datetime.now() > x["timer_after"]:
                         try:
-                            await app.delete_messages(
-                                chat_id, x["msg_id"]
-                            )
+                            await app.delete_messages(chat_id, x["msg_id"])
                         except FloodWait as e:
                             await asyncio.sleep(e.x)
                         except:
