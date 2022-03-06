@@ -11,20 +11,17 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 from config import BANNED_USERS
-from strings import get_command
 from ShasaMusic import app
-from ShasaMusic.utils.database import (get_chatmode, get_playmode,
-                                       get_playtype)
+from ShasaMusic.utils.database import get_chatmode, get_playmode, get_playtype
 from ShasaMusic.utils.decorators import language
 from ShasaMusic.utils.inline.settings import playmode_users_markup
+from strings import get_command
 
 ### Commands
 PLAYMODE_COMMAND = get_command("PLAYMODE_COMMAND")
 
 
-@app.on_message(
-    filters.command(PLAYMODE_COMMAND) & filters.group & ~BANNED_USERS
-)
+@app.on_message(filters.command(PLAYMODE_COMMAND) & filters.group & ~BANNED_USERS)
 @language
 async def playmode_(client, message: Message, _):
     playmode = await get_playmode(message.chat.id)
