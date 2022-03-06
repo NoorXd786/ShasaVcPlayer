@@ -12,21 +12,24 @@ from pyrogram.types import InlineKeyboardMarkup, Message
 
 import config
 from config import BANNED_USERS
+from strings import get_command
 from ShasaMusic import YouTube, app
 from ShasaMusic.core.call import Shasa
 from ShasaMusic.misc import db
 from ShasaMusic.utils.database import get_loop
 from ShasaMusic.utils.decorators import AdminRightsCheck
-from ShasaMusic.utils.inline.play import stream_markup, telegram_markup
+from ShasaMusic.utils.inline.play import (stream_markup,
+                                          telegram_markup)
 from ShasaMusic.utils.stream.autoclear import auto_clean
 from ShasaMusic.utils.thumbnails import gen_thumb
-from strings import get_command
 
 # Commands
 SKIP_COMMAND = get_command("SKIP_COMMAND")
 
 
-@app.on_message(filters.command(SKIP_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(SKIP_COMMAND) & filters.group & ~BANNED_USERS
+)
 @AdminRightsCheck
 async def skip(cli, message: Message, _, mystic, chat_id):
     if not len(message.command) < 2:
@@ -47,7 +50,9 @@ async def skip(cli, message: Message, _, mystic, chat_id):
                             try:
                                 popped = check.pop(0)
                             except:
-                                return await mystic.edit_text(_["admin_16"])
+                                return await mystic.edit_text(
+                                    _["admin_16"]
+                                )
                             if popped:
                                 if config.AUTO_DOWNLOADS_CLEAR:
                                     await auto_clean(popped)
@@ -63,7 +68,9 @@ async def skip(cli, message: Message, _, mystic, chat_id):
                                     return
                                 break
                     else:
-                        return await mystic.edit_text(_["admin_15"].format(count))
+                        return await mystic.edit_text(
+                            _["admin_15"].format(count)
+                        )
                 else:
                     return await mystic.edit_text(_["admin_14"])
             else:
@@ -120,7 +127,9 @@ async def skip(cli, message: Message, _, mystic, chat_id):
         )
         await mystic.delete()
     elif "vid_" in queued:
-        await mystic.edit_text(_["call_10"], disable_web_page_preview=True)
+        await mystic.edit_text(
+            _["call_10"], disable_web_page_preview=True
+        )
         try:
             file_path, direct = await YouTube.download(
                 videoid,
@@ -168,7 +177,9 @@ async def skip(cli, message: Message, _, mystic, chat_id):
                 photo=config.TELEGRAM_AUDIO_URL
                 if str(streamtype) == "audio"
                 else config.TELEGRAM_VIDEO_URL,
-                caption=_["stream_3"].format(title, check[0]["dur"], user),
+                caption=_["stream_3"].format(
+                    title, check[0]["dur"], user
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
             await mystic.delete()
@@ -178,7 +189,9 @@ async def skip(cli, message: Message, _, mystic, chat_id):
                 photo=config.SOUNCLOUD_IMG_URL
                 if str(streamtype) == "audio"
                 else config.TELEGRAM_VIDEO_URL,
-                caption=_["stream_3"].format(title, check[0]["dur"], user),
+                caption=_["stream_3"].format(
+                    title, check[0]["dur"], user
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
             await mystic.delete()
