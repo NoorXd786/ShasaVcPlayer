@@ -10,14 +10,18 @@
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from config import adminlist
-from strings import get_string
 from ShasaMusic import app
 from ShasaMusic.misc import SUDOERS
-from ShasaMusic.utils.database import (get_authuser_names,
-                                       get_chatmode, get_cmode,
-                                       get_lang, is_active_chat,
-                                       is_commanddelete_on,
-                                       is_nonadmin_chat)
+from ShasaMusic.utils.database import (
+    get_authuser_names,
+    get_chatmode,
+    get_cmode,
+    get_lang,
+    is_active_chat,
+    is_commanddelete_on,
+    is_nonadmin_chat,
+)
+from strings import get_string
 
 from ..formatters import int_to_alpha
 
@@ -42,9 +46,7 @@ def AdminRightsCheck(mystic):
                     ]
                 ]
             )
-            return await message.reply_text(
-                _["general_4"], reply_markup=upl
-            )
+            return await message.reply_text(_["general_4"], reply_markup=upl)
         if "pause" in message.command:
             s = "Pausing Stream"
         elif "resume" in message.command:
@@ -82,9 +84,7 @@ def AdminRightsCheck(mystic):
         is_non_admin = await is_nonadmin_chat(message.chat.id)
         if not is_non_admin:
             if message.from_user.id not in SUDOERS:
-                send += (
-                    "\n\n**🧛 Admin Commands:** Admins + Auth Users"
-                )
+                send += "\n\n**🧛 Admin Commands:** Admins + Auth Users"
                 admins = adminlist.get(message.chat.id)
                 if not admins:
                     return await message.reply_text(_["admin_18"])
@@ -119,9 +119,7 @@ def AdminActual(mystic):
                     ]
                 ]
             )
-            return await message.reply_text(
-                _["general_4"], reply_markup=upl
-            )
+            return await message.reply_text(_["general_4"], reply_markup=upl)
         if message.from_user.id not in SUDOERS:
             try:
                 member = await app.get_chat_member(
@@ -143,9 +141,7 @@ def ActualAdminCB(mystic):
         _ = get_string(language)
         if CallbackQuery.message.chat.type == "private":
             return await mystic(client, CallbackQuery, _)
-        is_non_admin = await is_nonadmin_chat(
-            CallbackQuery.message.chat.id
-        )
+        is_non_admin = await is_nonadmin_chat(CallbackQuery.message.chat.id)
         if not is_non_admin:
             try:
                 a = await app.get_chat_member(
@@ -153,17 +149,11 @@ def ActualAdminCB(mystic):
                     CallbackQuery.from_user.id,
                 )
             except:
-                return await CallbackQuery.answer(
-                    _["general_5"], show_alert=True
-                )
+                return await CallbackQuery.answer(_["general_5"], show_alert=True)
             if not a.can_manage_voice_chats:
                 if CallbackQuery.from_user.id not in SUDOERS:
-                    token = await int_to_alpha(
-                        CallbackQuery.from_user.id
-                    )
-                    _check = await get_authuser_names(
-                        CallbackQuery.from_user.id
-                    )
+                    token = await int_to_alpha(CallbackQuery.from_user.id)
+                    _check = await get_authuser_names(CallbackQuery.from_user.id)
                     if token not in _check:
                         try:
                             return await CallbackQuery.answer(
