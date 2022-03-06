@@ -17,13 +17,15 @@ import config
 from ShasaMusic import Carbon, Spotify, YouTube, app
 from ShasaMusic.core.call import Shasa
 from ShasaMusic.misc import db
-from ShasaMusic.utils.database import (add_active_chat,
-                                       add_active_video_chat,
-                                       is_active_chat,
-                                       is_video_allowed, music_on)
+from ShasaMusic.utils.database import (
+    add_active_chat,
+    add_active_video_chat,
+    is_active_chat,
+    is_video_allowed,
+    music_on,
+)
 from ShasaMusic.utils.exceptions import AssistantErr
-from ShasaMusic.utils.inline.play import (stream_markup,
-                                          telegram_markup)
+from ShasaMusic.utils.inline.play import stream_markup, telegram_markup
 from ShasaMusic.utils.inline.playlist import close_markup
 from ShasaMusic.utils.pastebin import Shasabin
 from ShasaMusic.utils.stream.queue import put_queue, put_queue_index
@@ -135,9 +137,7 @@ async def stream(
                 car = os.linesep.join(msg.split(os.linesep)[:17])
             else:
                 car = msg
-            carbon = await Carbon.generate(
-                car, randint(100, 10000000)
-            )
+            carbon = await Carbon.generate(car, randint(100, 10000000))
             upl = close_markup(_)
             return await app.send_photo(
                 original_chat_id,
@@ -172,15 +172,11 @@ async def stream(
             position = len(db.get(chat_id)) - 1
             await app.send_message(
                 original_chat_id,
-                _["queue_4"].format(
-                    position, title[:30], duration_min, user_name
-                ),
+                _["queue_4"].format(position, title[:30], duration_min, user_name),
             )
         else:
             db[chat_id] = []
-            await Shasa.join_call(
-                chat_id, original_chat_id, file_path, video=status
-            )
+            await Shasa.join_call(chat_id, original_chat_id, file_path, video=status)
             await add_active_chat(chat_id)
             await put_queue(
                 chat_id,
@@ -226,15 +222,11 @@ async def stream(
             position = len(db.get(chat_id)) - 1
             await app.send_message(
                 original_chat_id,
-                _["queue_4"].format(
-                    position, title[:30], duration_min, user_name
-                ),
+                _["queue_4"].format(position, title[:30], duration_min, user_name),
             )
         else:
             db[chat_id] = []
-            await Shasa.join_call(
-                chat_id, original_chat_id, file_path, video=None
-            )
+            await Shasa.join_call(chat_id, original_chat_id, file_path, video=None)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -254,9 +246,7 @@ async def stream(
             await app.send_photo(
                 original_chat_id,
                 photo=config.SOUNCLOUD_IMG_URL,
-                caption=_["stream_3"].format(
-                    title, duration_min, user_name
-                ),
+                caption=_["stream_3"].format(title, duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
             )
     elif streamtype == "telegram":
@@ -280,15 +270,11 @@ async def stream(
             position = len(db.get(chat_id)) - 1
             await app.send_message(
                 original_chat_id,
-                _["queue_4"].format(
-                    position, title[:30], duration_min, user_name
-                ),
+                _["queue_4"].format(position, title[:30], duration_min, user_name),
             )
         else:
             db[chat_id] = []
-            await Shasa.join_call(
-                chat_id, original_chat_id, file_path, video=status
-            )
+            await Shasa.join_call(chat_id, original_chat_id, file_path, video=status)
             await add_active_chat(chat_id)
             await put_queue(
                 chat_id,
@@ -307,12 +293,8 @@ async def stream(
             button = telegram_markup(_)
             await app.send_photo(
                 original_chat_id,
-                photo=config.TELEGRAM_VIDEO_URL
-                if video
-                else config.TELEGRAM_AUDIO_URL,
-                caption=_["stream_4"].format(
-                    title, link, duration_min, user_name
-                ),
+                photo=config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL,
+                caption=_["stream_4"].format(title, link, duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
             )
     elif streamtype == "live":
@@ -336,18 +318,14 @@ async def stream(
             position = len(db.get(chat_id)) - 1
             await app.send_message(
                 original_chat_id,
-                _["queue_4"].format(
-                    position, title[:30], duration_min, user_name
-                ),
+                _["queue_4"].format(position, title[:30], duration_min, user_name),
             )
         else:
             db[chat_id] = []
             n, file_path = await YouTube.video(link)
             if n == 0:
                 raise AssistantErr(_["str_3"])
-            await Shasa.join_call(
-                chat_id, original_chat_id, file_path, video=status
-            )
+            await Shasa.join_call(chat_id, original_chat_id, file_path, video=status)
             await add_active_chat(chat_id)
             await put_queue(
                 chat_id,
@@ -391,15 +369,11 @@ async def stream(
             )
             position = len(db.get(chat_id)) - 1
             await mystic.edit_text(
-                _["queue_4"].format(
-                    position, title[:30], duration_min, user_name
-                )
+                _["queue_4"].format(position, title[:30], duration_min, user_name)
             )
         else:
             db[chat_id] = []
-            await Shasa.join_call(
-                chat_id, original_chat_id, link, video=True
-            )
+            await Shasa.join_call(chat_id, original_chat_id, link, video=True)
             await add_active_chat(chat_id)
             await put_queue_index(
                 chat_id,
