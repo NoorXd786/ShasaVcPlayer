@@ -14,40 +14,37 @@ from typing import Union
 import psutil
 from pyrogram import __version__ as pyrover
 from pyrogram import filters, types
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+from pyrogram.types import (InlineKeyboardButton,
+                            InlineKeyboardMarkup, InputMediaPhoto)
 
 import config
 from config import BANNED_USERS, MUSIC_BOT_NAME
+from strings import get_command, get_string
 from ShasaMusic import YouTube, app
 from ShasaMusic.core.userbot import assistants
 from ShasaMusic.misc import SUDOERS, pymongodb
-from ShasaMusic.utils.database import (
-    get_global_tops,
-    get_lang,
-    get_particulars,
-    get_queries,
-    get_served_chats,
-    get_served_users,
-    get_sudoers,
-    get_top_chats,
-    get_topp_users,
-    is_commanddelete_on,
-)
+from ShasaMusic.utils.database import (get_global_tops, get_lang,
+                                       get_particulars, get_queries,
+                                       get_served_chats,
+                                       get_served_users, get_sudoers,
+                                       get_top_chats, get_topp_users,
+                                       is_commanddelete_on)
 from ShasaMusic.utils.decorators.language import languageCB
-from ShasaMusic.utils.inline.stats import (
-    back_stats_markup,
-    overallback_stats_markup,
-    top_ten_stats_markup,
-)
-from strings import get_command, get_string
+from ShasaMusic.utils.inline.stats import (back_stats_markup,
+                                           overallback_stats_markup,
+                                           top_ten_stats_markup)
 
 # Commands
 STATS_COMMAND = get_command("STATS_COMMAND")
 
 
-@app.on_message(filters.command(STATS_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(STATS_COMMAND) & filters.group & ~BANNED_USERS
+)
 @app.on_callback_query(filters.regex("GlobalStats") & ~BANNED_USERS)
-async def stats_global(client: app, update: Union[types.Message, types.CallbackQuery]):
+async def stats_global(
+    client: app, update: Union[types.Message, types.CallbackQuery]
+):
     is_callback = isinstance(update, types.CallbackQuery)
     if is_callback:
         try:
@@ -129,7 +126,7 @@ async def stats_global(client: app, update: Union[types.Message, types.CallbackQ
             [
                 InlineKeyboardButton(
                     text=_["SA_B_6"],
-                    url=f"https://t.me/{app.username}?vcstart=stats",
+                    url=f"https://t.me/{app.username}?start=stats",
                 ),
                 InlineKeyboardButton(
                     text=_["SA_B_5"],
@@ -144,7 +141,9 @@ async def stats_global(client: app, update: Union[types.Message, types.CallbackQ
         await update.edit_message_media(media=med, reply_markup=upl)
     else:
         await mystic.delete()
-        await app.send_photo(chat_id, photo=thumbnail, caption=final, reply_markup=upl)
+        await app.send_photo(
+            chat_id, photo=thumbnail, caption=final, reply_markup=upl
+        )
 
 
 @app.on_callback_query(filters.regex("TOPMARKUPGET") & ~BANNED_USERS)
@@ -159,7 +158,9 @@ async def too_ten_reply(client, CallbackQuery, _):
         media=config.GLOBAL_IMG_URL,
         caption=_["tops_10"],
     )
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
 
 
 @app.on_callback_query(filters.regex("TopOverall") & ~BANNED_USERS)
@@ -203,7 +204,9 @@ async def overall_stats(client, CallbackQuery, _):
 **Bot's Server Playlist Limit:** {playlist_limit}
 **Playlist Play Limit:** {fetch_playlist}"""
     med = InputMediaPhoto(media=config.STATS_IMG_URL, caption=text)
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
 
 
 @app.on_callback_query(filters.regex("TopUsers") & ~BANNED_USERS)
@@ -249,7 +252,9 @@ async def top_users_ten(client, CallbackQuery, _):
         return await mystic.edit(_["tops_2"], reply_markup=upl)
     msg = _["tops_5"].format(limit, MUSIC_BOT_NAME) + msg
     med = InputMediaPhoto(media=config.GLOBAL_IMG_URL, caption=msg)
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
 
 
 @app.on_callback_query(filters.regex("TopChats") & ~BANNED_USERS)
@@ -297,7 +302,9 @@ async def top_ten_chats(client, CallbackQuery, _):
         limit = 10
     msg = _["tops_3"].format(limit, MUSIC_BOT_NAME) + msg
     med = InputMediaPhoto(media=config.GLOBAL_IMG_URL, caption=msg)
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
 
 
 @app.on_callback_query(filters.regex("TopStats") & ~BANNED_USERS)
@@ -346,12 +353,16 @@ async def top_fif_stats(client, CallbackQuery, _):
         else:
             msg += f"🔗 [{title}](https://www.youtube.com/watch?v={vidid}) ** played {count} times**\n\n"
     final = (
-        _["gstats_3"].format(queries, config.MUSIC_BOT_NAME, tot, total_count, tracks)
+        _["gstats_3"].format(
+            queries, config.MUSIC_BOT_NAME, tot, total_count, tracks
+        )
         + msg
     )
     med = InputMediaPhoto(media=config.GLOBAL_IMG_URL, caption=final)
 
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
 
 
 @app.on_callback_query(filters.regex("TopHere") & ~BANNED_USERS)
@@ -401,7 +412,9 @@ async def top_here(client, CallbackQuery, _):
             msg += f"🔗 [{title}](https://www.youtube.com/watch?v={vidid}) ** played {count} times**\n\n"
     msg = _["tops_8"].format(tot, total_count, tracks) + msg
     med = InputMediaPhoto(media=config.GLOBAL_IMG_URL, caption=msg)
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
 
 
 @app.on_callback_query(filters.regex("bot_stats_sudo") & SUDOERS)
@@ -409,14 +422,19 @@ async def top_here(client, CallbackQuery, _):
 async def overall_stats(client, CallbackQuery, _):
     upl = overallback_stats_markup(_)
     try:
-        await CallbackQuery.answer("Getting Bot's Stats Master..\n\nPlease Hold on!")
+        await CallbackQuery.answer(
+            "Getting Bot's Stats Master..\n\nPlease Hold on!"
+        )
     except:
         pass
     await CallbackQuery.edit_message_text(_["tops_9"])
     sc = platform.system()
     p_core = psutil.cpu_count(logical=False)
     t_core = psutil.cpu_count(logical=True)
-    ram = str(round(psutil.virtual_memory().total / (1024.0**3))) + " GB"
+    ram = (
+        str(round(psutil.virtual_memory().total / (1024.0**3)))
+        + " GB"
+    )
     try:
         cpu_freq = psutil.cpu_freq().current
         if cpu_freq >= 1000:
@@ -477,4 +495,6 @@ async def overall_stats(client, CallbackQuery, _):
 **Total Bot Queries:** `{total_queries} `
     """
     med = InputMediaPhoto(media=config.STATS_IMG_URL, caption=text)
-    await CallbackQuery.edit_message_media(media=med, reply_markup=upl)
+    await CallbackQuery.edit_message_media(
+        media=med, reply_markup=upl
+    )
