@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -11,16 +11,14 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 import config
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.misc import SUDOERS
-from ShasaMusic.utils.database import (
-    add_private_chat,
-    get_private_served_chats,
-    is_served_private_chat,
-    remove_private_chat,
-)
+from ShasaMusic.utils.database import (add_private_chat,
+                                       get_private_served_chats,
+                                       is_served_private_chat,
+                                       remove_private_chat)
 from ShasaMusic.utils.decorators.language import language
-from strings import get_command
 
 AUTHORIZE_COMMAND = get_command("AUTHORIZE_COMMAND")
 UNAUTHORIZE_COMMAND = get_command("UNAUTHORIZE_COMMAND")
@@ -30,7 +28,7 @@ AUTHORIZED_COMMAND = get_command("AUTHORIZED_COMMAND")
 @app.on_message(filters.command(AUTHORIZE_COMMAND) & SUDOERS)
 @language
 async def authorize(client, message: Message, _):
-    if not config.PRIVATE_BOT_MODE:
+    if config.PRIVATE_BOT_MODE != str(True):
         return await message.reply_text(_["pbot_12"])
     if len(message.command) != 2:
         return await message.reply_text(_["pbot_1"])
@@ -48,7 +46,7 @@ async def authorize(client, message: Message, _):
 @app.on_message(filters.command(UNAUTHORIZE_COMMAND) & SUDOERS)
 @language
 async def unauthorize(client, message: Message, _):
-    if not config.PRIVATE_BOT_MODE:
+    if config.PRIVATE_BOT_MODE != str(True):
         return await message.reply_text(_["pbot_12"])
     if len(message.command) != 2:
         return await message.reply_text(_["pbot_2"])
@@ -66,7 +64,7 @@ async def unauthorize(client, message: Message, _):
 @app.on_message(filters.command(AUTHORIZED_COMMAND) & SUDOERS)
 @language
 async def authorized(client, message: Message, _):
-    if not config.PRIVATE_BOT_MODE:
+    if config.PRIVATE_BOT_MODE != str(True):
         return await message.reply_text(_["pbot_12"])
     m = await message.reply_text(_["pbot_8"])
     served_chats = []
