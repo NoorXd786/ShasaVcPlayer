@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -186,7 +186,7 @@ suggestor = {}
 async def dont_do_this():
     while not await asyncio.sleep(LEAVE_TIME):
         try:
-            if config.AUTO_LEAVING_ASSISTANT:
+            if config.AUTO_LEAVING_ASSISTANT == str(True):
                 if config.STRING1:
                     async for i in userbot.one.iter_dialogs():
                         chat_type = i.chat.type
@@ -204,7 +204,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.one.leave_chat(chat_id)
+                                        await userbot.one.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING2:
@@ -224,7 +226,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.two.leave_chat(chat_id)
+                                        await userbot.two.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING3:
@@ -244,7 +248,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.three.leave_chat(chat_id)
+                                        await userbot.three.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING4:
@@ -264,7 +270,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.four.leave_chat(chat_id)
+                                        await userbot.four.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING5:
@@ -283,13 +291,15 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.five.leave_chat(chat_id)
+                                        await userbot.five.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
         except:
             pass
         try:
-            if config.AUTO_SUGGESTION_MODE:
+            if config.AUTO_SUGGESTION_MODE == str(True):
                 chats = []
                 schats = await get_served_chats()
                 for chat in schats:
@@ -315,14 +325,18 @@ async def dont_do_this():
                     suggestor[x] = string["value"]
                     if string["markup"] is None:
                         try:
-                            sent = await app.send_message(x, string["msg"])
+                            sent = await app.send_message(
+                                x, string["msg"]
+                            )
                             if x not in clean:
                                 clean[x] = []
                             time_now = datetime.now()
                             put = {
                                 "msg_id": sent.message_id,
                                 "timer_after": time_now
-                                + timedelta(minutes=config.CLEANMODE_DELETE_MINS),
+                                + timedelta(
+                                    minutes=config.CLEANMODE_DELETE_MINS
+                                ),
                             }
                             clean[x].append(put)
                             send_to += 1
@@ -349,7 +363,9 @@ async def dont_do_this():
                             put = {
                                 "msg_id": sent.message_id,
                                 "timer_after": time_now
-                                + timedelta(minutes=config.CLEANMODE_DELETE_MINS),
+                                + timedelta(
+                                    minutes=config.CLEANMODE_DELETE_MINS
+                                ),
                             }
                             clean[x].append(put)
                             send_to += 1
