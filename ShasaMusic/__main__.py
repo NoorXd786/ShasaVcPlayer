@@ -45,9 +45,7 @@ async def init():
     await app.start()
     for all_module in ALL_MODULES:
         importlib.import_module("ShasaMusic.plugins" + all_module)
-    LOGGER("ShasaMusic.plugins").info(
-        "Successfully Imported Modules "
-    )
+    LOGGER("ShasaMusic.plugins").info("Successfully Imported Modules ")
     await userbot.start()
     await Shasa.start()
     try:
