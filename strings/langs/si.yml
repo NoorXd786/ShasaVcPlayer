@@ -23,6 +23,8 @@ call_7 : "**හානිකර පරිපාලක අයිතිය ලබ�
 call_8 : "**හානිකර පරිපාලක අයිතිය ලබා දී ඇත **\n\nකරුණාකර බොට් ගෙන් **ADD NEW ADMINS** අයිතීන් ඉවත් කරන්න."
 call_9 : "**සංගිතය්‍ මාරු කිරීමට අසමත් විය**\nකරුණාකර නැවත සංගිතය වෙනස් කිරීමට /skip භාවිතා කරන්න."
 call_10 : "සංගිත ලැයිස්තුවෙන් මීළඟ ඛණ්ඩය බාගැනීම"
+call_11 : "Please add @{0} to your channel[ ID: {1}].\n\nBot is not able to get channel details."
+
 
 # PLUGINS - Auth.py
 auth_1 : "ඔබට ඔබේ සමූහයේ බලයලත් පරිශීලක ලැයිස්තුවේ (AUL) සිටිය හැක්කේ පරිශීලකයින් 20ක් පමණි."
@@ -65,15 +67,15 @@ admin_27 : "Loop Play අබල කර ඇත"
 
 # Bot 
 # Start
-start_1 : "Thanks for having me in {0}.\n{1} is alive.\n\nFor any assistance or vchelp, checkout our support group and channel."
+start_1 : "Thanks for having me in {0}.\n{1} is alive.\n\nFor any assistance or help, checkout our support group and channel."
 start_2 : "Hello, My name is {0}.\n\nI'm a telegram streaming bot with some useful features. Supporting platforms like Youtube, Spotify, Resso, AppleMusic , Soundcloud etc.\n\nFeel free to add me to your groups."
 start_3 : "Welcome To {0}\n\nI don't need any **admin permission** to work ( until asked for ).\n\nAssistant Username:- @{1}\nAssistant ID:- {2}"
 start_4 : "{0}'s Owner[{1}] has just joined your chat."
 start_5 : "A member of {0}'s Sudo User[{1}] has just joined your chat."
 start_6 : "❗️ **Supergroup Needed** ❗️\n\nPlease convert your **group** to **supergroup** and then add me back.\n\n**How to make supergroup?**\n✅ Make your group's chat history **visible** once."
 
-# vchelp
-help_1 : "වැඩි විස්තර සඳහා පහත බොත්තම් ක්ලික් කරන්න. ඔබට විධාන සඳහා නිබන්ධන බැලීමට අවශ්‍ය නම් (ඒවා ක්‍රියා කරන ආකාරය සහ සියල්ල ):- @ShasaTutorials\n\nසියලු විධානයන් සමඟ භාවිතා කළ හැක: /"
+# Help
+help_1 : "වැඩි විස්තර සඳහා පහත බොත්තම් ක්ලික් කරන්න.\n\nසියලු විධානයන් සමඟ භාවිතා කළ හැක: /"
 help_2 : "උදව් සඳහා PM වලින් මාව සම්බන්ධ කරගන්න."
 
 # Settings
@@ -244,7 +246,7 @@ S_B_6 : "💡 ගිට් රිපොව"
 S_B_7 : "👤 බොට් හිමිකරු"
 S_B_8 : "🔎විධාන මෙනුව "
 
-#vchelp 
+#Help 
 H_B_1 : "පරිපාලක විධාන"
 H_B_2 : "වාදන විධාන"
 H_B_3 : "බොට් විධාන"
