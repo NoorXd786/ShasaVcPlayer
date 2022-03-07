@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -32,7 +32,9 @@ class ShasaBot(Client):
         self.username = get_me.username
         self.id = get_me.id
         try:
-            await self.send_message(config.LOG_GROUP_ID, "Bot Started")
+            await self.send_message(
+                config.LOG_GROUP_ID, "Bot Started"
+            )
         except:
             LOGGER(__name__).error(
                 "Bot has failed to access the log Group. Make sure that you have added your bot to your log channel and promoted as admin!"
@@ -40,7 +42,9 @@ class ShasaBot(Client):
             sys.exit()
         a = await self.get_chat_member(config.LOG_GROUP_ID, self.id)
         if a.status != "administrator":
-            LOGGER(__name__).error("Please promote Bot as Admin in Logger Group")
+            LOGGER(__name__).error(
+                "Please promote Bot as Admin in Logger Group"
+            )
             sys.exit()
         if get_me.last_name:
             self.name = get_me.first_name + " " + get_me.last_name
