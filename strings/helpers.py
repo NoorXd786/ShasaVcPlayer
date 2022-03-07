@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -91,7 +91,7 @@ HELP_4 = """✅<u>**Extra  Commands:**</u>
 
 3️⃣ **Auth Users**:- You can change admin commands mode from here to everyone or admins only. If everyone, anyone present in you group will be able to use admin commands(like /skip, /stop etc)
 
-4️⃣ **Play Mode Settings** :  Get vchelp regarding in play commands section.
+4️⃣ **Play Mode Settings** :  Get help regarding in play commands section.
 
 5️⃣ **Clean Mode:** When enabled deletes the bot's messages after 5 mins from your group to make sure your chat remains clean and good.
 
