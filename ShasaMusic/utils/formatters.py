@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -91,7 +91,10 @@ async def alpha_to_int(user_id_alphabet: str) -> int:
 
 def time_to_seconds(time):
     stringt = str(time)
-    return sum(int(x) * 60**i for i, x in enumerate(reversed(stringt.split(":"))))
+    return sum(
+        int(x) * 60**i
+        for i, x in enumerate(reversed(stringt.split(":")))
+    )
 
 
 def seconds_to_min(seconds):

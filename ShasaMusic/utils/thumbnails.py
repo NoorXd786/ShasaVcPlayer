@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -13,7 +13,8 @@ import textwrap
 
 import aiofiles
 import aiohttp
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter,
+                 ImageFont, ImageOps)
 from youtubesearchpython import VideosSearch
 
 from config import MUSIC_BOT_NAME, YOUTUBE_IMG_URL
@@ -59,7 +60,9 @@ async def gen_thumb(videoid):
         async with aiohttp.ClientSession() as session:
             async with session.get(thumbnail) as resp:
                 if resp.status == 200:
-                    f = await aiofiles.open(f"cache/thumb{videoid}.png", mode="wb")
+                    f = await aiofiles.open(
+                        f"cache/thumb{videoid}.png", mode="wb"
+                    )
                     await f.write(await resp.read())
                     await f.close()
 
@@ -86,7 +89,9 @@ async def gen_thumb(videoid):
         name_font = ImageFont.truetype("assets/font.ttf", 30)
         para = textwrap.wrap(title, width=32)
         j = 0
-        draw.text((5, 5), f"{MUSIC_BOT_NAME}", fill="white", font=name_font)
+        draw.text(
+            (5, 5), f"{MUSIC_BOT_NAME}", fill="white", font=name_font
+        )
         draw.text(
             (600, 150),
             "NOW PLAYING",
