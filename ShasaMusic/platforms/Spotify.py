@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -22,8 +22,10 @@ class SpotifyAPI:
         self.client_id = config.SPOTIFY_CLIENT_ID
         self.client_secret = config.SPOTIFY_CLIENT_SECRET
         if config.SPOTIFY_CLIENT_ID and config.SPOTIFY_CLIENT_SECRET:
-            self.client_credentials_manager = SpotifyClientCredentials(
-                self.client_id, self.client_secret
+            self.client_credentials_manager = (
+                SpotifyClientCredentials(
+                    self.client_id, self.client_secret
+                )
             )
             self.spotify = spotipy.Spotify(
                 client_credentials_manager=self.client_credentials_manager
@@ -71,5 +73,7 @@ class SpotifyAPI:
 
     async def trackplaylist(self, trackid):
         meta = self.spotify.track(trackid)
-        to_search = f"{meta['name']} {meta['album']['artists'][0]['name']}"
+        to_search = (
+            f"{meta['name']} {meta['album']['artists'][0]['name']}"
+        )
         return to_search
