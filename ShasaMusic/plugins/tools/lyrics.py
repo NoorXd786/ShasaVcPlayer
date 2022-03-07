@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
 #
 # All rights reserved.
 
@@ -13,12 +13,13 @@ import string
 
 import lyricsgenius as lg
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import (InlineKeyboardButton,
+                            InlineKeyboardMarkup, Message)
 
 from config import BANNED_USERS, lyrical
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.utils.decorators.language import language
-from strings import get_command
 
 ###Commands
 LYRICS_COMMAND = get_command("LYRICS_COMMAND")
@@ -43,7 +44,9 @@ async def lrsearch(client, message: Message, _):
     S = y.search_song(title, get_full_info=False)
     if S is None:
         return await m.edit(_["lyrics_3"].format(title))
-    ran_hash = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
+    ran_hash = "".join(
+        random.choices(string.ascii_uppercase + string.digits, k=10)
+    )
     lyric = S.lyrics
     if "Embed" in lyric:
         lyric = re.sub(r"\d*Embed", "", lyric)
@@ -53,7 +56,7 @@ async def lrsearch(client, message: Message, _):
             [
                 InlineKeyboardButton(
                     text=_["L_B_1"],
-                    url=f"https://t.me/{app.username}?vcstart=lyrics_{ran_hash}",
+                    url=f"https://t.me/{app.username}?start=lyrics_{ran_hash}",
                 ),
             ]
         ]
