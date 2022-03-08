@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -48,15 +48,17 @@ XCB = [
 def dbb():
     global db
     db = {}
-    LOGGER(__name__).info(f"Database Initialized.")
+    LOGGER(__name__).minfo(f"Database Initialized.")
 
 
 def sudo():
     global SUDOERS
+    OWNER = config.OWNER_ID
     sudoersdb = pymongodb.sudoers
     sudoers = sudoersdb.find_one({"sudo": "sudo"})
     sudoers = [] if not sudoers else sudoers["sudoers"]
-    for user_id in SUDOERS:
+    for user_id in OWNER:
+        SUDOERS.add(user_id)
         if user_id not in sudoers:
             sudoers.append(user_id)
             sudoersdb.update_one(
@@ -64,14 +66,10 @@ def sudo():
                 {"$set": {"sudoers": sudoers}},
                 upsert=True,
             )
-    OWNER = config.OWNER_ID
     if sudoers:
         for x in sudoers:
             SUDOERS.add(x)
-    if OWNER:
-        for x in OWNER:
-            SUDOERS.add(x)
-    LOGGER(__name__).info(f"Sudoers Loaded.")
+    LOGGER(__name__).minfo(f"Sudoers Loaded.")
 
 
 def heroku():
@@ -81,7 +79,7 @@ def heroku():
             try:
                 Heroku = heroku3.from_key(config.HEROKU_API_KEY)
                 HAPP = Heroku.app(config.HEROKU_APP_NAME)
-                LOGGER(__name__).info(f"Heroku App Configured")
+                LOGGER(__name__).minfo(f"Heroku App Configured")
             except BaseException:
                 LOGGER(__name__).warning(
                     f"Please make sure your Heroku API Key and Your App name are configured correctly in the heroku."
