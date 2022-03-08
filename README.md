@@ -89,7 +89,7 @@ Distributed under the [GNU General Public License v3.0 License.](https://github.
 ## Acknowledgements
 
 Special thanks to these amazing projects/people which/who help power Shasa Music Bot:
-
+- [Yukki](https;//GitHub.com/TeamYukki)
 - [Pyrogram](https://github.com/pyrogram/pyrogram)
 - [Py-Tgcalls](https://github.com/pytgcalls/pytgcalls)
 - [CallsMusic Team](https://github.com/Callsmusic)
