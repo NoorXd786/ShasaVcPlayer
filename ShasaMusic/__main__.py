@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -19,7 +19,7 @@ from config import BANNED_USERS
 from ShasaMusic import LOGGER, app, userbot
 from ShasaMusic.core.call import Shasa
 from ShasaMusic.plugins import ALL_MODULES
-from ShasaMusic.utils.database import get_gbanned
+from ShasaMusic.utils.database import get_banned_users, get_gbanned
 
 loop = asyncio.get_event_loop()
 
@@ -36,8 +36,18 @@ async def init():
             "No Assistant Clients Vars Defined!.. Exiting Process."
         )
         return
+    if (
+        not config.SPOTIFY_CLIENT_ID
+        and not config.SPOTIFY_CLIENT_SECRET
+    ):
+        LOGGER("ShasaMusic").warning(
+            "No Spotify Vars defined. Your bot won't be able to play spotify queries."
+        )
     try:
         users = await get_gbanned()
+        for user_id in users:
+            BANNED_USERS.add(user_id)
+        users = await get_banned_users()
         for user_id in users:
             BANNED_USERS.add(user_id)
     except:
@@ -45,7 +55,9 @@ async def init():
     await app.start()
     for all_module in ALL_MODULES:
         importlib.import_module("ShasaMusic.plugins" + all_module)
-    LOGGER("ShasaMusic.plugins").info("Successfully Imported Modules ")
+    LOGGER("ShasaMusic.plugins").minfo(
+        "Successfully Imported Modules "
+    )
     await userbot.start()
     await Shasa.start()
     try:
@@ -60,10 +72,10 @@ async def init():
     except:
         pass
     await Shasa.decorators()
-    LOGGER("ShasaMusic").info("Shasa Music Bot Started Successfully")
+    LOGGER("ShasaMusic").minfo("Shasa Music Bot Started Successfully")
     await idle()
 
 
 if __name__ == "__main__":
     loop.run_until_complete(init())
-    LOGGER("ShasaMusic").info("Stopping Shasa Music Bot! GoodBye")
+    LOGGER("ShasaMusic").minfo("Stopping Shasa Music Bot! GoodBye")
