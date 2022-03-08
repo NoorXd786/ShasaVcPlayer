@@ -52,7 +52,7 @@ async def init():
     await app.start()
     for all_module in ALL_MODULES:
         importlib.import_module("ShasaMusic.plugins" + all_module)
-    LOGGER("ShasaMusic.plugins").minfo("Successfully Imported Modules ")
+    LOGGER("ShasaMusic.plugins").info("Successfully Imported Modules ")
     await userbot.start()
     await Shasa.start()
     try:
@@ -67,10 +67,10 @@ async def init():
     except:
         pass
     await Shasa.decorators()
-    LOGGER("ShasaMusic").minfo("Shasa Music Bot Started Successfully")
+    LOGGER("ShasaMusic").info("Shasa Music Bot Started Successfully")
     await idle()
 
 
 if __name__ == "__main__":
     loop.run_until_complete(init())
-    LOGGER("ShasaMusic").minfo("Stopping Shasa Music Bot! GoodBye")
+    LOGGER("ShasaMusic").info("Stopping Shasa Music Bot! GoodBye")
