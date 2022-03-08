@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -39,9 +39,15 @@ def stream_markup(_, videoid):
                 text=_["PL_B_2"],
                 callback_data=f"add_playlist {videoid}",
             ),
-            InlineKeyboardButton(text=_["PL_B_3"], switch_inline_query_current_chat=""),
+            InlineKeyboardButton(
+                text=_["PL_B_3"], switch_inline_query_current_chat=""
+            ),
         ],
-        [InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close")],
+        [
+            InlineKeyboardButton(
+                text=_["CLOSEMENU_BUTTON"], callback_data="close"
+            )
+        ],
     ]
     return buttons
 
@@ -49,8 +55,12 @@ def stream_markup(_, videoid):
 def telegram_markup(_):
     buttons = [
         [
-            InlineKeyboardButton(text=_["PL_B_3"], switch_inline_query_current_chat=""),
-            InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close"),
+            InlineKeyboardButton(
+                text=_["PL_B_3"], switch_inline_query_current_chat=""
+            ),
+            InlineKeyboardButton(
+                text=_["CLOSEMENU_BUTTON"], callback_data="close"
+            ),
         ],
     ]
     return buttons
