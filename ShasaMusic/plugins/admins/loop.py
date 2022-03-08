@@ -11,21 +11,17 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS
-from strings import get_command
 from ShasaMusic import app
-from ShasaMusic.utils.database.memorydatabase import (get_loop,
-                                                      set_loop)
+from ShasaMusic.utils.database.memorydatabase import get_loop, set_loop
 from ShasaMusic.utils.decorators import AdminRightsCheck
+from strings import get_command
 
 # Commands
 LOOP_COMMAND = get_command("LOOP_COMMAND")
 
 
 @app.on_message(
-    filters.command(LOOP_COMMAND)
-    & filters.group
-    & ~filters.edited
-    & ~BANNED_USERS
+    filters.command(LOOP_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
 )
 @AdminRightsCheck
 async def admins(cli, message: Message, _, chat_id):
@@ -43,9 +39,7 @@ async def admins(cli, message: Message, _, chat_id):
                 state = 10
             await set_loop(chat_id, state)
             return await message.reply_text(
-                _["admin_25"].format(
-                    message.from_user.first_name, state
-                )
+                _["admin_25"].format(message.from_user.first_name, state)
             )
         else:
             return await message.reply_text(_["admin_26"])

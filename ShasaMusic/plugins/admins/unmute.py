@@ -11,21 +11,18 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS
-from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.core.call import Shasa
 from ShasaMusic.utils.database import is_muted, mute_off
 from ShasaMusic.utils.decorators import AdminRightsCheck
+from strings import get_command
 
 # Commands
 UNMUTE_COMMAND = get_command("UNMUTE_COMMAND")
 
 
 @app.on_message(
-    filters.command(UNMUTE_COMMAND)
-    & filters.group
-    & ~filters.edited
-    & ~BANNED_USERS
+    filters.command(UNMUTE_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
 )
 @AdminRightsCheck
 async def unmute_admin(Client, message: Message, _, chat_id):
@@ -35,6 +32,4 @@ async def unmute_admin(Client, message: Message, _, chat_id):
         return await message.reply_text(_["admin_7"])
     await mute_off(chat_id)
     await Shasa.unmute_stream(chat_id)
-    await message.reply_text(
-        _["admin_8"].format(message.from_user.mention)
-    )
+    await message.reply_text(_["admin_8"].format(message.from_user.mention))
