@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -32,7 +32,9 @@ from strings import get_command
 SONG_COMMAND = get_command("SONG_COMMAND")
 
 
-@app.on_message(filters.command(SONG_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(SONG_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
+)
 @language
 async def song_commad_group(client, message: Message, _):
     upl = InlineKeyboardMarkup(
@@ -51,7 +53,9 @@ async def song_commad_group(client, message: Message, _):
 # Song Module
 
 
-@app.on_message(filters.command(SONG_COMMAND) & filters.private & ~BANNED_USERS)
+@app.on_message(
+    filters.command(SONG_COMMAND) & filters.private & ~filters.edited & ~BANNED_USERS
+)
 @language
 async def song_commad_private(client, message: Message, _):
     await message.delete()

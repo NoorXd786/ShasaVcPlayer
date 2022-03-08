@@ -1,4 +1,5 @@
 .env
+.cache
 Shasalogs.txt
 .DS_Store
 *.session

@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -33,14 +33,17 @@ from strings import get_command, get_string
 
 
 @app.on_message(
-    filters.command(get_command("START_COMMAND")) & filters.private & ~BANNED_USERS
+    filters.command(get_command("START_COMMAND"))
+    & filters.private
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @language
 async def start_comm(client, message: Message, _):
     await add_served_user(message.from_user.id)
     if len(message.text.split()) > 1:
         name = message.text.split(None, 1)[1]
-        if name[0:4] == "help":
+        if name[0:4] == "vchelp":
             keyboard = help_pannel(_)
             return await message.reply_text(_["help_1"], reply_markup=keyboard)
         if name[0:4] == "song":
@@ -110,7 +113,7 @@ async def start_comm(client, message: Message, _):
             await del_plist_msg(client=client, message=message, _=_)
         if name[0:3] == "inf":
             m = await message.reply_text("🔎 Fetching Info!")
-            query = (str(name)).replace("info_", "", 1)
+            query = (str(name)).replace("minfo_", "", 1)
             query = f"https://www.youtube.com/watch?v={query}"
             results = VideosSearch(query, limit=1)
             for result in results.result()["result"]:
@@ -192,7 +195,10 @@ async def start_comm(client, message: Message, _):
 
 
 @app.on_message(
-    filters.command(get_command("START_COMMAND")) & filters.group & ~BANNED_USERS
+    filters.command(get_command("START_COMMAND"))
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @language
 async def testbot(client, message: Message, _):

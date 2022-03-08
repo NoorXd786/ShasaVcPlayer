@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -46,6 +46,12 @@ def help_pannel(_, START: Union[bool, int] = None):
                     callback_data="help_callback hb4",
                 ),
             ],
+            [
+                InlineKeyboardButton(
+                    text=_["H_B_6"],
+                    callback_data="help_callback hb5",
+                ),
+            ],
             mark,
         ]
     )
@@ -72,7 +78,7 @@ def private_help_panel(_):
         [
             InlineKeyboardButton(
                 text=_["S_B_1"],
-                url=f"https://t.me/{app.username}?start=help",
+                url=f"https://t.me/{app.username}?start=vchelp",
             ),
         ],
     ]

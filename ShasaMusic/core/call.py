@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -187,8 +187,9 @@ class Call(PyTgCalls):
                         invitelink = invitelink.replace(
                             "https://t.me/+", "https://t.me/joinchat/"
                         )
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(3)
                     await userbot.join_chat(invitelink)
+                    await asyncio.sleep(4)
                     await m.edit(_["call_6"].format(userbot.name))
                 except UserAlreadyParticipant:
                     pass
@@ -288,7 +289,7 @@ class Call(PyTgCalls):
                     photo=img,
                     caption=_["stream_1"].format(
                         user,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
+                        f"https://t.me/{app.username}?start=minfo_{videoid}",
                     ),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
@@ -320,7 +321,7 @@ class Call(PyTgCalls):
                     photo=img,
                     caption=_["stream_1"].format(
                         user,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
+                        f"https://t.me/{app.username}?start=minfo_{videoid}",
                     ),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
@@ -374,13 +375,13 @@ class Call(PyTgCalls):
                         photo=img,
                         caption=_["stream_1"].format(
                             user,
-                            f"https://t.me/{app.username}?start=info_{videoid}",
+                            f"https://t.me/{app.username}?start=minfo_{videoid}",
                         ),
                         reply_markup=InlineKeyboardMarkup(button),
                     )
 
     async def start(self):
-        LOGGER(__name__).info("Starting PyTgCalls Client\n")
+        LOGGER(__name__).minfo("Starting PyTgCalls Client\n")
         if config.STRING1:
             await self.one.start()
         if config.STRING2:

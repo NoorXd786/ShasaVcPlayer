@@ -25,7 +25,7 @@ node(){
 
 
 repo(){
-	git clone https://github.com/notreallyshikhar/ShasaVcPlayer &&  cd ShasaVcPlayer
+	git clone https://github.com/MdNoor786/ShasaVcPlayer &&  cd ShasaVcPlayer
 }
 
 

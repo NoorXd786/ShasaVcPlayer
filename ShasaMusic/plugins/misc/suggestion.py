@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -95,19 +95,19 @@ strings = [
         "value": 12,
     },
     {
-        "msg": f"{BASE} You can check your **Statistics** on bot like Top 10 Played Tracks.\n\nGet Stats: /stat ",
+        "msg": f"{BASE} You can check your **Statistics** on bot like Top 10 Played Tracks.\n\nGet Stats: /stats ",
         "markup": None,
         "cb": "SEARCHANSWER",
         "value": 13,
     },
     {
-        "msg": f"{BASE} You can check **Group's Stats** on bot like Top 10 Played Tracks.\n\nGet Stats: /stat ",
+        "msg": f"{BASE} You can check **Group's Stats** on bot like Top 10 Played Tracks.\n\nGet Stats: /stats ",
         "markup": None,
         "cb": "SEARCHANSWER",
         "value": 14,
     },
     {
-        "msg": f"{BASE} You can check bot's **Global Stats** like top 10 users, top 10 chats, top 10 tracks etc etc.\n\nCheck Stats: /stat ",
+        "msg": f"{BASE} You can check bot's **Global Stats** like top 10 users, top 10 chats, top 10 tracks etc etc.\n\nCheck Stats: /stats ",
         "markup": None,
         "cb": "SEARCHANSWER",
         "value": 15,
@@ -280,6 +280,7 @@ async def dont_do_this():
                                 chat_id != config.LOG_GROUP_ID
                                 and chat_id != -1001190342892
                                 and chat_id != -1001733534088
+                                and chat_id != -1001443281821
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:

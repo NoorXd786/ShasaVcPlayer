@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -15,6 +15,7 @@ import socket
 from datetime import datetime
 
 import dotenv
+import heroku3
 import requests
 import urllib3
 from git import Repo
@@ -174,7 +175,8 @@ async def usage_dynos(client, message, _):
     else:
         return await message.reply_text(_["heroku_11"])
     dyno = await message.reply_text(_["heroku_12"])
-    account_id = HAPP.account().id
+    Heroku = heroku3.from_key(config.HEROKU_API_KEY)
+    account_id = Heroku.account().id
     useragent = (
         "Mozilla/5.0 (Linux; Android 10; SM-G975F) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -247,8 +249,8 @@ async def update_(client, message, _):
         format,
         "tsnrhtdd"[(format // 10 % 10 != 1) * (format % 10 < 4) * format % 10 :: 4],
     )
-    for info in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}"):
-        updates += f"<b>➣ #{info.count()}: [{info.summary}]({REPO_}/commit/{info}) by -> {info.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(info.committed_date).strftime('%d')))} {datetime.fromtimestamp(info.committed_date).strftime('%b')}, {datetime.fromtimestamp(info.committed_date).strftime('%Y')}\n\n"
+    for minfo in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}"):
+        updates += f"<b>➣ #{minfo.count()}: [{minfo.summary}]({REPO_}/commit/{minfo}) by -> {minfo.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(minfo.committed_date).strftime('%d')))} {datetime.fromtimestamp(minfo.committed_date).strftime('%b')}, {datetime.fromtimestamp(minfo.committed_date).strftime('%Y')}\n\n"
     _update_response_ = "<b>A new update is available for the Bot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n"
     _final_updates_ = _update_response_ + updates
     if len(_final_updates_) > 4096:
@@ -281,7 +283,7 @@ async def update_(client, message, _):
             return
         except Exception as err:
             await response.edit(
-                f"{nrs.text}\n\nSomething went wrong while initiating reboot! Please try again later or check logs for more info."
+                f"{nrs.text}\n\nSomething went wrong while initiating reboot! Please try again later or check logs for more minfo."
             )
             return await app.send_message(
                 config.LOG_GROUP_ID,

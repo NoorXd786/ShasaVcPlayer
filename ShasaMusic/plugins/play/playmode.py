@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -21,7 +21,9 @@ from strings import get_command
 PLAYMODE_COMMAND = get_command("PLAYMODE_COMMAND")
 
 
-@app.on_message(filters.command(PLAYMODE_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(PLAYMODE_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
+)
 @language
 async def playmode_(client, message: Message, _):
     playmode = await get_playmode(message.chat.id)

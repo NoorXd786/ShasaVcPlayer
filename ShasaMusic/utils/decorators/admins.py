@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -50,15 +50,24 @@ def AdminRightsCheck(mystic):
                 ]
             )
             return await message.reply_text(_["general_4"], reply_markup=upl)
-        chatmode = await get_chatmode(message.chat.id)
-        if chatmode == "Group":
-            chat_id = message.chat.id
-        else:
+        if message.command[0][0] == "c":
             chat_id = await get_cmode(message.chat.id)
+            if chat_id is None:
+                return await message.reply_text(_["setting_12"])
             try:
                 await app.get_chat(chat_id)
             except:
                 return await message.reply_text(_["cplay_4"])
+        else:
+            chatmode = await get_chatmode(message.chat.id)
+            if chatmode == "Group":
+                chat_id = message.chat.id
+            else:
+                chat_id = await get_cmode(message.chat.id)
+                try:
+                    await app.get_chat(chat_id)
+                except:
+                    return await message.reply_text(_["cplay_4"])
         if not await is_active_chat(chat_id):
             return await message.reply_text(_["general_6"])
         is_non_admin = await is_nonadmin_chat(message.chat.id)
@@ -108,7 +117,6 @@ def AdminActual(mystic):
                 return
             if not member.can_manage_voice_chats:
                 return await message.reply(_["general_5"])
-
         return await mystic(client, message, _)
 
     return wrapper

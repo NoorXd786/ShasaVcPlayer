@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -28,16 +28,27 @@ QUEUE_COMMAND = get_command("QUEUE_COMMAND")
 @app.on_message(filters.command(QUEUE_COMMAND) & filters.group & ~BANNED_USERS)
 @language
 async def ping_com(client, message: Message, _):
-    send = await message.reply_text(_["queue_1"])
-    chatmode = await get_chatmode(message.chat.id)
-    if chatmode == "Group":
-        chat_id = message.chat.id
-    else:
+    if message.command[0][0] == "c":
         chat_id = await get_cmode(message.chat.id)
+        if chat_id is None:
+            return await message.reply_text(_["setting_12"])
         try:
-            await app.get_chat(chat_id)
+            chat = await app.get_chat(chat_id)
         except:
             return await message.reply_text(_["cplay_4"])
+        chat.title
+    else:
+        chatmode = await get_chatmode(message.chat.id)
+        if chatmode == "Group":
+            chat_id = message.chat.id
+        else:
+            chat_id = await get_cmode(message.chat.id)
+            try:
+                chat = await app.get_chat(chat_id)
+            except:
+                return await message.reply_text(_["cplay_4"])
+            chat.title
+    send = await message.reply_text(_["queue_1"])
     if await is_active_chat(chat_id):
         got = db.get(chat_id)
         if got:
@@ -46,16 +57,16 @@ async def ping_com(client, message: Message, _):
             for x in got:
                 j += 1
                 if j == 1:
-                    msg += f'Currently Playing:\n\n🏷Title: {x["title"]}\nDur: {x["dur"]}\n\n'
+                    msg += f'Currently Playing:\n\n🏷Title: {x["title"]}\nDur: {x["dur"]}\nBy: {x["by"]}\n\n'
                 elif j == 2:
-                    msg += f'Queued:\n\n🏷Title: {x["title"]}\nDur: {x["dur"]}\n\n'
+                    msg += f'Queued:\n\n🏷Title: {x["title"]}\nDur: {x["dur"]}\nBy: {x["by"]}\n\n'
                 else:
-                    msg += f'🏷Title: {x["title"]}\nDur: {x["dur"]}\n\n'
+                    msg += f'🏷Title: {x["title"]}\nDur: {x["dur"]}\nBy: {x["by"]}\n\n'
             if "Queued" in msg:
                 link = await Shasabin(msg)
                 lines = msg.count("\n")
-                if lines >= 22:
-                    car = os.linesep.join(msg.split(os.linesep)[:22])
+                if lines >= 23:
+                    car = os.linesep.join(msg.split(os.linesep)[:23])
                 else:
                     return await send.edit_text(msg)
                 if "🏷" in car:

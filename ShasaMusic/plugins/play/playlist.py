@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -39,7 +39,7 @@ PLAYLIST_COMMAND = get_command("PLAYLIST_COMMAND")
 DELETEPLAYLIST_COMMAND = get_command("DELETEPLAYLIST_COMMAND")
 
 
-@app.on_message(filters.command(PLAYLIST_COMMAND) & ~BANNED_USERS)
+@app.on_message(filters.command(PLAYLIST_COMMAND) & ~filters.edited & ~BANNED_USERS)
 @language
 async def check_playlist(client, message: Message, _):
     _playlist = await get_playlist_names(message.from_user.id)
@@ -49,8 +49,8 @@ async def check_playlist(client, message: Message, _):
         return await message.reply_text(_["playlist_3"])
     msg = _["playlist_4"]
     count = 0
-    for shikhar in _playlist:
-        _note = await get_playlist(message.from_user.id, shikhar)
+    for mdnoor in _playlist:
+        _note = await get_playlist(message.from_user.id, mdnoor)
         title = _note["title"]
         title = title.title()
         duration = _note["duration"]
@@ -68,7 +68,12 @@ async def check_playlist(client, message: Message, _):
     await message.reply_photo(carbon, caption=_["playlist_15"].format(link))
 
 
-@app.on_message(filters.command(DELETEPLAYLIST_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(DELETEPLAYLIST_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @language
 async def del_group_message(client, message: Message, _):
     upl = InlineKeyboardMarkup(
@@ -109,7 +114,10 @@ async def get_keyboard(_, user_id):
 
 
 @app.on_message(
-    filters.command(DELETEPLAYLIST_COMMAND) & filters.private & ~BANNED_USERS
+    filters.command(DELETEPLAYLIST_COMMAND)
+    & filters.private
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @language
 async def del_plist_msg(client, message: Message, _):

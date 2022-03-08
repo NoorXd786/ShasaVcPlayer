@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -15,6 +15,7 @@ from pyrogram.types import InlineKeyboardMarkup, Message
 
 from config import BANNED_USERS
 from ShasaMusic import app
+from ShasaMusic.misc import SUDOERS
 from ShasaMusic.utils import help_pannel
 from ShasaMusic.utils.database import get_lang, is_commanddelete_on
 from ShasaMusic.utils.decorators.language import language, languageCB
@@ -25,7 +26,9 @@ from strings import get_command, get_string, helpers
 HELP_COMMAND = get_command("HELP_COMMAND")
 
 
-@app.on_message(filters.command(HELP_COMMAND) & filters.private & ~BANNED_USERS)
+@app.on_message(
+    filters.command(HELP_COMMAND) & filters.private & ~filters.edited & ~BANNED_USERS
+)
 @app.on_callback_query(filters.regex("settings_back_helper") & ~BANNED_USERS)
 async def helper_private(
     client: app, update: Union[types.Message, types.CallbackQuery]
@@ -58,7 +61,9 @@ async def helper_private(
         await update.reply_text(_["help_1"], reply_markup=keyboard)
 
 
-@app.on_message(filters.command(HELP_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(HELP_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
+)
 @language
 async def help_com_group(client, message: Message, _):
     keyboard = private_help_panel(_)
@@ -70,11 +75,17 @@ async def help_com_group(client, message: Message, _):
 async def helper_cb(client, CallbackQuery, _):
     callback_data = CallbackQuery.data.strip()
     cb = callback_data.split(None, 1)[1]
+    keyboard = help_back_markup(_)
+    if cb == "hb5":
+        if CallbackQuery.from_user.id not in SUDOERS:
+            return await CallbackQuery.answer("Only for Sudo Users", show_alert=True)
+        else:
+            await CallbackQuery.edit_message_text(helpers.HELP_5, reply_markup=keyboard)
+            return await CallbackQuery.answer()
     try:
         await CallbackQuery.answer()
     except:
         pass
-    keyboard = help_back_markup(_)
     if cb == "hb1":
         await CallbackQuery.edit_message_text(helpers.HELP_1, reply_markup=keyboard)
     elif cb == "hb2":

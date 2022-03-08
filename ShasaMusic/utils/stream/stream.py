@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -14,7 +14,7 @@ from typing import Union
 from pyrogram.types import InlineKeyboardMarkup
 
 import config
-from ShasaMusic import Carbon, Spotify, YouTube, app
+from ShasaMusic import Carbon, YouTube, app
 from ShasaMusic.core.call import Shasa
 from ShasaMusic.misc import db
 from ShasaMusic.utils.database import (
@@ -53,23 +53,13 @@ async def stream(
         for search in result:
             if int(count) == config.PLAYLIST_FETCH_LIMIT:
                 continue
-            if spotify:
-                search = await Spotify.trackplaylist(search)
-                (
-                    title,
-                    duration_min,
-                    duration_sec,
-                    thumbnail,
-                    vidid,
-                ) = await YouTube.details(search)
-            else:
-                (
-                    title,
-                    duration_min,
-                    duration_sec,
-                    thumbnail,
-                    vidid,
-                ) = await YouTube.details(search, True)
+            (
+                title,
+                duration_min,
+                duration_sec,
+                thumbnail,
+                vidid,
+            ) = await YouTube.details(search, False if spotify else True)
             if str(duration_min) == "None":
                 continue
             if duration_sec > config.DURATION_LIMIT:
@@ -124,7 +114,7 @@ async def stream(
                     photo=img,
                     caption=_["stream_1"].format(
                         user_name,
-                        f"https://t.me/{app.username}?start=info_{vidid}",
+                        f"https://t.me/{app.username}?start=minfo_{vidid}",
                     ),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
@@ -199,7 +189,7 @@ async def stream(
                 photo=img,
                 caption=_["stream_1"].format(
                     user_name,
-                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    f"https://t.me/{app.username}?start=minfo_{vidid}",
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
@@ -348,7 +338,7 @@ async def stream(
                 photo=img,
                 caption=_["stream_1"].format(
                     user_name,
-                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    f"https://t.me/{app.username}?start=minfo_{vidid}",
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
             )

@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -255,8 +255,8 @@ class YouTubeAPI:
                 "no_warnings": True,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
-            info = x.extract_info(link, False)
-            xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
+            minfo = x.extract_info(link, False)
+            xyz = os.path.join("downloads", f"{minfo['id']}.{minfo['ext']}")
             if os.path.exists(xyz):
                 return xyz
             x.download([link])
@@ -272,8 +272,8 @@ class YouTubeAPI:
                 "no_warnings": True,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
-            info = x.extract_info(link, False)
-            xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
+            minfo = x.extract_info(link, False)
+            xyz = os.path.join("downloads", f"{minfo['id']}.{minfo['ext']}")
             if os.path.exists(xyz):
                 return xyz
             x.download([link])

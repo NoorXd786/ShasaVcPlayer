@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -45,7 +45,9 @@ from strings import get_command, get_string
 STATS_COMMAND = get_command("STATS_COMMAND")
 
 
-@app.on_message(filters.command(STATS_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(STATS_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
+)
 @app.on_callback_query(filters.regex("GlobalStats") & ~BANNED_USERS)
 async def stats_global(client: app, update: Union[types.Message, types.CallbackQuery]):
     is_callback = isinstance(update, types.CallbackQuery)
@@ -409,7 +411,7 @@ async def top_here(client, CallbackQuery, _):
 async def overall_stats(client, CallbackQuery, _):
     upl = overallback_stats_markup(_)
     try:
-        await CallbackQuery.answer("Getting Bot's Stats main..\n\nPlease Hold on!")
+        await CallbackQuery.answer("Getting Bot's Stats Master..\n\nPlease Hold on!")
     except:
         pass
     await CallbackQuery.edit_message_text(_["tops_9"])
