@@ -14,21 +14,18 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS
-from strings import get_command
 from ShasaMusic import Carbon, app
 from ShasaMusic.misc import db
-from ShasaMusic.utils.database import (get_chatmode, get_cmode,
-                                       is_active_chat)
+from ShasaMusic.utils.database import get_chatmode, get_cmode, is_active_chat
 from ShasaMusic.utils.decorators.language import language
 from ShasaMusic.utils.pastebin import Shasabin
+from strings import get_command
 
 ###Commands
 QUEUE_COMMAND = get_command("QUEUE_COMMAND")
 
 
-@app.on_message(
-    filters.command(QUEUE_COMMAND) & filters.group & ~BANNED_USERS
-)
+@app.on_message(filters.command(QUEUE_COMMAND) & filters.group & ~BANNED_USERS)
 @language
 async def ping_com(client, message: Message, _):
     if message.command[0][0] == "c":
@@ -39,19 +36,18 @@ async def ping_com(client, message: Message, _):
             chat = await app.get_chat(chat_id)
         except:
             return await message.reply_text(_["cplay_4"])
-        channel = chat.title
+        chat.title
     else:
         chatmode = await get_chatmode(message.chat.id)
         if chatmode == "Group":
             chat_id = message.chat.id
-            channel = None
         else:
             chat_id = await get_cmode(message.chat.id)
             try:
                 chat = await app.get_chat(chat_id)
             except:
                 return await message.reply_text(_["cplay_4"])
-            channel = chat.title
+            chat.title
     send = await message.reply_text(_["queue_1"])
     if await is_active_chat(chat_id):
         got = db.get(chat_id)
@@ -65,9 +61,7 @@ async def ping_com(client, message: Message, _):
                 elif j == 2:
                     msg += f'Queued:\n\n🏷Title: {x["title"]}\nDur: {x["dur"]}\nBy: {x["by"]}\n\n'
                 else:
-                    msg += (
-                        f'🏷Title: {x["title"]}\nDur: {x["dur"]}\nBy: {x["by"]}\n\n'
-                    )
+                    msg += f'🏷Title: {x["title"]}\nDur: {x["dur"]}\nBy: {x["by"]}\n\n'
             if "Queued" in msg:
                 link = await Shasabin(msg)
                 lines = msg.count("\n")
@@ -77,9 +71,7 @@ async def ping_com(client, message: Message, _):
                     return await send.edit_text(msg)
                 if "🏷" in car:
                     car = car.replace("🏷", "")
-                carbon = await Carbon.generate(
-                    car, randint(100, 10000000)
-                )
+                carbon = await Carbon.generate(car, randint(100, 10000000))
                 await message.reply_photo(
                     photo=carbon, caption=_["queue_3"].format(link)
                 )
