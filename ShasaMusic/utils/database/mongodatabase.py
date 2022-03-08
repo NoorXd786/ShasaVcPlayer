@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -22,6 +22,7 @@ chatsdb = mongodb.chats
 blacklist_chatdb = mongodb.blacklistChat
 usersdb = mongodb.tgusersdb
 playlistdb = mongodb.playlist
+blockeddb = mongodb.blockedusers
 
 
 async def get_playlist_count() -> dict:
@@ -141,7 +142,10 @@ async def remove_served_chat(chat_id: int):
 
 async def blacklisted_chats() -> list:
     chats = blacklist_chatdb.find({"chat_id": {"$lt": 0}})
-    return [chat["chat_id"] for chat in await chats.to_list(length=1000000000)]
+    return [
+        chat["chat_id"]
+        for chat in await chats.to_list(length=1000000000)
+    ]
 
 
 async def blacklist_chat(chat_id: int) -> bool:
@@ -398,7 +402,9 @@ async def get_particulars(chat_id: int) -> Dict[str, int]:
     return ids["vidid"]
 
 
-async def get_particular_top(chat_id: int, name: str) -> Union[bool, dict]:
+async def get_particular_top(
+    chat_id: int, name: str
+) -> Union[bool, dict]:
     ids = await get_particulars(chat_id)
     if name in ids:
         return ids[name]
@@ -444,4 +450,44 @@ async def get_user_top(chat_id: int, name: str) -> Union[bool, dict]:
 async def update_user_top(chat_id: int, name: str, vidid: dict):
     ids = await get_userss(chat_id)
     ids[name] = vidid
-    await userdb.update_one({"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True)
+    await userdb.update_one(
+        {"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True
+    )
+
+
+async def get_banned_users() -> list:
+    users = blockeddb.find({"user_id": {"$gt": 0}})
+    if not users:
+        return []
+    results = []
+    for user in await users.to_list(length=1000000000):
+        user_id = user["user_id"]
+        results.append(user_id)
+    return results
+
+
+async def get_banned_count() -> int:
+    users = blockeddb.find({"user_id": {"$gt": 0}})
+    users = await users.to_list(length=100000)
+    return len(users)
+
+
+async def is_banned_user(user_id: int) -> bool:
+    user = await blockeddb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+
+
+async def add_banned_user(user_id: int):
+    is_gbanned = await is_banned_user(user_id)
+    if is_gbanned:
+        return
+    return await blockeddb.insert_one({"user_id": user_id})
+
+
+async def remove_banned_user(user_id: int):
+    is_gbanned = await is_banned_user(user_id)
+    if not is_gbanned:
+        return
+    return await blockeddb.delete_one({"user_id": user_id})
