@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -11,16 +11,13 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS, adminlist
+from strings import get_command
 from ShasaMusic import app
-from ShasaMusic.utils.database import (
-    delete_authuser,
-    get_authuser,
-    get_authuser_names,
-    save_authuser,
-)
+from ShasaMusic.utils.database import (delete_authuser, get_authuser,
+                                       get_authuser_names,
+                                       save_authuser)
 from ShasaMusic.utils.decorators import AdminActual, language
 from ShasaMusic.utils.formatters import int_to_alpha
-from strings import get_command
 
 # Command
 AUTH_COMMAND = get_command("AUTH_COMMAND")
@@ -28,7 +25,12 @@ UNAUTH_COMMAND = get_command("UNAUTH_COMMAND")
 AUTHUSERS_COMMAND = get_command("AUTHUSERS_COMMAND")
 
 
-@app.on_message(filters.command(AUTH_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(AUTH_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @AdminActual
 async def auth(client, message: Message, _):
     if not message.reply_to_message:
@@ -90,7 +92,12 @@ async def auth(client, message: Message, _):
         await message.reply_text(_["auth_3"])
 
 
-@app.on_message(filters.command(UNAUTH_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(UNAUTH_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @AdminActual
 async def unauthusers(client, message: Message, _):
     if not message.reply_to_message:
@@ -123,7 +130,12 @@ async def unauthusers(client, message: Message, _):
         return await message.reply_text(_["auth_5"])
 
 
-@app.on_message(filters.command(AUTHUSERS_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(AUTHUSERS_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @language
 async def authusers(client, message: Message, _):
     _playlist = await get_authuser_names(message.chat.id)
