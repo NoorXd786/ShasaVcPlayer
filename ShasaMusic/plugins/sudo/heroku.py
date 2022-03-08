@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -15,6 +15,7 @@ import socket
 from datetime import datetime
 
 import dotenv
+import heroku3
 import requests
 import urllib3
 from git import Repo
@@ -22,16 +23,14 @@ from git.exc import GitCommandError, InvalidGitRepositoryError
 from pyrogram import filters
 
 import config
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.misc import HAPP, SUDOERS, XCB
-from ShasaMusic.utils.database import (
-    get_active_chats,
-    remove_active_chat,
-    remove_active_video_chat,
-)
+from ShasaMusic.utils.database import (get_active_chats,
+                                       remove_active_chat,
+                                       remove_active_video_chat)
 from ShasaMusic.utils.decorators.language import language
 from ShasaMusic.utils.pastebin import Shasabin
-from strings import get_command
 
 # Commands
 GETLOG_COMMAND = get_command("GETLOG_COMMAND")
@@ -104,7 +103,9 @@ async def varget_(client, message, _):
         if not output:
             await message.reply_text(_["heroku_4"])
         else:
-            return await message.reply_text(f"**{check_var}:** `{str(output)}`")
+            return await message.reply_text(
+                f"**{check_var}:** `{str(output)}`"
+            )
 
 
 @app.on_message(filters.command(DELVAR_COMMAND) & SUDOERS)
@@ -174,7 +175,8 @@ async def usage_dynos(client, message, _):
     else:
         return await message.reply_text(_["heroku_11"])
     dyno = await message.reply_text(_["heroku_12"])
-    account_id = HAPP.account().id
+    Heroku = heroku3.from_key(config.HEROKU_API_KEY)
+    account_id = Heroku.account().id
     useragent = (
         "Mozilla/5.0 (Linux; Android 10; SM-G975F) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -237,18 +239,29 @@ async def update_(client, message, _):
     os.system(to_exc)
     await asyncio.sleep(7)
     verification = ""
-    REPO_ = repo.remotes.origin.url.split(".git")[0]  # main git repository
-    for checks in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}"):
+    REPO_ = repo.remotes.origin.url.split(".git")[
+        0
+    ]  # main git repository
+    for checks in repo.iter_commits(
+        f"HEAD..origin/{config.UPSTREAM_BRANCH}"
+    ):
         verification = str(checks.count())
     if verification == "":
         return await response.edit("Bot is up-to-date!")
     updates = ""
     ordinal = lambda format: "%d%s" % (
         format,
-        "tsnrhtdd"[(format // 10 % 10 != 1) * (format % 10 < 4) * format % 10 :: 4],
+        "tsnrhtdd"[
+            (format // 10 % 10 != 1)
+            * (format % 10 < 4)
+            * format
+            % 10 :: 4
+        ],
     )
-    for info in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}"):
-        updates += f"<b>➣ #{info.count()}: [{info.summary}]({REPO_}/commit/{info}) by -> {info.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(info.committed_date).strftime('%d')))} {datetime.fromtimestamp(info.committed_date).strftime('%b')}, {datetime.fromtimestamp(info.committed_date).strftime('%Y')}\n\n"
+    for minfo in repo.iter_commits(
+        f"HEAD..origin/{config.UPSTREAM_BRANCH}"
+    ):
+        updates += f"<b>➣ #{minfo.count()}: [{minfo.summary}]({REPO_}/commit/{minfo}) by -> {minfo.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(minfo.committed_date).strftime('%d')))} {datetime.fromtimestamp(minfo.committed_date).strftime('%b')}, {datetime.fromtimestamp(minfo.committed_date).strftime('%Y')}\n\n"
     _update_response_ = "<b>A new update is available for the Bot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n"
     _final_updates_ = _update_response_ + updates
     if len(_final_updates_) > 4096:
@@ -257,7 +270,9 @@ async def update_(client, message, _):
             f"<b>A new update is available for the Bot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n[Click Here to checkout Updates]({url})"
         )
     else:
-        nrs = await response.edit(_final_updates_, disable_web_page_preview=True)
+        nrs = await response.edit(
+            _final_updates_, disable_web_page_preview=True
+        )
     os.system("git stash &> /dev/null && git pull")
     if await is_heroku():
         try:
@@ -281,7 +296,7 @@ async def update_(client, message, _):
             return
         except Exception as err:
             await response.edit(
-                f"{nrs.text}\n\nSomething went wrong while initiating reboot! Please try again later or check logs for more info."
+                f"{nrs.text}\n\nSomething went wrong while initiating reboot! Please try again later or check logs for more minfo."
             )
             return await app.send_message(
                 config.LOG_GROUP_ID,
