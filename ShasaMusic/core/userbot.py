@@ -53,7 +53,7 @@ class Userbot(Client):
         )
 
     async def start(self):
-        LOGGER(__name__).minfo(f"Starting Assistant Clients")
+        LOGGER(__name__).info(f"Starting Assistant Clients")
         if config.STRING1:
             await self.one.start()
             try:
@@ -78,7 +78,7 @@ class Userbot(Client):
                 self.one.name = get_me.first_name + " " + get_me.last_name
             else:
                 self.one.name = get_me.first_name
-            LOGGER(__name__).minfo(f"Assistant Started as {self.one.name}")
+            LOGGER(__name__).info(f"Assistant Started as {self.one.name}")
         if config.STRING2:
             await self.two.start()
             try:
@@ -103,7 +103,7 @@ class Userbot(Client):
                 self.two.name = get_me.first_name + " " + get_me.last_name
             else:
                 self.two.name = get_me.first_name
-            LOGGER(__name__).minfo(f"Assistant Two Started as {self.two.name}")
+            LOGGER(__name__).info(f"Assistant Two Started as {self.two.name}")
         if config.STRING3:
             await self.three.start()
             try:
@@ -128,7 +128,7 @@ class Userbot(Client):
                 self.three.name = get_me.first_name + " " + get_me.last_name
             else:
                 self.three.name = get_me.first_name
-            LOGGER(__name__).minfo(f"Assistant Three Started as {self.three.name}")
+            LOGGER(__name__).info(f"Assistant Three Started as {self.three.name}")
         if config.STRING4:
             await self.four.start()
             try:
@@ -153,7 +153,7 @@ class Userbot(Client):
                 self.four.name = get_me.first_name + " " + get_me.last_name
             else:
                 self.four.name = get_me.first_name
-            LOGGER(__name__).minfo(f"Assistant Four Started as {self.four.name}")
+            LOGGER(__name__).info(f"Assistant Four Started as {self.four.name}")
         if config.STRING5:
             await self.five.start()
             try:
@@ -178,4 +178,4 @@ class Userbot(Client):
                 self.five.name = get_me.first_name + " " + get_me.last_name
             else:
                 self.five.name = get_me.first_name
-            LOGGER(__name__).minfo(f"Assistant Five Started as {self.five.name}")
+            LOGGER(__name__).info(f"Assistant Five Started as {self.five.name}")

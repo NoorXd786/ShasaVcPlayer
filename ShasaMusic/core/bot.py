@@ -18,7 +18,7 @@ from ..logging import LOGGER
 
 class ShasaBot(Client):
     def __init__(self):
-        LOGGER(__name__).minfo(f"Starting Bot")
+        LOGGER(__name__).info(f"Starting Bot")
         super().__init__(
             "ShasaVcPlayer",
             api_id=config.API_ID,
@@ -46,4 +46,4 @@ class ShasaBot(Client):
             self.name = get_me.first_name + " " + get_me.last_name
         else:
             self.name = get_me.first_name
-        LOGGER(__name__).minfo(f"MusicBot Started as {self.name}")
+        LOGGER(__name__).info(f"MusicBot Started as {self.name}")
