@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -11,11 +11,9 @@ import asyncio
 from typing import Union
 
 from pyrogram import Client
-from pyrogram.errors import (
-    ChatAdminRequired,
-    UserAlreadyParticipant,
-    UserNotParticipant,
-)
+from pyrogram.errors import (ChatAdminRequired,
+                             UserAlreadyParticipant,
+                             UserNotParticipant)
 from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls, StreamType
 from pytgcalls.exceptions import NoActiveGroupCall
@@ -24,25 +22,21 @@ from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
 from pytgcalls.types.stream import StreamAudioEnded
 
 import config
+from strings import get_string
 from ShasaMusic import LOGGER, YouTube, app
 from ShasaMusic.misc import db
-from ShasaMusic.utils.database import (
-    get_assistant,
-    get_audio_bitrate,
-    get_lang,
-    get_loop,
-    get_video_bitrate,
-    group_assistant,
-    mute_off,
-    remove_active_chat,
-    remove_active_video_chat,
-    set_loop,
-)
+from ShasaMusic.utils.database import (get_assistant,
+                                       get_audio_bitrate, get_lang,
+                                       get_loop, get_video_bitrate,
+                                       group_assistant, mute_off,
+                                       remove_active_chat,
+                                       remove_active_video_chat,
+                                       set_loop)
 from ShasaMusic.utils.exceptions import AssistantErr
-from ShasaMusic.utils.inline.play import stream_markup, telegram_markup
+from ShasaMusic.utils.inline.play import (stream_markup,
+                                          telegram_markup)
 from ShasaMusic.utils.stream.autoclear import auto_clean
 from ShasaMusic.utils.thumbnails import gen_thumb
-from strings import get_string
 
 
 async def _clear_(chat_id):
@@ -159,7 +153,9 @@ class Call(PyTgCalls):
             except ChatAdminRequired:
                 raise AssistantErr(_["call_1"])
             if get.status == "banned" or get.status == "kicked":
-                raise AssistantErr(_["call_2"].format(userbot.username, userbot.id))
+                raise AssistantErr(
+                    _["call_2"].format(userbot.username, userbot.id)
+                )
         except UserNotParticipant:
             chat = await app.get_chat(chat_id)
             if chat.username:
@@ -175,20 +171,31 @@ class Call(PyTgCalls):
                         try:
                             invitelink = chat.invite_link
                             if invitelink is None:
-                                invitelink = await app.export_chat_invite_link(chat_id)
+                                invitelink = (
+                                    await app.export_chat_invite_link(
+                                        chat_id
+                                    )
+                                )
                         except:
-                            invitelink = await app.export_chat_invite_link(chat_id)
+                            invitelink = (
+                                await app.export_chat_invite_link(
+                                    chat_id
+                                )
+                            )
                     except ChatAdminRequired:
                         raise AssistantErr(_["call_4"])
                     except Exception as e:
                         raise AssistantErr(e)
-                    m = await app.send_message(original_chat_id, _["call_5"])
+                    m = await app.send_message(
+                        original_chat_id, _["call_5"]
+                    )
                     if invitelink.startswith("https://t.me/+"):
                         invitelink = invitelink.replace(
                             "https://t.me/+", "https://t.me/joinchat/"
                         )
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(3)
                     await userbot.join_chat(invitelink)
+                    await asyncio.sleep(4)
                     await m.edit(_["call_6"].format(userbot.name))
                 except UserAlreadyParticipant:
                     pass
@@ -213,7 +220,9 @@ class Call(PyTgCalls):
                 video_parameters=video_stream_quality,
             )
             if video
-            else AudioPiped(link, audio_parameters=audio_stream_quality)
+            else AudioPiped(
+                link, audio_parameters=audio_stream_quality
+            )
         )
         try:
             await assistant.join_group_call(
@@ -265,7 +274,11 @@ class Call(PyTgCalls):
             user = check[0]["by"]
             original_chat_id = check[0]["chat_id"]
             streamtype = check[0]["streamtype"]
-            stream = AudioPiped if str(streamtype) == "audio" else AudioVideoPiped
+            stream = (
+                AudioPiped
+                if str(streamtype) == "audio"
+                else AudioVideoPiped
+            )
             videoid = check[0]["vidid"]
             if "live_" in queued:
                 n, link = await YouTube.video(videoid, True)
@@ -288,25 +301,31 @@ class Call(PyTgCalls):
                     photo=img,
                     caption=_["stream_1"].format(
                         user,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
+                        f"https://t.me/{app.username}?start=minfo_{videoid}",
                     ),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
             elif "vid_" in queued:
-                mystic = await app.send_message(original_chat_id, _["call_10"])
+                mystic = await app.send_message(
+                    original_chat_id, _["call_10"]
+                )
                 try:
                     file_path, direct = await YouTube.download(
                         videoid,
                         mystic,
                         videoid=True,
-                        video=True if str(streamtype) == "video" else False,
+                        video=True
+                        if str(streamtype) == "video"
+                        else False,
                     )
                 except:
                     return await mystic.edit_text(
                         _["call_9"], disable_web_page_preview=True
                     )
                 try:
-                    await client.change_stream(chat_id, stream(file_path))
+                    await client.change_stream(
+                        chat_id, stream(file_path)
+                    )
                 except Exception:
                     return await app.send_message(
                         original_chat_id,
@@ -320,13 +339,15 @@ class Call(PyTgCalls):
                     photo=img,
                     caption=_["stream_1"].format(
                         user,
-                        f"https://t.me/{app.username}?start=info_{videoid}",
+                        f"https://t.me/{app.username}?start=minfo_{videoid}",
                     ),
                     reply_markup=InlineKeyboardMarkup(button),
                 )
             elif "index_" in queued:
                 try:
-                    await client.change_stream(chat_id, AudioVideoPiped(videoid))
+                    await client.change_stream(
+                        chat_id, AudioVideoPiped(videoid)
+                    )
                 except Exception:
                     return await app.send_message(
                         original_chat_id,
@@ -340,9 +361,15 @@ class Call(PyTgCalls):
                     reply_markup=InlineKeyboardMarkup(button),
                 )
             else:
-                stream = AudioPiped if str(streamtype) == "audio" else AudioVideoPiped
+                stream = (
+                    AudioPiped
+                    if str(streamtype) == "audio"
+                    else AudioVideoPiped
+                )
                 try:
-                    await client.change_stream(chat_id, stream(queued))
+                    await client.change_stream(
+                        chat_id, stream(queued)
+                    )
                 except Exception:
                     return await app.send_message(
                         original_chat_id,
@@ -355,7 +382,9 @@ class Call(PyTgCalls):
                         photo=config.TELEGRAM_AUDIO_URL
                         if str(streamtype) == "audio"
                         else config.TELEGRAM_VIDEO_URL,
-                        caption=_["stream_3"].format(title, check[0]["dur"], user),
+                        caption=_["stream_3"].format(
+                            title, check[0]["dur"], user
+                        ),
                         reply_markup=InlineKeyboardMarkup(button),
                     )
                 elif videoid == "soundcloud":
@@ -363,7 +392,9 @@ class Call(PyTgCalls):
                     await app.send_photo(
                         original_chat_id,
                         photo=config.SOUNCLOUD_IMG_URL,
-                        caption=_["stream_3"].format(title, check[0]["dur"], user),
+                        caption=_["stream_3"].format(
+                            title, check[0]["dur"], user
+                        ),
                         reply_markup=InlineKeyboardMarkup(button),
                     )
                 else:
@@ -374,13 +405,13 @@ class Call(PyTgCalls):
                         photo=img,
                         caption=_["stream_1"].format(
                             user,
-                            f"https://t.me/{app.username}?start=info_{videoid}",
+                            f"https://t.me/{app.username}?start=minfo_{videoid}",
                         ),
                         reply_markup=InlineKeyboardMarkup(button),
                     )
 
     async def start(self):
-        LOGGER(__name__).info("Starting PyTgCalls Client\n")
+        LOGGER(__name__).minfo("Starting PyTgCalls Client\n")
         if config.STRING1:
             await self.one.start()
         if config.STRING2:
