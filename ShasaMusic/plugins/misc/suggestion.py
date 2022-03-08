@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -95,19 +95,19 @@ strings = [
         "value": 12,
     },
     {
-        "msg": f"{BASE} You can check your **Statistics** on bot like Top 10 Played Tracks.\n\nGet Stats: /stat ",
+        "msg": f"{BASE} You can check your **Statistics** on bot like Top 10 Played Tracks.\n\nGet Stats: /stats ",
         "markup": None,
         "cb": "SEARCHANSWER",
         "value": 13,
     },
     {
-        "msg": f"{BASE} You can check **Group's Stats** on bot like Top 10 Played Tracks.\n\nGet Stats: /stat ",
+        "msg": f"{BASE} You can check **Group's Stats** on bot like Top 10 Played Tracks.\n\nGet Stats: /stats ",
         "markup": None,
         "cb": "SEARCHANSWER",
         "value": 14,
     },
     {
-        "msg": f"{BASE} You can check bot's **Global Stats** like top 10 users, top 10 chats, top 10 tracks etc etc.\n\nCheck Stats: /stat ",
+        "msg": f"{BASE} You can check bot's **Global Stats** like top 10 users, top 10 chats, top 10 tracks etc etc.\n\nCheck Stats: /stats ",
         "markup": None,
         "cb": "SEARCHANSWER",
         "value": 15,
@@ -204,7 +204,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.one.leave_chat(chat_id)
+                                        await userbot.one.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING2:
@@ -224,7 +226,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.two.leave_chat(chat_id)
+                                        await userbot.two.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING3:
@@ -244,7 +248,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.three.leave_chat(chat_id)
+                                        await userbot.three.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING4:
@@ -264,7 +270,9 @@ async def dont_do_this():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.four.leave_chat(chat_id)
+                                        await userbot.four.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
                 if config.STRING5:
@@ -280,10 +288,13 @@ async def dont_do_this():
                                 chat_id != config.LOG_GROUP_ID
                                 and chat_id != -1001190342892
                                 and chat_id != -1001733534088
+                                and chat_id != -1001443281821
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await userbot.five.leave_chat(chat_id)
+                                        await userbot.five.leave_chat(
+                                            chat_id
+                                        )
                                     except:
                                         continue
         except:
@@ -315,14 +326,18 @@ async def dont_do_this():
                     suggestor[x] = string["value"]
                     if string["markup"] is None:
                         try:
-                            sent = await app.send_message(x, string["msg"])
+                            sent = await app.send_message(
+                                x, string["msg"]
+                            )
                             if x not in clean:
                                 clean[x] = []
                             time_now = datetime.now()
                             put = {
                                 "msg_id": sent.message_id,
                                 "timer_after": time_now
-                                + timedelta(minutes=config.CLEANMODE_DELETE_MINS),
+                                + timedelta(
+                                    minutes=config.CLEANMODE_DELETE_MINS
+                                ),
                             }
                             clean[x].append(put)
                             send_to += 1
@@ -349,7 +364,9 @@ async def dont_do_this():
                             put = {
                                 "msg_id": sent.message_id,
                                 "timer_after": time_now
-                                + timedelta(minutes=config.CLEANMODE_DELETE_MINS),
+                                + timedelta(
+                                    minutes=config.CLEANMODE_DELETE_MINS
+                                ),
                             }
                             clean[x].append(put)
                             send_to += 1
