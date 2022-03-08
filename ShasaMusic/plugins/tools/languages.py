@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -12,10 +12,11 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, Message
 
 from config import BANNED_USERS
+from strings import get_command, get_string
 from ShasaMusic import app
 from ShasaMusic.utils.database import get_lang, set_lang
-from ShasaMusic.utils.decorators import ActualAdminCB, language, languageCB
-from strings import get_command, get_string
+from ShasaMusic.utils.decorators import (ActualAdminCB, language,
+                                         languageCB)
 
 # Languages Available
 
@@ -47,7 +48,9 @@ def lanuages_keyboard(_):
             text=_["BACK_BUTTON"],
             callback_data=f"settingsback_helper",
         ),
-        InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data=f"close"),
+        InlineKeyboardButton(
+            text=_["CLOSE_BUTTON"], callback_data=f"close"
+        ),
     )
     return keyboard
 
@@ -55,7 +58,12 @@ def lanuages_keyboard(_):
 LANGUAGE_COMMAND = get_command("LANGUAGE_COMMAND")
 
 
-@app.on_message(filters.command(LANGUAGE_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(LANGUAGE_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @language
 async def langs_command(client, message: Message, _):
     keyboard = lanuages_keyboard(_)
@@ -73,10 +81,14 @@ async def lanuagecb(client, CallbackQuery, _):
     except:
         pass
     keyboard = lanuages_keyboard(_)
-    return await CallbackQuery.edit_message_reply_markup(reply_markup=keyboard)
+    return await CallbackQuery.edit_message_reply_markup(
+        reply_markup=keyboard
+    )
 
 
-@app.on_callback_query(filters.regex(r"languages:(.*?)") & ~BANNED_USERS)
+@app.on_callback_query(
+    filters.regex(r"languages:(.*?)") & ~BANNED_USERS
+)
 @ActualAdminCB
 async def language_markup(client, CallbackQuery, _):
     langauge = (CallbackQuery.data).split(":")[1]
@@ -98,4 +110,6 @@ async def language_markup(client, CallbackQuery, _):
         )
     await set_lang(CallbackQuery.message.chat.id, langauge)
     keyboard = lanuages_keyboard(_)
-    return await CallbackQuery.edit_message_reply_markup(reply_markup=keyboard)
+    return await CallbackQuery.edit_message_reply_markup(
+        reply_markup=keyboard
+    )

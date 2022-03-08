@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -13,16 +13,21 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS, MUSIC_BOT_NAME, PING_IMG_URL
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.utils import bot_sys_stats
 from ShasaMusic.utils.decorators.language import language
-from strings import get_command
 
 ### Commands
 PING_COMMAND = get_command("PING_COMMAND")
 
 
-@app.on_message(filters.command(PING_COMMAND) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(PING_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @language
 async def ping_com(client, message: Message, _):
     start = datetime.now()
