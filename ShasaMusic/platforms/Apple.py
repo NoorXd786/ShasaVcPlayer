@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2021-2022 by MdNoor@Github, < https://github.com/MdNoor786 >.
+# Copyright (C) 2021-2022 by MdNoor786@Github, < https://github.com/MdNoor786 >.
 #
 # This file is part of < https://github.com/MdNoor786/ShasaVcPlayer > project,
 # and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/main/LICENSE >
+# Please see < https://github.com/MdNoor786/ShasaVcPlayer/blob/master/LICENSE >
 #
 # All rights reserved.
 
@@ -67,14 +67,20 @@ class AppleAPI:
                     return False
                 html = await response.text()
         soup = BeautifulSoup(html, "html.parser")
-        applelinks = soup.find_all("meta", attrs={"property": "music:song"})
+        applelinks = soup.find_all(
+            "meta", attrs={"property": "music:song"}
+        )
         results = []
         for item in applelinks:
             try:
-                xx = (((item["content"]).split("album/")[1]).split("/")[0]).replace(
-                    "-", " "
-                )
+                xx = (
+                    ((item["content"]).split("album/")[1]).split("/")[
+                        0
+                    ]
+                ).replace("-", " ")
             except:
-                xx = ((item["content"]).split("album/")[1]).split("/")[0]
+                xx = ((item["content"]).split("album/")[1]).split(
+                    "/"
+                )[0]
             results.append(xx)
         return results, playlist_id
