@@ -247,9 +247,7 @@ async def get_gbanned() -> list:
     if not users:
         return []
     results = []
-    results.extend(
-        user["user_id"] for user in await users.to_list(length=1000000000)
-    )
+    results.extend(user["user_id"] for user in await users.to_list(length=1000000000))
 
     return results
 
@@ -441,9 +439,7 @@ async def get_banned_users() -> list:
     if not users:
         return []
     results = []
-    results.extend(
-        user["user_id"] for user in await users.to_list(length=1000000000)
-    )
+    results.extend(user["user_id"] for user in await users.to_list(length=1000000000))
 
     return results
 

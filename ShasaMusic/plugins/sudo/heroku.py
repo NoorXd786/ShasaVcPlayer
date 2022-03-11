@@ -239,9 +239,7 @@ async def update_(client, message, _):
     )
     updates = "".join(
         f"<b>➣ #{minfo.count()}: [{minfo.summary}]({REPO_}/commit/{minfo}) by -> {minfo.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(minfo.committed_date).strftime('%d')))} {datetime.fromtimestamp(minfo.committed_date).strftime('%b')}, {datetime.fromtimestamp(minfo.committed_date).strftime('%Y')}\n\n"
-        for minfo in repo.iter_commits(
-            f"HEAD..origin/{config.UPSTREAM_BRANCH}"
-        )
+        for minfo in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}")
     )
 
     _update_response_ = "<b>A new update is available for the Bot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n"

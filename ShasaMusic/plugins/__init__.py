@@ -14,7 +14,7 @@ from os.path import dirname, isfile
 
 def __list_all_modules():
     work_dir = dirname(__file__)
-    mod_paths = glob.glob(f'{work_dir}/*/*.py')
+    mod_paths = glob.glob(f"{work_dir}/*/*.py")
 
     return [
         (((f.replace(work_dir, "")).replace("/", "."))[:-3])

@@ -186,10 +186,13 @@ async def song_helper_cb(client, CallbackQuery, _):
                 )
             )
 
-    keyboard.row(InlineKeyboardButton(
-                text=_["BACK_BUTTON"],
-                callback_data=f"song_back {stype}|{vidid}",
-            ), InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"))
+    keyboard.row(
+        InlineKeyboardButton(
+            text=_["BACK_BUTTON"],
+            callback_data=f"song_back {stype}|{vidid}",
+        ),
+        InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+    )
     return await CallbackQuery.edit_message_reply_markup(reply_markup=keyboard)
 
 

@@ -59,9 +59,7 @@ async def skip(cli, message: Message, _, chat_id):
             if not check:
                 try:
                     await message.reply_text(
-                        _["admin_10"].format(
-                            message.from_user.first_name
-                        )
+                        _["admin_10"].format(message.from_user.first_name)
                     )
                     await Shasa.stop_stream(chat_id)
                 except:

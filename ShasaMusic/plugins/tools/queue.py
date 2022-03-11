@@ -68,9 +68,7 @@ async def ping_com(client, message: Message, _):
             if "🏷" in car:
                 car = car.replace("🏷", "")
             carbon = await Carbon.generate(car, randint(100, 10000000))
-            await message.reply_photo(
-                photo=carbon, caption=_["queue_3"].format(link)
-            )
+            await message.reply_photo(photo=carbon, caption=_["queue_3"].format(link))
             await send.delete()
         else:
             await send.edit_text(msg)

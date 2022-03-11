@@ -86,9 +86,7 @@ async def group_assistant(self, chat_id: int) -> int:
 
     if assistant := assistantdict.get(chat_id):
         assis = (
-            assistant
-            if assistant in assistants
-            else await set_calls_assistant(chat_id)
+            assistant if assistant in assistants else await set_calls_assistant(chat_id)
         )
 
     else:
