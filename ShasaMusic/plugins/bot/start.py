@@ -43,19 +43,16 @@ async def start_comm(client, message: Message, _):
     await add_served_user(message.from_user.id)
     if len(message.text.split()) > 1:
         name = message.text.split(None, 1)[1]
-        if name[0:4] == "vchelp":
+        if name[:4] == "vchelp":
             keyboard = help_pannel(_)
             return await message.reply_text(_["help_1"], reply_markup=keyboard)
-        if name[0:4] == "song":
+        if name[:4] == "song":
             return await message.reply_text(_["song_2"])
-        if name[0:3] == "sta":
+        if name[:3] == "sta":
             m = await message.reply_text("🔎 Fetching your personal stats.!")
             stats = await get_userss(message.from_user.id)
             tot = len(stats)
-            if tot > 10:
-                tracks = 10
-            else:
-                tracks = tot
+            tracks = min(tot, 10)
             if not stats:
                 return await m.edit(_["ustats_1"])
             msg = ""
@@ -91,7 +88,7 @@ async def start_comm(client, message: Message, _):
             msg = _["ustats_2"].format(tot, tota, tracks) + msg
             await message.reply_photo(photo=thumbnail, caption=msg)
             return
-        if name[0:3] == "sud":
+        if name[:3] == "sud":
             await sudoers_list(client=client, message=message, _=_)
             if await is_on_off(config.LOG):
                 sender_id = message.from_user.id
@@ -101,17 +98,16 @@ async def start_comm(client, message: Message, _):
                     f"{message.from_user.mention} has just started bot to check <code>SUDOLIST</code>\n\n**USER ID:** {sender_id}\n**USER NAME:** {sender_name}",
                 )
             return
-        if name[0:3] == "lyr":
+        if name[:3] == "lyr":
             query = (str(name)).replace("lyrics_", "", 1)
             lyrical = config.lyrical
-            lyrics = lyrical.get(query)
-            if lyrics:
+            if lyrics := lyrical.get(query):
                 return await Telegram.send_split_text(message, lyrics)
             else:
                 return await message.reply_text("Failed to get lyrics.")
-        if name[0:3] == "del":
+        if name[:3] == "del":
             await del_plist_msg(client=client, message=message, _=_)
-        if name[0:3] == "inf":
+        if name[:3] == "inf":
             m = await message.reply_text("🔎 Fetching Info!")
             query = (str(name)).replace("minfo_", "", 1)
             query = f"https://www.youtube.com/watch?v={query}"

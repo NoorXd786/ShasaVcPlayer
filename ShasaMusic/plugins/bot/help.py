@@ -79,9 +79,8 @@ async def helper_cb(client, CallbackQuery, _):
     if cb == "hb5":
         if CallbackQuery.from_user.id not in SUDOERS:
             return await CallbackQuery.answer("Only for Sudo Users", show_alert=True)
-        else:
-            await CallbackQuery.edit_message_text(helpers.HELP_5, reply_markup=keyboard)
-            return await CallbackQuery.answer()
+        await CallbackQuery.edit_message_text(helpers.HELP_5, reply_markup=keyboard)
+        return await CallbackQuery.answer()
     try:
         await CallbackQuery.answer()
     except:

@@ -27,20 +27,11 @@ PLAYMODE_COMMAND = get_command("PLAYMODE_COMMAND")
 @language
 async def playmode_(client, message: Message, _):
     playmode = await get_playmode(message.chat.id)
-    if playmode == "Direct":
-        Direct = True
-    else:
-        Direct = None
+    Direct = True if playmode == "Direct" else None
     chatmode = await get_chatmode(message.chat.id)
-    if chatmode == "Group":
-        Group = True
-    else:
-        Group = None
+    Group = True if chatmode == "Group" else None
     playty = await get_playtype(message.chat.id)
-    if playty == "Everyone":
-        Playtype = None
-    else:
-        Playtype = True
+    Playtype = None if playty == "Everyone" else True
     buttons = playmode_users_markup(_, Direct, Group, Playtype)
     response = await message.reply_text(
         _["playmode_1"].format(message.chat.title),

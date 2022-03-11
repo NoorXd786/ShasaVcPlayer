@@ -11,7 +11,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 def back_stats_markup(_):
-    upl = InlineKeyboardMarkup(
+    return InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
@@ -25,11 +25,10 @@ def back_stats_markup(_):
             ],
         ]
     )
-    return upl
 
 
 def overallback_stats_markup(_):
-    upl = InlineKeyboardMarkup(
+    return InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
@@ -43,11 +42,10 @@ def overallback_stats_markup(_):
             ],
         ]
     )
-    return upl
 
 
 def top_ten_stats_markup(_):
-    upl = InlineKeyboardMarkup(
+    return InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
@@ -81,4 +79,3 @@ def top_ten_stats_markup(_):
             ],
         ]
     )
-    return upl
