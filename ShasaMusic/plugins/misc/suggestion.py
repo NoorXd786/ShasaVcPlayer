@@ -196,17 +196,16 @@ async def dont_do_this():
                             "channel",
                         ]:
                             chat_id = i.chat.id
-                            if (
-                                chat_id != config.LOG_GROUP_ID
-                                and chat_id != -1001190342892
-                                and chat_id != -1001733534088
-                                and chat_id != -1001443281821
-                            ):
-                                if not await is_active_chat(chat_id):
-                                    try:
-                                        await userbot.one.leave_chat(chat_id)
-                                    except:
-                                        continue
+                            if chat_id not in [
+                                config.LOG_GROUP_ID,
+                                -1001190342892,
+                                -1001733534088,
+                                -1001443281821,
+                            ] and not await is_active_chat(chat_id):
+                                try:
+                                    await userbot.one.leave_chat(chat_id)
+                                except:
+                                    continue
                 if config.STRING2:
                     async for i in userbot.two.iter_dialogs():
                         chat_type = i.chat.type
@@ -216,17 +215,16 @@ async def dont_do_this():
                             "channel",
                         ]:
                             chat_id = i.chat.id
-                            if (
-                                chat_id != config.LOG_GROUP_ID
-                                and chat_id != -1001190342892
-                                and chat_id != -1001733534088
-                                and chat_id != -1001443281821
-                            ):
-                                if not await is_active_chat(chat_id):
-                                    try:
-                                        await userbot.two.leave_chat(chat_id)
-                                    except:
-                                        continue
+                            if chat_id not in [
+                                config.LOG_GROUP_ID,
+                                -1001190342892,
+                                -1001733534088,
+                                -1001443281821,
+                            ] and not await is_active_chat(chat_id):
+                                try:
+                                    await userbot.two.leave_chat(chat_id)
+                                except:
+                                    continue
                 if config.STRING3:
                     async for i in userbot.three.iter_dialogs():
                         chat_type = i.chat.type
@@ -236,17 +234,16 @@ async def dont_do_this():
                             "channel",
                         ]:
                             chat_id = i.chat.id
-                            if (
-                                chat_id != config.LOG_GROUP_ID
-                                and chat_id != -1001190342892
-                                and chat_id != -1001733534088
-                                and chat_id != -1001443281821
-                            ):
-                                if not await is_active_chat(chat_id):
-                                    try:
-                                        await userbot.three.leave_chat(chat_id)
-                                    except:
-                                        continue
+                            if chat_id not in [
+                                config.LOG_GROUP_ID,
+                                -1001190342892,
+                                -1001733534088,
+                                -1001443281821,
+                            ] and not await is_active_chat(chat_id):
+                                try:
+                                    await userbot.three.leave_chat(chat_id)
+                                except:
+                                    continue
                 if config.STRING4:
                     async for i in userbot.four.iter_dialogs():
                         chat_type = i.chat.type
@@ -256,17 +253,16 @@ async def dont_do_this():
                             "channel",
                         ]:
                             chat_id = i.chat.id
-                            if (
-                                chat_id != config.LOG_GROUP_ID
-                                and chat_id != -1001190342892
-                                and chat_id != -1001733534088
-                                and chat_id != -1001443281821
-                            ):
-                                if not await is_active_chat(chat_id):
-                                    try:
-                                        await userbot.four.leave_chat(chat_id)
-                                    except:
-                                        continue
+                            if chat_id not in [
+                                config.LOG_GROUP_ID,
+                                -1001190342892,
+                                -1001733534088,
+                                -1001443281821,
+                            ] and not await is_active_chat(chat_id):
+                                try:
+                                    await userbot.four.leave_chat(chat_id)
+                                except:
+                                    continue
                 if config.STRING5:
                     async for i in userbot.five.iter_dialogs():
                         chat_type = i.chat.type
@@ -276,29 +272,26 @@ async def dont_do_this():
                             "channel",
                         ]:
                             chat_id = i.chat.id
-                            if (
-                                chat_id != config.LOG_GROUP_ID
-                                and chat_id != -1001190342892
-                                and chat_id != -1001733534088
-                                and chat_id != -1001443281821
-                            ):
-                                if not await is_active_chat(chat_id):
-                                    try:
-                                        await userbot.five.leave_chat(chat_id)
-                                    except:
-                                        continue
+                            if chat_id not in [
+                                config.LOG_GROUP_ID,
+                                -1001190342892,
+                                -1001733534088,
+                                -1001443281821,
+                            ] and not await is_active_chat(chat_id):
+                                try:
+                                    await userbot.five.leave_chat(chat_id)
+                                except:
+                                    continue
         except:
             pass
         try:
             if config.AUTO_SUGGESTION_MODE == str(True):
-                chats = []
                 schats = await get_served_chats()
-                for chat in schats:
-                    chats.append(int(chat["chat_id"]))
+                chats = [int(chat["chat_id"]) for chat in schats]
                 total = len(chats)
-                final = int(total / 10)
+                final = total // 10
                 if final < 10:
-                    final = int(total)
+                    final = total
                 send_to = 0
                 random.shuffle(chats)
                 for x in chats:
@@ -307,12 +300,11 @@ async def dont_do_this():
                     if x == config.LOG_GROUP_ID:
                         continue
                     string = random.choice(strings)
-                    previous = suggestor.get(x)
-                    if previous:
+                    if previous := suggestor.get(x):
                         if previous == string["value"]:
                             string = random.choice(strings)
-                            if previous == string["value"]:
-                                string = random.choice(strings)
+                        if previous == string["value"]:
+                            string = random.choice(strings)
                     suggestor[x] = string["value"]
                     if string["markup"] is None:
                         try:

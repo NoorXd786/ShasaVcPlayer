@@ -55,23 +55,22 @@ async def play_live_stream(client, CallbackQuery, _):
         details, track_id = await YouTube.track(vidid, True)
     except Exception:
         return await mystic.edit_text(_["play_3"])
-    if not details["duration_min"]:
-        try:
-            await stream(
-                _,
-                mystic,
-                user_id,
-                details,
-                chat_id,
-                user_name,
-                CallbackQuery.message.chat.id,
-                video,
-                streamtype="live",
-            )
-        except Exception as e:
-            ex_type = type(e).__name__
-            err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
-            return await mystic.edit_text(err)
-    else:
+    if details["duration_min"]:
         return await mystic.edit_text("Not a live stream")
+    try:
+        await stream(
+            _,
+            mystic,
+            user_id,
+            details,
+            chat_id,
+            user_name,
+            CallbackQuery.message.chat.id,
+            video,
+            streamtype="live",
+        )
+    except Exception as e:
+        ex_type = type(e).__name__
+        err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+        return await mystic.edit_text(err)
     await mystic.delete()

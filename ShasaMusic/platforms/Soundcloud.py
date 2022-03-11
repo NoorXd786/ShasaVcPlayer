@@ -27,10 +27,7 @@ class SoundAPI:
         }
 
     async def valid(self, link: str):
-        if re.search(self.regex, link):
-            return True
-        else:
-            return False
+        return bool(re.search(self.regex, link))
 
     async def download(self, url):
         d = YoutubeDL(self.opts)

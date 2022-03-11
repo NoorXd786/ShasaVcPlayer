@@ -44,9 +44,8 @@ async def stream(
     streamtype: Union[bool, str] = None,
     spotify: Union[bool, str] = None,
 ):
-    if video:
-        if not await is_video_allowed(chat_id):
-            raise AssistantErr(_["play_6"])
+    if video and not await is_video_allowed(chat_id):
+        raise AssistantErr(_["play_6"])
     if streamtype == "playlist":
         msg = f"{_['playlist_16']}\n\n"
         count = 0
@@ -59,7 +58,7 @@ async def stream(
                 duration_sec,
                 thumbnail,
                 vidid,
-            ) = await YouTube.details(search, False if spotify else True)
+            ) = await YouTube.details(search, not spotify)
             if str(duration_min) == "None":
                 continue
             if duration_sec > config.DURATION_LIMIT:
@@ -120,21 +119,17 @@ async def stream(
                 )
         if count == 0:
             return
-        else:
-            link = await Shasabin(msg)
-            lines = msg.count("\n")
-            if lines >= 17:
-                car = os.linesep.join(msg.split(os.linesep)[:17])
-            else:
-                car = msg
-            carbon = await Carbon.generate(car, randint(100, 10000000))
-            upl = close_markup(_)
-            return await app.send_photo(
-                original_chat_id,
-                photo=carbon,
-                caption=_["playlist_18"].format(link, position),
-                reply_markup=upl,
-            )
+        link = await Shasabin(msg)
+        lines = msg.count("\n")
+        car = os.linesep.join(msg.split(os.linesep)[:17]) if lines >= 17 else msg
+        carbon = await Carbon.generate(car, randint(100, 10000000))
+        upl = close_markup(_)
+        return await app.send_photo(
+            original_chat_id,
+            photo=carbon,
+            caption=_["playlist_18"].format(link, position),
+            reply_markup=upl,
+        )
     elif streamtype == "youtube":
         link = result["link"]
         vidid = result["vidid"]

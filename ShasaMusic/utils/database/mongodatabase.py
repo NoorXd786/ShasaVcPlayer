@@ -47,18 +47,14 @@ async def _get_playlists(chat_id: int) -> Dict[str, int]:
 
 async def get_playlist_names(chat_id: int) -> List[str]:
     _notes = []
-    for note in await _get_playlists(chat_id):
-        _notes.append(note)
+    _notes.extend(iter(await _get_playlists(chat_id)))
     return _notes
 
 
 async def get_playlist(chat_id: int, name: str) -> Union[bool, dict]:
     name = name
     _notes = await _get_playlists(chat_id)
-    if name in _notes:
-        return _notes[name]
-    else:
-        return False
+    return _notes[name] if name in _notes else False
 
 
 async def save_playlist(chat_id: int, name: str, note: dict):
@@ -97,8 +93,7 @@ async def get_served_users() -> list:
     if not users:
         return []
     users_list = []
-    for user in await users.to_list(length=1000000000):
-        users_list.append(user)
+    users_list.extend(iter(await users.to_list(length=1000000000)))
     return users_list
 
 
@@ -114,8 +109,7 @@ async def get_served_chats() -> list:
     if not chats:
         return []
     chats_list = []
-    for chat in await chats.to_list(length=1000000000):
-        chats_list.append(chat)
+    chats_list.extend(iter(await chats.to_list(length=1000000000)))
     return chats_list
 
 
@@ -167,8 +161,7 @@ async def get_private_served_chats() -> list:
     if not chats:
         return []
     chats_list = []
-    for chat in await chats.to_list(length=1000000000):
-        chats_list.append(chat)
+    chats_list.extend(iter(await chats.to_list(length=1000000000)))
     return chats_list
 
 
@@ -215,18 +208,14 @@ async def _get_authusers(chat_id: int) -> Dict[str, int]:
 
 async def get_authuser_names(chat_id: int) -> List[str]:
     _notes = []
-    for note in await _get_authusers(chat_id):
-        _notes.append(note)
+    _notes.extend(iter(await _get_authusers(chat_id)))
     return _notes
 
 
 async def get_authuser(chat_id: int, name: str) -> Union[bool, dict]:
     name = name
     _notes = await _get_authusers(chat_id)
-    if name in _notes:
-        return _notes[name]
-    else:
-        return False
+    return _notes[name] if name in _notes else False
 
 
 async def save_authuser(chat_id: int, name: str, note: dict):
@@ -258,9 +247,10 @@ async def get_gbanned() -> list:
     if not users:
         return []
     results = []
-    for user in await users.to_list(length=1000000000):
-        user_id = user["user_id"]
-        results.append(user_id)
+    results.extend(
+        user["user_id"] for user in await users.to_list(length=1000000000)
+    )
+
     return results
 
 
@@ -382,9 +372,7 @@ async def get_global_tops() -> dict:
             title_ = chat["vidid"][i]["title"]
             if counts_ > 0:
                 if i not in results:
-                    results[i] = {}
-                    results[i]["spot"] = counts_
-                    results[i]["title"] = title_
+                    results[i] = {"spot": counts_, "title": title_}
                 else:
                     spot = results[i]["spot"]
                     count_ = spot + counts_
@@ -453,9 +441,10 @@ async def get_banned_users() -> list:
     if not users:
         return []
     results = []
-    for user in await users.to_list(length=1000000000):
-        user_id = user["user_id"]
-        results.append(user_id)
+    results.extend(
+        user["user_id"] for user in await users.to_list(length=1000000000)
+    )
+
     return results
 
 

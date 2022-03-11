@@ -21,10 +21,7 @@ class RessoAPI:
         self.base = "https://m.resso.com/"
 
     async def valid(self, link: str):
-        if re.search(self.regex, link):
-            return True
-        else:
-            return False
+        return bool(re.search(self.regex, link))
 
     async def track(self, url, playid: Union[bool, str] = None):
         if playid:
@@ -42,7 +39,7 @@ class RessoAPI:
                 print(title)
             if tag.get("property", None) == "og:description":
                 des = tag.get("content", None)
-                print("des" + des)
+                print(f"des{des}")
                 try:
                     des = des.split("·")[0]
                 except:
