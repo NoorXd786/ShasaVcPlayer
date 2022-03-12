@@ -11,11 +11,11 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.misc import SUDOERS
 from ShasaMusic.utils.database import add_gban_user, remove_gban_user
 from ShasaMusic.utils.decorators.language import language
-from strings import get_command
 
 # Command
 BLOCK_COMMAND = get_command("BLOCK_COMMAND")
@@ -34,19 +34,25 @@ async def useradd(client, message: Message, _):
             user = user.replace("@", "")
         user = await app.get_users(user)
         if user.id in BANNED_USERS:
-            return await message.reply_text(_["block_1"].format(user.mention))
+            return await message.reply_text(
+                _["block_1"].format(user.mention)
+            )
         await add_gban_user(user.id)
         BANNED_USERS.add(user.id)
         await message.reply_text(_["block_2"].format(user.mention))
         return
     if message.reply_to_message.from_user.id in BANNED_USERS:
         return await message.reply_text(
-            _["block_1"].format(message.reply_to_message.from_user.mention)
+            _["block_1"].format(
+                message.reply_to_message.from_user.mention
+            )
         )
     await add_gban_user(message.reply_to_message.from_user.id)
     BANNED_USERS.add(message.reply_to_message.from_user.id)
     await message.reply_text(
-        _["block_2"].format(message.reply_to_message.from_user.mention)
+        _["block_2"].format(
+            message.reply_to_message.from_user.mention
+        )
     )
 
 
@@ -85,7 +91,9 @@ async def sudoers_list(client, message: Message, _):
     for users in BANNED_USERS:
         try:
             user = await app.get_users(users)
-            user = user.mention or user.first_name
+            user = (
+                user.first_name if not user.mention else user.mention
+            )
             count += 1
         except Exception:
             continue

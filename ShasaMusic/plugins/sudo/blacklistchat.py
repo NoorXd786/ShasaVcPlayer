@@ -11,11 +11,13 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.misc import SUDOERS
-from ShasaMusic.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
+from ShasaMusic.utils.database import (blacklist_chat,
+                                       blacklisted_chats,
+                                       whitelist_chat)
 from ShasaMusic.utils.decorators.language import language
-from strings import get_command
 
 # Commands
 
@@ -34,8 +36,13 @@ async def blacklist_chat_func(client, message: Message, _):
         return await message.reply_text(_["black_2"])
     blacklisted = await blacklist_chat(chat_id)
     if blacklisted:
-        return await message.reply_text(_["black_3"])
-    await message.reply_text("Something wrong happened.")
+        await message.reply_text(_["black_3"])
+    else:
+        await message.reply_text("Something wrong happened.")
+    try:
+        await app.leave_chat(chat_id)
+    except:
+        pass
 
 
 @app.on_message(filters.command(WHITELISTCHAT_COMMAND) & SUDOERS)
@@ -52,7 +59,9 @@ async def white_funciton(client, message: Message, _):
     await message.reply_text("Something wrong happened.")
 
 
-@app.on_message(filters.command(BLACKLISTEDCHAT_COMMAND) & ~BANNED_USERS)
+@app.on_message(
+    filters.command(BLACKLISTEDCHAT_COMMAND) & ~BANNED_USERS
+)
 @language
 async def all_chats(client, message: Message, _):
     text = _["black_7"]

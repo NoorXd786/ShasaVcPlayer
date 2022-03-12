@@ -23,16 +23,14 @@ from git.exc import GitCommandError, InvalidGitRepositoryError
 from pyrogram import filters
 
 import config
+from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.misc import HAPP, SUDOERS, XCB
-from ShasaMusic.utils.database import (
-    get_active_chats,
-    remove_active_chat,
-    remove_active_video_chat,
-)
+from ShasaMusic.utils.database import (get_active_chats,
+                                       remove_active_chat,
+                                       remove_active_video_chat)
 from ShasaMusic.utils.decorators.language import language
 from ShasaMusic.utils.pastebin import Shasabin
-from strings import get_command
 
 # Commands
 GETLOG_COMMAND = get_command("GETLOG_COMMAND")
@@ -58,18 +56,23 @@ async def log_(client, message, _):
             if HAPP is None:
                 return await message.reply_text(_["heroku_1"])
             data = HAPP.get_log()
+            link = await Shasabin(data)
+            return await message.reply_text(link)
         else:
-            if not os.path.exists(config.LOG_FILE_NAME):
+            if os.path.exists(config.LOG_FILE_NAME):
+                log = open(config.LOG_FILE_NAME)
+                lines = log.readlines()
+                data = ""
+                try:
+                    NUMB = int(message.text.split(None, 1)[1])
+                except:
+                    NUMB = 100
+                for x in lines[-NUMB:]:
+                    data += x
+                link = await Shasabin(data)
+                return await message.reply_text(link)
+            else:
                 return await message.reply_text(_["heroku_2"])
-            log = open(config.LOG_FILE_NAME)
-            lines = log.readlines()
-            try:
-                NUMB = int(message.text.split(None, 1)[1])
-            except:
-                NUMB = 100
-            data = "".join(lines[-NUMB:])
-        link = await Shasabin(data)
-        return await message.reply_text(link)
     except Exception as e:
         print(e)
         await message.reply_text(_["heroku_2"])
@@ -96,10 +99,13 @@ async def varget_(client, message, _):
         path = dotenv.find_dotenv()
         if not path:
             return await message.reply_text(_["heroku_5"])
-        if output := dotenv.get_key(path, check_var):
-            return await message.reply_text(f"**{check_var}:** `{str(output)}`")
-        else:
+        output = dotenv.get_key(path, check_var)
+        if not output:
             await message.reply_text(_["heroku_4"])
+        else:
+            return await message.reply_text(
+                f"**{check_var}:** `{str(output)}`"
+            )
 
 
 @app.on_message(filters.command(DELVAR_COMMAND) & SUDOERS)
@@ -113,10 +119,11 @@ async def vardel_(client, message, _):
         if HAPP is None:
             return await message.reply_text(_["heroku_1"])
         heroku_config = HAPP.config()
-        if check_var not in heroku_config:
+        if check_var in heroku_config:
+            await message.reply_text(_["heroku_7"].format(check_var))
+            del heroku_config[check_var]
+        else:
             return await message.reply_text(_["heroku_4"])
-        await message.reply_text(_["heroku_7"].format(check_var))
-        del heroku_config[check_var]
     else:
         path = dotenv.find_dotenv()
         if not path:
@@ -124,8 +131,9 @@ async def vardel_(client, message, _):
         output = dotenv.unset_key(path, check_var)
         if not output[0]:
             return await message.reply_text(_["heroku_4"])
-        await message.reply_text(_["heroku_7"].format(check_var))
-        os.system(f"kill -9 {os.getpid()} && bash start")
+        else:
+            await message.reply_text(_["heroku_7"].format(check_var))
+            os.system(f"kill -9 {os.getpid()} && bash start")
 
 
 @app.on_message(filters.command(SETVAR_COMMAND) & SUDOERS)
@@ -160,10 +168,12 @@ async def set_var(client, message, _):
 @app.on_message(filters.command(USAGE_COMMAND) & SUDOERS)
 @language
 async def usage_dynos(client, message, _):
-    if not await is_heroku():
+    ### Credits CatUserbot
+    if await is_heroku():
+        if HAPP is None:
+            return await message.reply_text(_["heroku_1"])
+    else:
         return await message.reply_text(_["heroku_11"])
-    if HAPP is None:
-        return await message.reply_text(_["heroku_1"])
     dyno = await message.reply_text(_["heroku_12"])
     Heroku = heroku3.from_key(config.HEROKU_API_KEY)
     account_id = Heroku.account().id
@@ -177,8 +187,8 @@ async def usage_dynos(client, message, _):
         "Authorization": f"Bearer {config.HEROKU_API_KEY}",
         "Accept": "application/vnd.heroku+json; version=3.account-quotas",
     }
-    path = f"/accounts/{account_id}/actions/get-quota"
-    r = requests.get(f"https://api.heroku.com{path}", headers=headers)
+    path = "/accounts/" + account_id + "/actions/get-quota"
+    r = requests.get("https://api.heroku.com" + path, headers=headers)
     if r.status_code != 200:
         return await dyno.edit("Unable to fetch.")
     result = r.json()
@@ -215,8 +225,9 @@ Total Left: `{hours}`**h**  `{minutes}`**m**  [`{percentage}`**%**]"""
 @app.on_message(filters.command(UPDATE_COMMAND) & SUDOERS)
 @language
 async def update_(client, message, _):
-    if await is_heroku() and HAPP is None:
-        return await message.reply_text(_["heroku_1"])
+    if await is_heroku():
+        if HAPP is None:
+            return await message.reply_text(_["heroku_1"])
     response = await message.reply_text(_["heroku_13"])
     try:
         repo = Repo()
@@ -227,21 +238,30 @@ async def update_(client, message, _):
     to_exc = f"git fetch origin {config.UPSTREAM_BRANCH} &> /dev/null"
     os.system(to_exc)
     await asyncio.sleep(7)
-    REPO_ = repo.remotes.origin.url.split(".git")[0]  # main git repository
     verification = ""
-    for checks in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}"):
+    REPO_ = repo.remotes.origin.url.split(".git")[
+        0
+    ]  # main git repository
+    for checks in repo.iter_commits(
+        f"HEAD..origin/{config.UPSTREAM_BRANCH}"
+    ):
         verification = str(checks.count())
     if verification == "":
         return await response.edit("Bot is up-to-date!")
+    updates = ""
     ordinal = lambda format: "%d%s" % (
         format,
-        "tsnrhtdd"[(format // 10 % 10 != 1) * (format % 10 < 4) * format % 10 :: 4],
+        "tsnrhtdd"[
+            (format // 10 % 10 != 1)
+            * (format % 10 < 4)
+            * format
+            % 10 :: 4
+        ],
     )
-    updates = "".join(
-        f"<b>➣ #{minfo.count()}: [{minfo.summary}]({REPO_}/commit/{minfo}) by -> {minfo.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(minfo.committed_date).strftime('%d')))} {datetime.fromtimestamp(minfo.committed_date).strftime('%b')}, {datetime.fromtimestamp(minfo.committed_date).strftime('%Y')}\n\n"
-        for minfo in repo.iter_commits(f"HEAD..origin/{config.UPSTREAM_BRANCH}")
-    )
-
+    for info in repo.iter_commits(
+        f"HEAD..origin/{config.UPSTREAM_BRANCH}"
+    ):
+        updates += f"<b>➣ #{info.count()}: [{info.summary}]({REPO_}/commit/{info}) by -> {info.author}</b>\n\t\t\t\t<b>➥ Commited on:</b> {ordinal(int(datetime.fromtimestamp(info.committed_date).strftime('%d')))} {datetime.fromtimestamp(info.committed_date).strftime('%b')}, {datetime.fromtimestamp(info.committed_date).strftime('%Y')}\n\n"
     _update_response_ = "<b>A new update is available for the Bot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n"
     _final_updates_ = _update_response_ + updates
     if len(_final_updates_) > 4096:
@@ -250,7 +270,9 @@ async def update_(client, message, _):
             f"<b>A new update is available for the Bot!</b>\n\n➣ Pushing Updates Now</code>\n\n**<u>Updates:</u>**\n\n[Click Here to checkout Updates]({url})"
         )
     else:
-        nrs = await response.edit(_final_updates_, disable_web_page_preview=True)
+        nrs = await response.edit(
+            _final_updates_, disable_web_page_preview=True
+        )
     os.system("git stash &> /dev/null && git pull")
     if await is_heroku():
         try:
@@ -274,7 +296,7 @@ async def update_(client, message, _):
             return
         except Exception as err:
             await response.edit(
-                f"{nrs.text}\n\nSomething went wrong while initiating reboot! Please try again later or check logs for more minfo."
+                f"{nrs.text}\n\nSomething went wrong while initiating reboot! Please try again later or check logs for more info."
             )
             return await app.send_message(
                 config.LOG_GROUP_ID,
