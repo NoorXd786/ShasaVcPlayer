@@ -11,13 +11,13 @@
 # Commands in Every Language
 
 # Bot Commands
-PING_COMMAND : ["ping"]
-START_COMMAND : ["start"]
-HELP_COMMAND : ["help"]
-SETTINGS_COMMAND : ["settings", "setting"]
+PING_COMMAND : ["mping"]
+START_COMMAND : ["mstart"]
+HELP_COMMAND : ["mhelp"]
+SETTINGS_COMMAND : ["vsettings", "msetting"]
 RELOAD_COMMAND : ["admincache", "reload"]
 GSTATS_COMMAND : ["gstats"]
-STATS_COMMAND : ["stats"]
+STATS_COMMAND : ["mstats"]
 LANGUAGE_COMMAND : ["lang", "language", "langs"]
 
 # Play Commands
