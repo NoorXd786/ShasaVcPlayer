@@ -12,64 +12,83 @@ from pyrogram.types import InlineKeyboardMarkup, Message
 
 import config
 from config import BANNED_USERS
+from strings import get_command
 from ShasaMusic import YouTube, app
 from ShasaMusic.core.call import Shasa
 from ShasaMusic.misc import db
 from ShasaMusic.utils.database import get_loop
 from ShasaMusic.utils.decorators import AdminRightsCheck
-from ShasaMusic.utils.inline.play import stream_markup, telegram_markup
+from ShasaMusic.utils.inline.play import (stream_markup,
+                                          telegram_markup)
 from ShasaMusic.utils.stream.autoclear import auto_clean
 from ShasaMusic.utils.thumbnails import gen_thumb
-from strings import get_command
 
 # Commands
 SKIP_COMMAND = get_command("SKIP_COMMAND")
 
 
 @app.on_message(
-    filters.command(SKIP_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
+    filters.command(SKIP_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @AdminRightsCheck
 async def skip(cli, message: Message, _, chat_id):
-    if len(message.command) >= 2:
+    if not len(message.command) < 2:
         loop = await get_loop(chat_id)
         if loop != 0:
             return await message.reply_text(_["admin_12"])
         state = message.text.split(None, 1)[1].strip()
-        if not state.isnumeric():
+        if state.isnumeric():
+            state = int(state)
+            check = db.get(chat_id)
+            if check:
+                count = len(check)
+                if count > 2:
+                    count = int(count - 1)
+                    if 1 <= state <= count:
+                        for x in range(state):
+                            popped = None
+                            try:
+                                popped = check.pop(0)
+                            except:
+                                return await message.reply_text(
+                                    _["admin_16"]
+                                )
+                            if popped:
+                                if (
+                                    config.AUTO_DOWNLOADS_CLEAR
+                                    == str(True)
+                                ):
+                                    await auto_clean(popped)
+                            if not check:
+                                try:
+                                    await message.reply_text(
+                                        _["admin_10"].format(
+                                            message.from_user.first_name
+                                        )
+                                    )
+                                    await Shasa.stop_stream(chat_id)
+                                except:
+                                    return
+                                break
+                    else:
+                        return await message.reply_text(
+                            _["admin_15"].format(count)
+                        )
+                else:
+                    return await message.reply_text(_["admin_14"])
+            else:
+                return await message.reply_text(_["queue_2"])
+        else:
             return await message.reply_text(_["admin_13"])
-        state = int(state)
-        check = db.get(chat_id)
-        if not check:
-            return await message.reply_text(_["queue_2"])
-        count = len(check)
-        if count <= 2:
-            return await message.reply_text(_["admin_14"])
-        count = int(count - 1)
-        if not 1 <= state <= count:
-            return await message.reply_text(_["admin_15"].format(count))
-        for _ in range(state):
-            popped = None
-            try:
-                popped = check.pop(0)
-            except:
-                return await message.reply_text(_["admin_16"])
-            if popped and config.AUTO_DOWNLOADS_CLEAR == str(True):
-                await auto_clean(popped)
-            if not check:
-                try:
-                    await message.reply_text(
-                        _["admin_10"].format(message.from_user.first_name)
-                    )
-                    await Shasa.stop_stream(chat_id)
-                except:
-                    return
-                break
     else:
         check = db.get(chat_id)
         popped = None
         try:
-            if popped := check.pop(0):
+            popped = check.pop(0)
+            if popped:
                 if config.AUTO_DOWNLOADS_CLEAR == str(True):
                     await auto_clean(popped)
             if not check:
@@ -97,7 +116,9 @@ async def skip(cli, message: Message, _, chat_id):
     if "live_" in queued:
         n, link = await YouTube.video(videoid, True)
         if n == 0:
-            return await message.reply_text(_["admin_11"].format(title))
+            return await message.reply_text(
+                _["admin_11"].format(title)
+            )
         try:
             await Shasa.skip_stream(chat_id, link, video=status)
         except Exception:
@@ -108,12 +129,14 @@ async def skip(cli, message: Message, _, chat_id):
             photo=img,
             caption=_["stream_1"].format(
                 user,
-                f"https://t.me/{app.username}?start=minfo_{videoid}",
+                f"https://t.me/{app.username}?start=info_{videoid}",
             ),
             reply_markup=InlineKeyboardMarkup(button),
         )
     elif "vid_" in queued:
-        mystic = await message.reply_text(_["call_10"], disable_web_page_preview=True)
+        mystic = await message.reply_text(
+            _["call_10"], disable_web_page_preview=True
+        )
         try:
             file_path, direct = await YouTube.download(
                 videoid,
@@ -133,7 +156,7 @@ async def skip(cli, message: Message, _, chat_id):
             photo=img,
             caption=_["stream_1"].format(
                 user,
-                f"https://t.me/{app.username}?start=minfo_{videoid}",
+                f"https://t.me/{app.username}?start=info_{videoid}",
             ),
             reply_markup=InlineKeyboardMarkup(button),
         )
@@ -160,7 +183,9 @@ async def skip(cli, message: Message, _, chat_id):
                 photo=config.TELEGRAM_AUDIO_URL
                 if str(streamtype) == "audio"
                 else config.TELEGRAM_VIDEO_URL,
-                caption=_["stream_3"].format(title, check[0]["dur"], user),
+                caption=_["stream_3"].format(
+                    title, check[0]["dur"], user
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
         elif videoid == "soundcloud":
@@ -169,7 +194,9 @@ async def skip(cli, message: Message, _, chat_id):
                 photo=config.SOUNCLOUD_IMG_URL
                 if str(streamtype) == "audio"
                 else config.TELEGRAM_VIDEO_URL,
-                caption=_["stream_3"].format(title, check[0]["dur"], user),
+                caption=_["stream_3"].format(
+                    title, check[0]["dur"], user
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
         else:
@@ -179,7 +206,7 @@ async def skip(cli, message: Message, _, chat_id):
                 photo=img,
                 caption=_["stream_1"].format(
                     user,
-                    f"https://t.me/{app.username}?start=minfo_{videoid}",
+                    f"https://t.me/{app.username}?start=info_{videoid}",
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
