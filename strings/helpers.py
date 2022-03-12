@@ -37,14 +37,19 @@ Auth Users can use admin commands without admin rights in your chat.
 
 HELP_2 = """✅<u>**Play Commands:**</u>
 
-**cplay** or **cstream **stands for channel play.
-**vplay** stands for video play.
+Available Commands = play , vplay , cplay
 
-/play or /vplay or /cplay  - Bot will start playing your given query on voice chat.
+ForcePlay Commands = playforce , vplayforce , cplayforce
 
-/stream or /cstream - Stream live links on voice chats.
+**c** stands for channel play.
+**v** stands for video play.
+**force** stands for force play.
 
-/channelplay - Connect channel to a group and stream music on channel's voice chat from your group.
+/play or /vplay or /cplay  - Bot will start playing your given query on voice chat or Stream live links on voice chats.
+
+/playforce or /vplayforce or /cplayforce -  **Force Play** stops the current playing track on voice chat and starts playing the searched track instantly without disturbing/clearing queue.
+
+/channelplay [Chat username or id] or [Disable] - Connect channel to a group and stream music on channel's voice chat from your group.
 
 
 ✅**<u>Bot's Server Playlists:</u>**
@@ -67,12 +72,12 @@ HELP_3 = """✅<u>**Bot Commands:**</u>
 /queue or /cqueue- Check Queue List of Music."""
 
 HELP_4 = """✅<u>**Extra  Commands:**</u>
-/vcstart - Start the Shasa Music Bot.
-/vchelp  - Get Commands Helper Menu with detailed explanations of commands.
-/ping- Ping the Bot and check Ram, Cpu etc stats of Shasa.
+/start - Start the Music Bot.
+/help  - Get Commands Helper Menu with detailed explanations of commands.
+/ping- Ping the Bot and check Ram, Cpu etc stats of Bot.
 
 ✅<u>**Group Settings:**</u>
-/vcsettings - Get a complete group's settings with inline buttons
+/settings - Get a complete group's settings with inline buttons
 
 🔗 **Options in Settings:**
 
@@ -92,11 +97,11 @@ HELP_4 = """✅<u>**Extra  Commands:**</u>
 
 <u>Options in playmode:</u>
 
-1️⃣ **Search Mode** [ Direct or Inline] - Changes your search mode while you give /play mode. 
+1️⃣ **Search Mode** [Direct or Inline] - Changes your search mode while you give /play mode. 
 
-2️⃣ **Play Mode** [ Group or Channel] - Changes your Play mode to channel or group and streams music there only.
+2️⃣ **Admin Commands** [Everyone or Admins] - If everyone, anyone present in you group will be able to use admin commands(like /skip, /stop etc)
 
-3️⃣ **Play Type** [ Everyone or Admins] - If admins, only admins present in group can play music on voice chat."""
+3️⃣ **Play Type** [Everyone or Admins] - If admins, only admins present in group can play music on voice chat."""
 
 HELP_5 = """🔰**<u>ADD & REMOVE SUDO USERS :</u>**
 /addsudo [Username or Reply to a user]
