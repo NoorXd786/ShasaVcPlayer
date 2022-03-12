@@ -36,10 +36,7 @@ async def init():
             "No Assistant Clients Vars Defined!.. Exiting Process."
         )
         return
-    if (
-        not config.SPOTIFY_CLIENT_ID
-        and not config.SPOTIFY_CLIENT_SECRET
-    ):
+    if not config.SPOTIFY_CLIENT_ID and not config.SPOTIFY_CLIENT_SECRET:
         LOGGER("ShasaMusic").warning(
             "No Spotify Vars defined. Your bot won't be able to play spotify queries."
         )
@@ -55,9 +52,7 @@ async def init():
     await app.start()
     for all_module in ALL_MODULES:
         importlib.import_module("ShasaMusic.plugins" + all_module)
-    LOGGER("ShasaMusic.plugins").info(
-        "Successfully Imported Modules "
-    )
+    LOGGER("ShasaMusic.plugins").info("Successfully Imported Modules ")
     await userbot.start()
     await Shasa.start()
     try:

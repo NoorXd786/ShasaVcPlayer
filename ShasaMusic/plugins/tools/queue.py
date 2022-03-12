@@ -15,20 +15,18 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS
-from strings import get_command
 from ShasaMusic import Carbon, app
 from ShasaMusic.misc import db
 from ShasaMusic.utils.database import get_cmode, is_active_chat
 from ShasaMusic.utils.decorators.language import language
 from ShasaMusic.utils.pastebin import Shasabin
+from strings import get_command
 
 ###Commands
 QUEUE_COMMAND = get_command("QUEUE_COMMAND")
 
 
-@app.on_message(
-    filters.command(QUEUE_COMMAND) & filters.group & ~BANNED_USERS
-)
+@app.on_message(filters.command(QUEUE_COMMAND) & filters.group & ~BANNED_USERS)
 @language
 async def ping_com(client, message: Message, _):
     if message.command[0][0] == "c":
@@ -65,9 +63,7 @@ async def ping_com(client, message: Message, _):
                     return await send.edit_text(msg)
                 if "🏷" in car:
                     car = car.replace("🏷", "")
-                carbon = await Carbon.generate(
-                    car, randint(100, 10000000)
-                )
+                carbon = await Carbon.generate(car, randint(100, 10000000))
                 await message.reply_photo(
                     photo=carbon, caption=_["queue_3"].format(link)
                 )

@@ -15,9 +15,7 @@ from ShasaMusic.utils.database import get_client, is_active_chat
 
 async def auto_leave():
     if config.AUTO_LEAVING_ASSISTANT == str(True):
-        while not await asyncio.sleep(
-            config.AUTO_LEAVE_ASSISTANT_TIME
-        ):
+        while not await asyncio.sleep(config.AUTO_LEAVE_ASSISTANT_TIME):
             from ShasaMusic.core.userbot import assistants
 
             for num in assistants:
@@ -39,9 +37,7 @@ async def auto_leave():
                             ):
                                 if not await is_active_chat(chat_id):
                                     try:
-                                        await client.leave_chat(
-                                            chat_id
-                                        )
+                                        await client.leave_chat(chat_id)
                                     except:
                                         continue
                 except:

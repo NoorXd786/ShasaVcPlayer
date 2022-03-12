@@ -17,8 +17,7 @@ import config
 from config import clean
 from ShasaMusic import app
 from ShasaMusic.utils.database import get_served_chats
-from ShasaMusic.utils.database.mongodatabase import \
-    get_private_served_chats
+from ShasaMusic.utils.database.mongodatabase import get_private_served_chats
 
 LEAVE_TIME = config.AUTO_SUGGESTION_TIME
 
@@ -200,18 +199,14 @@ async def dont_do_this():
                     suggestor[x] = string["value"]
                     if string["markup"] is None:
                         try:
-                            sent = await app.send_message(
-                                x, string["msg"]
-                            )
+                            sent = await app.send_message(x, string["msg"])
                             if x not in clean:
                                 clean[x] = []
                             time_now = datetime.now()
                             put = {
                                 "msg_id": sent.message_id,
                                 "timer_after": time_now
-                                + timedelta(
-                                    minutes=config.CLEANMODE_DELETE_MINS
-                                ),
+                                + timedelta(minutes=config.CLEANMODE_DELETE_MINS),
                             }
                             clean[x].append(put)
                             send_to += 1
@@ -238,9 +233,7 @@ async def dont_do_this():
                             put = {
                                 "msg_id": sent.message_id,
                                 "timer_after": time_now
-                                + timedelta(
-                                    minutes=config.CLEANMODE_DELETE_MINS
-                                ),
+                                + timedelta(minutes=config.CLEANMODE_DELETE_MINS),
                             }
                             clean[x].append(put)
                             send_to += 1

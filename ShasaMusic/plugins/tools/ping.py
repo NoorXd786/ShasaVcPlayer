@@ -13,20 +13,17 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from config import BANNED_USERS, MUSIC_BOT_NAME, PING_IMG_URL
-from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.utils import bot_sys_stats
 from ShasaMusic.utils.decorators.language import language
+from strings import get_command
 
 ### Commands
 PING_COMMAND = get_command("PING_COMMAND")
 
 
 @app.on_message(
-    filters.command(PING_COMMAND)
-    & filters.group
-    & ~filters.edited
-    & ~BANNED_USERS
+    filters.command(PING_COMMAND) & filters.group & ~filters.edited & ~BANNED_USERS
 )
 @language
 async def ping_com(client, message: Message, _):

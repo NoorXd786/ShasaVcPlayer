@@ -8,10 +8,9 @@
 # All rights reserved.
 
 
-from strings import get_string
 from ShasaMusic.misc import SUDOERS
-from ShasaMusic.utils.database import (get_lang, is_commanddelete_on,
-                                       is_maintenance)
+from ShasaMusic.utils.database import get_lang, is_commanddelete_on, is_maintenance
+from strings import get_string
 
 
 def language(mystic):

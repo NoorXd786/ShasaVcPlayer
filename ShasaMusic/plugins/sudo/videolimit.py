@@ -10,11 +10,11 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from strings import get_command
 from ShasaMusic import app
 from ShasaMusic.misc import SUDOERS
 from ShasaMusic.utils.database import set_video_limit
 from ShasaMusic.utils.decorators.language import language
+from strings import get_command
 
 VIDEOLIMIT_COMMAND = get_command("VIDEOLIMIT_COMMAND")
 
