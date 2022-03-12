@@ -90,7 +90,10 @@ class CarbonAPI:
         async with aiohttp.ClientSession(
             headers={"Content-Type": "application/json"},
         ) as ses:
-            params = {"code": text, "backgroundColor": random.choice(colour)}
+            params = {
+                "code": text,
+            }
+            params["backgroundColor"] = random.choice(colour)
             params["theme"] = random.choice(themes)
             params["dropShadow"] = self.drop_shadow
             params["dropShadowOffsetY"] = self.drop_shadow_offset

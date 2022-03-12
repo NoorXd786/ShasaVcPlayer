@@ -12,7 +12,7 @@ from typing import Union
 
 import aiohttp
 from bs4 import BeautifulSoup
-from youtubesearchpython import VideosSearch
+from youtubesearchpython.__future__ import VideosSearch
 
 
 class AppleAPI:
@@ -21,7 +21,10 @@ class AppleAPI:
         self.base = "https://music.apple.com/in/playlist/"
 
     async def valid(self, link: str):
-        return bool(re.search(self.regex, link))
+        if re.search(self.regex, link):
+            return True
+        else:
+            return False
 
     async def track(self, url, playid: Union[bool, str] = None):
         if playid:
@@ -39,7 +42,7 @@ class AppleAPI:
         if search is None:
             return False
         results = VideosSearch(search, limit=1)
-        for result in results.result()["result"]:
+        for result in (await results.next())["result"]:
             title = result["title"]
             ytlink = result["link"]
             vidid = result["id"]
@@ -64,14 +67,20 @@ class AppleAPI:
                     return False
                 html = await response.text()
         soup = BeautifulSoup(html, "html.parser")
-        applelinks = soup.find_all("meta", attrs={"property": "music:song"})
+        applelinks = soup.find_all(
+            "meta", attrs={"property": "music:song"}
+        )
         results = []
         for item in applelinks:
             try:
-                xx = (((item["content"]).split("album/")[1]).split("/")[0]).replace(
-                    "-", " "
-                )
+                xx = (
+                    ((item["content"]).split("album/")[1]).split("/")[
+                        0
+                    ]
+                ).replace("-", " ")
             except:
-                xx = ((item["content"]).split("album/")[1]).split("/")[0]
+                xx = ((item["content"]).split("album/")[1]).split(
+                    "/"
+                )[0]
             results.append(xx)
         return results, playlist_id
