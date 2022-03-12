@@ -18,15 +18,15 @@ assistantdict = {}
 
 
 async def get_client(assistant: int):
-    if assistant == 1:
+    if int(assistant) == 1:
         return userbot.one
-    elif assistant == 2:
+    elif int(assistant) == 2:
         return userbot.two
-    elif assistant == 3:
+    elif int(assistant) == 3:
         return userbot.three
-    elif assistant == 4:
+    elif int(assistant) == 4:
         return userbot.four
-    elif assistant == 5:
+    elif int(assistant) == 5:
         return userbot.five
 
 
@@ -47,25 +47,28 @@ async def set_assistant(chat_id):
 async def get_assistant(chat_id: int) -> str:
     from ShasaMusic.core.userbot import assistants
 
-    if assistant := assistantdict.get(chat_id):
-        userbot = (
-            await get_client(assistant)
-            if assistant in assistants
-            else await set_assistant(chat_id)
-        )
-
-    else:
+    assistant = assistantdict.get(chat_id)
+    if not assistant:
         dbassistant = await db.find_one({"chat_id": chat_id})
         if not dbassistant:
             userbot = await set_assistant(chat_id)
+            return userbot
         else:
             got_assis = dbassistant["assistant"]
             if got_assis in assistants:
                 assistantdict[chat_id] = got_assis
                 userbot = await get_client(got_assis)
+                return userbot
             else:
                 userbot = await set_assistant(chat_id)
-    return userbot
+                return userbot
+    else:
+        if assistant in assistants:
+            userbot = await get_client(assistant)
+            return userbot
+        else:
+            userbot = await set_assistant(chat_id)
+            return userbot
 
 
 async def set_calls_assistant(chat_id):
@@ -84,12 +87,8 @@ async def set_calls_assistant(chat_id):
 async def group_assistant(self, chat_id: int) -> int:
     from ShasaMusic.core.userbot import assistants
 
-    if assistant := assistantdict.get(chat_id):
-        assis = (
-            assistant if assistant in assistants else await set_calls_assistant(chat_id)
-        )
-
-    else:
+    assistant = assistantdict.get(chat_id)
+    if not assistant:
         dbassistant = await db.find_one({"chat_id": chat_id})
         if not dbassistant:
             assis = await set_calls_assistant(chat_id)
@@ -100,6 +99,11 @@ async def group_assistant(self, chat_id: int) -> int:
                 assis = assis
             else:
                 assis = await set_calls_assistant(chat_id)
+    else:
+        if assistant in assistants:
+            assis = assistant
+        else:
+            assis = await set_calls_assistant(chat_id)
     if int(assis) == 1:
         return self.one
     elif int(assis) == 2:

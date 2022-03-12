@@ -9,22 +9,20 @@
 
 
 import config
+from config import PRIVATE_BOT_MODE
 from ShasaMusic.core.mongo import mongodb
 
 channeldb = mongodb.cplaymode
 commanddb = mongodb.commands
 cleandb = mongodb.cleanmode
 playmodedb = mongodb.playmode
-chatmodedb = mongodb.chatmode
 playtypedb = mongodb.playtypedb
-loopdb = mongodb.loop
 langdb = mongodb.language
 authdb = mongodb.adminauth
 videodb = mongodb.Shasavideocalls
-
+onoffdb = mongodb.onoffper
 
 # Shifting to memory [ mongo sucks often]
-chatmode = {}
 loop = {}
 playtype = {}
 playmode = {}
@@ -40,7 +38,7 @@ command = []
 cleanmode = []
 nonadmin = {}
 vlimit = []
-
+maintenance = []
 
 # LOOP PLAY
 async def get_loop(chat_id: int) -> int:
@@ -60,7 +58,7 @@ async def get_cmode(chat_id: int) -> int:
     if not mode:
         mode = await channeldb.find_one({"chat_id": chat_id})
         if not mode:
-            return False
+            return None
         channelconnect[chat_id] = mode["mode"]
         return mode["mode"]
     return mode
@@ -69,25 +67,6 @@ async def get_cmode(chat_id: int) -> int:
 async def set_cmode(chat_id: int, mode: int):
     channelconnect[chat_id] = mode
     await channeldb.update_one(
-        {"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True
-    )
-
-
-# PLAY MODE WHETHER GROUP OR CHANNEL
-async def get_chatmode(chat_id: int) -> str:
-    if mode := chatmode.get(chat_id):
-        return mode
-    mode = await chatmodedb.find_one({"chat_id": chat_id})
-    if not mode:
-        chatmode[chat_id] = "Group"
-        return "Group"
-    chatmode[chat_id] = mode["mode"]
-    return mode["mode"]
-
-
-async def set_chatmode(chat_id: int, mode: str):
-    chatmode[chat_id] = mode
-    await chatmodedb.update_one(
         {"chat_id": chat_id}, {"$set": {"mode": mode}}, upsert=True
     )
 
@@ -147,7 +126,9 @@ async def get_lang(chat_id: int) -> str:
 
 async def set_lang(chat_id: int, lang: str):
     langm[chat_id] = lang
-    await langdb.update_one({"chat_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
+    await langdb.update_one(
+        {"chat_id": chat_id}, {"$set": {"lang": lang}}, upsert=True
+    )
 
 
 # Muted
@@ -188,7 +169,10 @@ async def get_active_chats() -> list:
 
 
 async def is_active_chat(chat_id: int) -> bool:
-    return chat_id in active
+    if chat_id not in active:
+        return False
+    else:
+        return True
 
 
 async def add_active_chat(chat_id: int):
@@ -207,7 +191,10 @@ async def get_active_video_chats() -> list:
 
 
 async def is_active_video_chat(chat_id: int) -> bool:
-    return chat_id in activevideo
+    if chat_id not in activevideo:
+        return False
+    else:
+        return True
 
 
 async def add_active_video_chat(chat_id: int):
@@ -222,7 +209,10 @@ async def remove_active_video_chat(chat_id: int):
 
 # Delete command mode
 async def is_commanddelete_on(chat_id: int) -> bool:
-    return chat_id not in command
+    if chat_id not in command:
+        return True
+    else:
+        return False
 
 
 async def commanddelete_off(chat_id: int):
@@ -239,7 +229,10 @@ async def commanddelete_on(chat_id: int):
 
 # Clean Mode
 async def is_cleanmode_on(chat_id: int) -> bool:
-    return chat_id not in cleanmode
+    if chat_id not in cleanmode:
+        return True
+    else:
+        return False
 
 
 async def cleanmode_off(chat_id: int):
@@ -292,8 +285,8 @@ async def remove_nonadmin_chat(chat_id: int):
 
 # Video Limit
 async def is_video_allowed(chat_idd) -> str:
+    chat_id = 123456
     if not vlimit:
-        chat_id = 123456
         dblimit = await videodb.find_one({"chat_id": chat_id})
         if not dblimit:
             vlimit.clear()
@@ -308,9 +301,23 @@ async def is_video_allowed(chat_idd) -> str:
     if limit == 0:
         return False
     count = len(await get_active_video_chats())
-    if count == int(limit) and not await is_active_video_chat(chat_idd):
-        return False
+    if int(count) == int(limit):
+        if not await is_active_video_chat(chat_idd):
+            return False
     return True
+
+
+async def get_video_limit() -> str:
+    chat_id = 123456
+    if not vlimit:
+        dblimit = await videodb.find_one({"chat_id": chat_id})
+        if not dblimit:
+            limit = config.VIDEO_STREAM_LIMIT
+        else:
+            limit = dblimit["limit"]
+    else:
+        limit = vlimit[0]
+    return limit
 
 
 async def set_video_limit(limt: int):
@@ -322,16 +329,75 @@ async def set_video_limit(limt: int):
     )
 
 
+# On Off
+async def is_on_off(on_off: int) -> bool:
+    onoff = await onoffdb.find_one({"on_off": on_off})
+    if not onoff:
+        return False
+    return True
+
+
+async def add_on(on_off: int):
+    is_on = await is_on_off(on_off)
+    if is_on:
+        return
+    return await onoffdb.insert_one({"on_off": on_off})
+
+
+async def add_off(on_off: int):
+    is_off = await is_on_off(on_off)
+    if not is_off:
+        return
+    return await onoffdb.delete_one({"on_off": on_off})
+
+
+# Maintenance
+
+
+async def is_maintenance():
+    if not maintenance:
+        get = await onoffdb.find_one({"on_off": 1})
+        if not get:
+            maintenance.clear()
+            maintenance.append(2)
+            return True
+        else:
+            maintenance.clear()
+            maintenance.append(1)
+            return False
+    else:
+        if 1 in maintenance:
+            return False
+        else:
+            return True
+
+
+async def maintenance_off():
+    maintenance.clear()
+    maintenance.append(2)
+    is_off = await is_on_off(1)
+    if not is_off:
+        return
+    return await onoffdb.delete_one({"on_off": 1})
+
+
+async def maintenance_on():
+    maintenance.clear()
+    maintenance.append(1)
+    is_on = await is_on_off(1)
+    if is_on:
+        return
+    return await onoffdb.insert_one({"on_off": 1})
+
+
 # Audio Video Limit
 
-from pytgcalls.types.input_stream.quality import (
-    HighQualityAudio,
-    HighQualityVideo,
-    LowQualityAudio,
-    LowQualityVideo,
-    MediumQualityAudio,
-    MediumQualityVideo,
-)
+from pytgcalls.types.input_stream.quality import (HighQualityAudio,
+                                                  HighQualityVideo,
+                                                  LowQualityAudio,
+                                                  LowQualityVideo,
+                                                  MediumQualityAudio,
+                                                  MediumQualityVideo)
 
 
 async def save_audio_bitrate(chat_id: int, bitrate: str):
@@ -352,7 +418,10 @@ async def get_aud_bit_name(chat_id: int) -> str:
 async def get_vid_bit_name(chat_id: int) -> str:
     mode = video.get(chat_id)
     if not mode:
-        return "Medium"
+        if PRIVATE_BOT_MODE == str(True):
+            return "High"
+        else:
+            return "Medium"
     return mode
 
 
@@ -371,7 +440,10 @@ async def get_audio_bitrate(chat_id: int) -> str:
 async def get_video_bitrate(chat_id: int) -> str:
     mode = video.get(chat_id)
     if not mode:
-        return MediumQualityVideo()
+        if PRIVATE_BOT_MODE == str(True):
+            return HighQualityVideo()
+        else:
+            return MediumQualityVideo()
     if str(mode) == "High":
         return HighQualityVideo()
     elif str(mode) == "Medium":

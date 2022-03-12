@@ -14,7 +14,6 @@ from ShasaMusic.core.mongo import mongodb
 queriesdb = mongodb.queries
 userdb = mongodb.userstats
 chattopdb = mongodb.chatstats
-onoffdb = mongodb.onoffper
 authuserdb = mongodb.authuser
 gbansdb = mongodb.gban
 sudoersdb = mongodb.sudoers
@@ -23,19 +22,10 @@ blacklist_chatdb = mongodb.blacklistChat
 usersdb = mongodb.tgusersdb
 playlistdb = mongodb.playlist
 blockeddb = mongodb.blockedusers
+privatedb = mongodb.privatechats
 
 
-async def get_playlist_count() -> dict:
-    chats = playlistdb.find({"chat_id": {"$gt": 0}})
-    if not chats:
-        return {}
-    chats_count = 0
-    notes_count = 0
-    for chat in await chats.to_list(length=1000000000):
-        notes_name = await get_playlist_names(chat["chat_id"])
-        notes_count += len(notes_name)
-        chats_count += 1
-    return {"chats_count": chats_count, "notes_count": notes_count}
+# Playlist
 
 
 async def _get_playlists(chat_id: int) -> Dict[str, int]:
@@ -47,21 +37,24 @@ async def _get_playlists(chat_id: int) -> Dict[str, int]:
 
 async def get_playlist_names(chat_id: int) -> List[str]:
     _notes = []
-    _notes.extend(iter(await _get_playlists(chat_id)))
+    for note in await _get_playlists(chat_id):
+        _notes.append(note)
     return _notes
 
 
 async def get_playlist(chat_id: int, name: str) -> Union[bool, dict]:
     name = name
     _notes = await _get_playlists(chat_id)
-    return _notes[name] if name in _notes else False
+    if name in _notes:
+        return _notes[name]
+    else:
+        return False
 
 
 async def save_playlist(chat_id: int, name: str, note: dict):
     name = name
     _notes = await _get_playlists(chat_id)
     _notes[name] = note
-
     await playlistdb.update_one(
         {"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True
     )
@@ -81,6 +74,9 @@ async def delete_playlist(chat_id: int, name: str) -> bool:
     return False
 
 
+# Users
+
+
 async def is_served_user(user_id: int) -> bool:
     user = await usersdb.find_one({"user_id": user_id})
     if not user:
@@ -89,11 +85,9 @@ async def is_served_user(user_id: int) -> bool:
 
 
 async def get_served_users() -> list:
-    users = usersdb.find({"user_id": {"$gt": 0}})
-    if not users:
-        return []
     users_list = []
-    users_list.extend(iter(await users.to_list(length=1000000000)))
+    async for user in usersdb.find({"user_id": {"$gt": 0}}):
+        users_list.append(user)
     return users_list
 
 
@@ -104,12 +98,13 @@ async def add_served_user(user_id: int):
     return await usersdb.insert_one({"user_id": user_id})
 
 
+# Served Chats
+
+
 async def get_served_chats() -> list:
-    chats = chatsdb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return []
     chats_list = []
-    chats_list.extend(iter(await chats.to_list(length=1000000000)))
+    async for chat in chatsdb.find({"chat_id": {"$lt": 0}}):
+        chats_list.append(chat)
     return chats_list
 
 
@@ -127,16 +122,14 @@ async def add_served_chat(chat_id: int):
     return await chatsdb.insert_one({"chat_id": chat_id})
 
 
-async def remove_served_chat(chat_id: int):
-    is_served = await is_served_chat(chat_id)
-    if not is_served:
-        return
-    return await chatsdb.delete_one({"chat_id": chat_id})
+# Blacklisted Chats
 
 
 async def blacklisted_chats() -> list:
-    chats = blacklist_chatdb.find({"chat_id": {"$lt": 0}})
-    return [chat["chat_id"] for chat in await chats.to_list(length=1000000000)]
+    chats_list = []
+    async for chat in blacklist_chatdb.find({"chat_id": {"$lt": 0}}):
+        chats_list.append(chat["chat_id"])
+    return chats_list
 
 
 async def blacklist_chat(chat_id: int) -> bool:
@@ -153,15 +146,13 @@ async def whitelist_chat(chat_id: int) -> bool:
     return False
 
 
-privatedb = mongodb.privatechats
+# Private Served Chats
 
 
 async def get_private_served_chats() -> list:
-    chats = privatedb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return []
     chats_list = []
-    chats_list.extend(iter(await chats.to_list(length=1000000000)))
+    async for chat in privatedb.find({"chat_id": {"$lt": 0}}):
+        chats_list.append(chat)
     return chats_list
 
 
@@ -186,17 +177,7 @@ async def remove_private_chat(chat_id: int):
     return await privatedb.delete_one({"chat_id": chat_id})
 
 
-async def get_authuser_count() -> dict:
-    chats = authuserdb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return {}
-    chats_count = 0
-    notes_count = 0
-    for chat in await chats.to_list(length=1000000000):
-        notes_name = await get_authuser_names(chat["chat_id"])
-        notes_count += len(notes_name)
-        chats_count += 1
-    return {"chats_count": chats_count, "notes_count": notes_count}
+# Auth Users DB
 
 
 async def _get_authusers(chat_id: int) -> Dict[str, int]:
@@ -208,14 +189,18 @@ async def _get_authusers(chat_id: int) -> Dict[str, int]:
 
 async def get_authuser_names(chat_id: int) -> List[str]:
     _notes = []
-    _notes.extend(iter(await _get_authusers(chat_id)))
+    for note in await _get_authusers(chat_id):
+        _notes.append(note)
     return _notes
 
 
 async def get_authuser(chat_id: int, name: str) -> Union[bool, dict]:
     name = name
     _notes = await _get_authusers(chat_id)
-    return _notes[name] if name in _notes else False
+    if name in _notes:
+        return _notes[name]
+    else:
+        return False
 
 
 async def save_authuser(chat_id: int, name: str, note: dict):
@@ -242,20 +227,15 @@ async def delete_authuser(chat_id: int, name: str) -> bool:
     return False
 
 
+# Blocked Users
+
+
 async def get_gbanned() -> list:
-    users = gbansdb.find({"user_id": {"$gt": 0}})
-    if not users:
-        return []
     results = []
-    results.extend(user["user_id"] for user in await users.to_list(length=1000000000))
-
+    async for user in gbansdb.find({"user_id": {"$gt": 0}}):
+        user_id = user["user_id"]
+        results.append(user_id)
     return results
-
-
-async def get_gbans_count() -> int:
-    users = gbansdb.find({"user_id": {"$gt": 0}})
-    users = await users.to_list(length=100000)
-    return len(users)
 
 
 async def is_gbanned_user(user_id: int) -> bool:
@@ -277,6 +257,9 @@ async def remove_gban_user(user_id: int):
     if not is_gbanned:
         return
     return await gbansdb.delete_one({"user_id": user_id})
+
+
+# Sudoers
 
 
 async def get_sudoers() -> list:
@@ -304,25 +287,7 @@ async def remove_sudo(user_id: int) -> bool:
     return True
 
 
-async def is_on_off(on_off: int) -> bool:
-    onoff = await onoffdb.find_one({"on_off": on_off})
-    if not onoff:
-        return False
-    return True
-
-
-async def add_on(on_off: int):
-    is_on = await is_on_off(on_off)
-    if is_on:
-        return
-    return await onoffdb.insert_one({"on_off": on_off})
-
-
-async def add_off(on_off: int):
-    is_off = await is_on_off(on_off)
-    if not is_off:
-        return
-    return await onoffdb.delete_one({"on_off": on_off})
+# Total Queries on bot
 
 
 async def get_queries() -> int:
@@ -343,12 +308,12 @@ async def set_queries(mode: int):
     )
 
 
+# Top Chats DB
+
+
 async def get_top_chats() -> dict:
-    chats = chattopdb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return {}
     results = {}
-    for chat in await chats.to_list(length=1000000):
+    async for chat in chattopdb.find({"chat_id": {"$lt": 0}}):
         chat_id = chat["chat_id"]
         total = 0
         for i in chat["vidid"]:
@@ -360,17 +325,16 @@ async def get_top_chats() -> dict:
 
 
 async def get_global_tops() -> dict:
-    chats = chattopdb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return {}
     results = {}
-    for chat in await chats.to_list(length=1000000):
+    async for chat in chattopdb.find({"chat_id": {"$lt": 0}}):
         for i in chat["vidid"]:
             counts_ = chat["vidid"][i]["spot"]
             title_ = chat["vidid"][i]["title"]
             if counts_ > 0:
                 if i not in results:
-                    results[i] = {"spot": counts_, "title": title_}
+                    results[i] = {}
+                    results[i]["spot"] = counts_
+                    results[i]["title"] = title_
                 else:
                     spot = results[i]["spot"]
                     count_ = spot + counts_
@@ -385,7 +349,9 @@ async def get_particulars(chat_id: int) -> Dict[str, int]:
     return ids["vidid"]
 
 
-async def get_particular_top(chat_id: int, name: str) -> Union[bool, dict]:
+async def get_particular_top(
+    chat_id: int, name: str
+) -> Union[bool, dict]:
     ids = await get_particulars(chat_id)
     if name in ids:
         return ids[name]
@@ -399,20 +365,7 @@ async def update_particular_top(chat_id: int, name: str, vidid: dict):
     )
 
 
-async def get_topp_users() -> dict:
-    chats = userdb.find({"chat_id": {"$gt": 0}})
-    if not chats:
-        return {}
-    results = {}
-    for chat in await chats.to_list(length=1000000000):
-        user_id = chat["chat_id"]
-        total = 0
-        for i in chat["vidid"]:
-            counts_ = chat["vidid"][i]["spot"]
-            if counts_ > 0:
-                total += counts_
-        results[user_id] = total
-    return results
+# Top User DB
 
 
 async def get_userss(chat_id: int) -> Dict[str, int]:
@@ -431,16 +384,32 @@ async def get_user_top(chat_id: int, name: str) -> Union[bool, dict]:
 async def update_user_top(chat_id: int, name: str, vidid: dict):
     ids = await get_userss(chat_id)
     ids[name] = vidid
-    await userdb.update_one({"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True)
+    await userdb.update_one(
+        {"chat_id": chat_id}, {"$set": {"vidid": ids}}, upsert=True
+    )
+
+
+async def get_topp_users() -> dict:
+    results = {}
+    async for chat in userdb.find({"chat_id": {"$gt": 0}}):
+        user_id = chat["chat_id"]
+        total = 0
+        for i in chat["vidid"]:
+            counts_ = chat["vidid"][i]["spot"]
+            if counts_ > 0:
+                total += counts_
+        results[user_id] = total
+    return results
+
+
+# Gban Users
 
 
 async def get_banned_users() -> list:
-    users = blockeddb.find({"user_id": {"$gt": 0}})
-    if not users:
-        return []
     results = []
-    results.extend(user["user_id"] for user in await users.to_list(length=1000000000))
-
+    async for user in blockeddb.find({"user_id": {"$gt": 0}}):
+        user_id = user["user_id"]
+        results.append(user_id)
     return results
 
 
