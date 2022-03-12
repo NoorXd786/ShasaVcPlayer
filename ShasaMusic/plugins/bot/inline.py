@@ -7,12 +7,10 @@
 #
 # All rights reserved.
 
-from pyrogram.types import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    InlineQueryResultPhoto,
-)
-from youtubesearchpython import VideosSearch
+from pyrogram.types import (InlineKeyboardButton,
+                            InlineKeyboardMarkup,
+                            InlineQueryResultPhoto)
+from youtubesearchpython.__future__ import VideosSearch
 
 from config import BANNED_USERS, MUSIC_BOT_NAME
 from ShasaMusic import app
@@ -22,20 +20,24 @@ from ShasaMusic.utils.inlinequery import answer
 @app.on_inline_query(~BANNED_USERS)
 async def inline_query_handler(client, query):
     text = query.query.strip().lower()
+    answers = []
     if text.strip() == "":
         try:
-            await client.answer_inline_query(query.id, results=answer, cache_time=10)
+            await client.answer_inline_query(
+                query.id, results=answer, cache_time=10
+            )
         except:
             return
     else:
         a = VideosSearch(text, limit=20)
-        result = (a.result()).get("result")
-        answers = []
+        result = (await a.next()).get("result")
         for x in range(15):
             title = (result[x]["title"]).title()
             duration = result[x]["duration"]
             views = result[x]["viewCount"]["short"]
-            thumbnail = result[x]["thumbnails"][0]["url"].split("?")[0]
+            thumbnail = result[x]["thumbnails"][0]["url"].split("?")[
+                0
+            ]
             channellink = result[x]["channel"]["link"]
             channel = result[x]["channel"]["name"]
             link = result[x]["link"]
@@ -74,6 +76,8 @@ __Reply with /play on this searched message to stream it on voice chat.__
                 )
             )
         try:
-            return await client.answer_inline_query(query.id, results=answers)
+            return await client.answer_inline_query(
+                query.id, results=answers
+            )
         except:
             return
