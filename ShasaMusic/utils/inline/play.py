@@ -10,16 +10,16 @@
 from pyrogram.types import InlineKeyboardButton
 
 
-def track_markup(_, videoid, user_id):
-    return [
+def track_markup(_, videoid, user_id, channel, fplay):
+    buttons = [
         [
             InlineKeyboardButton(
                 text=_["P_B_1"],
-                callback_data=f"MusicStream {videoid}|{user_id}|a",
+                callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
                 text=_["P_B_2"],
-                callback_data=f"MusicStream {videoid}|{user_id}|v",
+                callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}",
             ),
         ],
         [
@@ -29,40 +29,53 @@ def track_markup(_, videoid, user_id):
             )
         ],
     ]
+    return buttons
 
 
 def stream_markup(_, videoid):
-    return [
+    buttons = [
         [
             InlineKeyboardButton(
                 text=_["PL_B_2"],
                 callback_data=f"add_playlist {videoid}",
             ),
-            InlineKeyboardButton(text=_["PL_B_3"], switch_inline_query_current_chat=""),
+            InlineKeyboardButton(
+                text=_["PL_B_3"], switch_inline_query_current_chat=""
+            ),
         ],
-        [InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close")],
+        [
+            InlineKeyboardButton(
+                text=_["CLOSEMENU_BUTTON"], callback_data="close"
+            )
+        ],
     ]
+    return buttons
 
 
 def telegram_markup(_):
-    return [
+    buttons = [
         [
-            InlineKeyboardButton(text=_["PL_B_3"], switch_inline_query_current_chat=""),
-            InlineKeyboardButton(text=_["CLOSEMENU_BUTTON"], callback_data="close"),
+            InlineKeyboardButton(
+                text=_["PL_B_3"], switch_inline_query_current_chat=""
+            ),
+            InlineKeyboardButton(
+                text=_["CLOSEMENU_BUTTON"], callback_data="close"
+            ),
         ],
     ]
+    return buttons
 
 
-def playlist_markup(_, videoid, user_id, ptype):
-    return [
+def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
+    buttons = [
         [
             InlineKeyboardButton(
                 text=_["P_B_1"],
-                callback_data=f"ShasaPlaylists {videoid}|{user_id}|{ptype}|a",
+                callback_data=f"ShasaPlaylists {videoid}|{user_id}|{ptype}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
                 text=_["P_B_2"],
-                callback_data=f"ShasaPlaylists {videoid}|{user_id}|{ptype}|v",
+                callback_data=f"ShasaPlaylists {videoid}|{user_id}|{ptype}|v|{channel}|{fplay}",
             ),
         ],
         [
@@ -72,14 +85,15 @@ def playlist_markup(_, videoid, user_id, ptype):
             ),
         ],
     ]
+    return buttons
 
 
-def livestream_markup(_, videoid, user_id, mode):
-    return [
+def livestream_markup(_, videoid, user_id, mode, channel, fplay):
+    buttons = [
         [
             InlineKeyboardButton(
                 text=_["P_B_3"],
-                callback_data=f"LiveStream {videoid}|{user_id}|{mode}",
+                callback_data=f"LiveStream {videoid}|{user_id}|{mode}|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
                 text=_["CLOSEMENU_BUTTON"],
@@ -87,25 +101,28 @@ def livestream_markup(_, videoid, user_id, mode):
             ),
         ],
     ]
+    return buttons
 
 
-def slider_markup(_, videoid, user_id, query, query_type):
+def slider_markup(
+    _, videoid, user_id, query, query_type, channel, fplay
+):
     query = f"{query[:20]}"
-    return [
+    buttons = [
         [
             InlineKeyboardButton(
                 text=_["P_B_1"],
-                callback_data=f"MusicStream {videoid}|{user_id}|a",
+                callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
                 text=_["P_B_2"],
-                callback_data=f"MusicStream {videoid}|{user_id}|v",
+                callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}",
             ),
         ],
         [
             InlineKeyboardButton(
                 text="❮",
-                callback_data=f"slider B|{query_type}|{query}|{user_id}",
+                callback_data=f"slider B|{query_type}|{query}|{user_id}|{channel}|{fplay}",
             ),
             InlineKeyboardButton(
                 text=_["CLOSE_BUTTON"],
@@ -113,7 +130,8 @@ def slider_markup(_, videoid, user_id, query, query_type):
             ),
             InlineKeyboardButton(
                 text="❯",
-                callback_data=f"slider F|{query_type}|{query}|{user_id}",
+                callback_data=f"slider F|{query_type}|{query}|{user_id}|{channel}|{fplay}",
             ),
         ],
     ]
+    return buttons
